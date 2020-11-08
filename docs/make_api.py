@@ -8,7 +8,6 @@
 # License: BSD 3 clause
 
 
-import string
 import inspect
 import os
 import sys
@@ -37,12 +36,15 @@ def docstring_to_markdown(docstring):
     """
     new_docstring_lst = []
 
+    encountered_examples = False
     for idx, line in enumerate(docstring.split('\n')):
         line = line.strip()
         if set(line) in ({'-'}, {'='}):
             new_docstring_lst[idx-1] = '**%s**' % new_docstring_lst[idx-1]
         elif line.startswith('>>>'):
-            line = '    %s' % line
+            if not encountered_examples:
+                new_docstring_lst.append('```')
+                encountered_examples = True
         new_docstring_lst.append(line)
 
     for idx, line in enumerate(new_docstring_lst[1:]):
@@ -62,6 +64,9 @@ def docstring_to_markdown(docstring):
     for line in new_docstring_lst:
         if set(line.strip()) not in ({'-'}, {'='}):
             clean_lst.append(line)
+
+    if encountered_examples:
+        clean_lst.append('```')
     return clean_lst
 
 
@@ -99,19 +104,23 @@ def object_to_markdownpage(obj_name, obj, s=''):
     if inspect.isclass(obj):
         methods, properties = '\n\n### Methods', '\n\n### Properties'
         members = inspect.getmembers(obj)
+
         for m in members:
-            if not m[0].startswith('_') and len(m) >= 2:
-                if isinstance(m[1], property):
-                    properties += '\n\n<hr>\n\n*%s*\n\n' % m[0]
-                    m_doc = docstring_to_markdown(str(inspect.getdoc(m[1])))
-                    properties += '\n'.join(m_doc)
-                else:
-                    sig = str(inspect.signature(m[1]))
-                    sig = sig.replace('(self, ', '(').replace('(self)', '()')
-                    sig = sig.replace('(self)', '()')
-                    methods += '\n\n<hr>\n\n*%s%s*\n\n' % (m[0], sig)
-                    m_doc = docstring_to_markdown(str(inspect.getdoc(m[1])))
-                    methods += '\n'.join(m_doc)
+            try:
+                if not m[0].startswith('_') and len(m) >= 2:
+                    if isinstance(m[1], property):
+                        properties += '\n\n<hr>\n\n*%s*\n\n' % m[0]
+                        m_doc = docstring_to_markdown(str(inspect.getdoc(m[1])))
+                        properties += '\n'.join(m_doc)
+                    else:
+                        sig = str(inspect.signature(m[1]))
+                        sig = sig.replace('(self, ', '(').replace('(self)', '()')
+                        sig = sig.replace('(self)', '()')
+                        methods += '\n\n<hr>\n\n*%s%s*\n\n' % (m[0], sig)
+                        m_doc = docstring_to_markdown(str(inspect.getdoc(m[1])))
+                        methods += '\n'.join(m_doc)
+            except TypeError:
+                continue
         s += methods
         s += properties
     return s + '\n\n'
@@ -232,33 +241,34 @@ def generate_api_docs(package, api_dir, clean=False, printlog=True):
     for importer, pkg_name, is_pkg in pkgutil.iter_modules(
                                                            package.__path__,
                                                            prefix):
-        if is_pkg:
-            subpackage = __import__(pkg_name, fromlist="dummy")
-            prefix = subpackage.__name__ + "."
 
-            # get functions and classes
-            classes, functions = get_functions_and_classes(subpackage)
 
-            target_dir = os.path.join(api_dir, subpackage.__name__)
+        subpackage = __import__(pkg_name, fromlist="dummy")
+        prefix = subpackage.__name__ + "."
 
-            # create the subdirs
-            if not os.path.isdir(target_dir):
-                os.makedirs(target_dir)
-                if printlog:
-                    print('created %s' % target_dir)
+        # get functions and classes
+        classes, functions = get_functions_and_classes(subpackage)
 
-            # create markdown documents in memory
-            for obj in classes + functions:
-                md_path = os.path.join(target_dir, obj[0]) + '.md'
-                if md_path not in api_docs:
-                    api_docs[md_path] = object_to_markdownpage(obj_name=obj[0],
-                                                               obj=obj[1],
-                                                               s='')
-                else:
-                    api_docs[md_path] += object_to_markdownpage(obj_name=(
-                                                                obj[0]),
-                                                                obj=obj[1],
-                                                                s='')
+        target_dir = os.path.join(api_dir, subpackage.__name__)
+
+        # create the subdirs
+        if not os.path.isdir(target_dir):
+            os.makedirs(target_dir)
+            if printlog:
+                print('created %s' % target_dir)
+
+        # create markdown documents in memory
+        for obj in classes + functions:
+            md_path = os.path.join(target_dir, obj[0]) + '.md'
+            if md_path not in api_docs:
+                api_docs[md_path] = object_to_markdownpage(obj_name=obj[0],
+                                                            obj=obj[1],
+                                                            s='')
+            else:
+                api_docs[md_path] += object_to_markdownpage(obj_name=(
+                                                            obj[0]),
+                                                            obj=obj[1],
+                                                            s='')
 
     # write to files
     for d in sorted(api_docs):
@@ -367,17 +377,17 @@ if __name__ == "__main__":
             formatter_class=argparse.RawTextHelpFormatter)
 
     parser.add_argument('-n', '--package_name',
-                        default='pytorch_coral',
+                        default='coral_pytorch',
                         help='Name of the package')
     parser.add_argument('-d', '--package_dir',
-                        default='../../pytorch_coral/',
+                        default='../coral_pytorch/',
                         help="Path to the package's enclosing directory")
     parser.add_argument('-o1', '--output_module_api',
-                        default='../docs/sources/api_modules',
+                        default='./api_modules',
                         help=('Target directory for the module-level'
                               ' API Markdown files'))
     parser.add_argument('-o2', '--output_subpackage_api',
-                        default='../docs/sources/api_subpackages',
+                        default='./api_subpackages',
                         help=('Target directory for the'
                               'subpackage-level API Markdown files'))
     parser.add_argument('-c', '--clean',

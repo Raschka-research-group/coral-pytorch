@@ -21,7 +21,7 @@ install_reqs.append('setuptools')
 
 setup(name='coral_pytorch',
       version=VERSION,
-      description='CORAL Ordinal regression for PyTorch',
+      description='CORAL ordinal regression for PyTorch',
       author='Sebastian Raschka',
       author_email='mail@sebastianraschka.com',
       url='https://github.com/rasbt/coral_pytorch',
@@ -31,11 +31,13 @@ setup(name='coral_pytorch',
                          'requirements.txt']
                     },
       include_package_data=True,
+      setup_requires=[],
       install_requires=install_reqs,
       extras_require={'testing': ['pytest'],
                       'docs': ['mkdocs']},
       license='MIT',
       platforms='any',
+      keywords=['deep learning', 'pytorch', 'AI'],
       classifiers=[
              'License :: OSI Approved :: MIT License',
              'Development Status :: 5 - Production/Stable',
@@ -49,6 +51,7 @@ setup(name='coral_pytorch',
              'Topic :: Scientific/Engineering :: Information Analysis',
              'Topic :: Scientific/Engineering :: Image Recognition',
       ],
+      long_description_content_type='text/markdown',
       long_description="""
 
 Library implementing the core utilities for the
