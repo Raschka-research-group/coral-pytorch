@@ -1,20 +1,18 @@
-### Citing
-
 If you use BioPandas as part of your workflow in a scientific publication, please consider citing the BioPandas repository with the following DOI:
 
-- Sebastian Raschka. Biopandas: Working with molecular structures in pandas dataframes. *The Journal of Open Source Software*, 2(14), jun 2017. doi: 10.21105/joss.00279. URL http://dx.doi.org/10.21105/joss.00279.
+- Wenzhi Cao, Vahid Mirjalili, and Sebastian Raschka (2020).  *Rank Consistent Ordinal Regression for Neural Networks with Application to Age Estimation*. Pattern Recognition Letters 140, pp. 325-331; [https://doi.org/10.1016/j.patrec.2020.11.008](https://doi.org/10.1016/j.patrec.2020.11.008).
 
 ```
-@article{raschkas2017biopandas,
-  doi = {10.21105/joss.00279},
-  url = {http://dx.doi.org/10.21105/joss.00279},
-  year  = {2017},
-  month = {jun},
-  publisher = {The Open Journal},
-  volume = {2},
-  number = {14},
-  author = {Sebastian Raschka},
-  title = {BioPandas: Working with molecular structures in pandas DataFrames},
-  journal = {The Journal of Open Source Software}
+@article{coral2020,
+title = "Rank consistent ordinal regression for neural networks with application to age estimation",
+journal = "Pattern Recognition Letters",
+volume = "140",
+pages = "325 - 331",
+year = "2020",
+issn = "0167-8655",
+doi = "https://doi.org/10.1016/j.patrec.2020.11.008",
+url = "http://www.sciencedirect.com/science/article/pii/S016786552030413X",
+author = "Wenzhi Cao and Vahid Mirjalili and Sebastian Raschka",
+keywords = "Deep learning, Ordinal regression, Convolutional neural networks, Age prediction, Machine learning, Biometrics"
 }
 ```

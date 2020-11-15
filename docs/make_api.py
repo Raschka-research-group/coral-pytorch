@@ -101,7 +101,10 @@ def object_to_markdownpage(obj_name, obj, s=''):
     s += '\n'.join(ds)
 
     # document methods
-    if inspect.isclass(obj):
+
+    skip = {"<class 'coral_pytorch.layers.CoralLayer'>"}
+
+    if inspect.isclass(obj) and str(obj) not in skip:
         methods, properties = '\n\n### Methods', '\n\n### Properties'
         members = inspect.getmembers(obj)
 
@@ -242,7 +245,6 @@ def generate_api_docs(package, api_dir, clean=False, printlog=True):
                                                            package.__path__,
                                                            prefix):
 
-
         subpackage = __import__(pkg_name, fromlist="dummy")
         prefix = subpackage.__name__ + "."
 
@@ -262,8 +264,8 @@ def generate_api_docs(package, api_dir, clean=False, printlog=True):
             md_path = os.path.join(target_dir, obj[0]) + '.md'
             if md_path not in api_docs:
                 api_docs[md_path] = object_to_markdownpage(obj_name=obj[0],
-                                                            obj=obj[1],
-                                                            s='')
+                                                           obj=obj[1],
+                                                           s='')
             else:
                 api_docs[md_path] += object_to_markdownpage(obj_name=(
                                                             obj[0]),

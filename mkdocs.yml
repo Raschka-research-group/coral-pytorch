@@ -11,7 +11,8 @@ repo_url: https://github.com/rasbt/coral_pytorch
 docs_dir: docs
 site_favicon: favicon.ico
 
-theme: bootstrap4
+# install via pip install mkdocs-material
+theme: material
 
 markdown_extensions:
   - tables
@@ -29,10 +30,14 @@ copyright: Copyright &copy; 2020 <a href="http://sebastianraschka.com">Sebastian
 
 nav:
     - Home: index.md
+    - Tutorials:
+      - MNIST: tutorials/mnist.md
+      - Poker Hands: tutorials/poker.md
     - API:
           - coral_pytorch.dataset: api_subpackages/coral_pytorch.dataset.md
           - coral_pytorch.layers: api_subpackages/coral_pytorch.layers.md
           - coral_pytorch.losses: api_subpackages/coral_pytorch.losses.md
-    - Changelog: CHANGELOG.md
     - Installation: installation.md
+    - Changelog: changelog.md
     - Citing: citing.md
+    - License: license.md

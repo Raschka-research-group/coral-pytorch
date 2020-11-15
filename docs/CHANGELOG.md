@@ -1,7 +1,7 @@
 # Release Notes
 
-The CHANGELOG for the current development version is available at
-[https://github.com/rasbt/biopandas/blob/master/docs/sources/CHANGELOG.md](https://github.com/rasbt/coral_pytorch/blob/master/docs/sources/CHANGELOG.md).
+The changelog for the current development version is available at
+[https://github.com/rasbt/coral_pytorch/blob/master/docs/sources/CHANGELOG.md](https://github.com/rasbt/coral_pytorch/blob/master/docs/sources/CHANGELOG.md).
 
 
 ### 0.1.0 (TBA)
@@ -13,11 +13,12 @@ The CHANGELOG for the current development version is available at
 
 ##### New Features
 
-- -
+- First release.
+ 
 ##### Changes
 
-- -
+- First release.
 
 ##### Bug Fixes
 
-- 
+- First release.
