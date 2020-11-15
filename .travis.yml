@@ -1,0 +1,45 @@
+language: generic
+
+cache:
+  apt: true
+  directories:
+  - $HOME/.cache/pip
+  - $HOME/.ccache
+
+dist: trusty
+
+env:
+  global:
+    # Directory where tests are run from
+    - TEST_DIR=/tmp/torch
+    - OMP_NUM_THREADS=4
+    - OPENBLAS_NUM_THREADS=4
+
+matrix:
+    include:
+        - os: linux
+          python: 3.8
+          env: LATEST="false" COVERAGE="false" MINICONDA_PYTHON_VERSION=3.7
+        - os: linux
+          python: 3.8
+          env: LATEST="true" COVERAGE="true" MINICONDA_PYTHON_VERSION=3.7
+
+before_install:
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
+
+install:
+    - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo apt-get update; fi
+    - source ci/.travis_install.sh
+
+script:
+    - bash ci/.travis_test.sh
+
+after_success:
+    - if [[ "$COVERAGE" == "true" ]]; then coveralls || echo "failed"; fi
+
+notifications:
+    email:
+      recipients:
+          - mail@sebastianraschka.com
+    on_success: always
+    on_failure: always
