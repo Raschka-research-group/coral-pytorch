@@ -1,0 +1,808 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="coral_pytorch is a package implementing the CORAL PyTorch utilities.">
+      
+      
+      
+        <link rel="canonical" href="http://rasbt.github.io/coral_pytorch/tutorials/mnist/">
+      
+      
+        <meta name="author" content="Sebastian Raschka">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.5">
+    
+    
+      
+        <title>MNIST - coral_pytorch</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.21aed14c.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.196e0c26.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../extra.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+      
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#coral-cnn-for-predicting-handwritten-digits-mnist" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="http://rasbt.github.io/coral_pytorch" title="coral_pytorch" class="md-header-nav__button md-logo" aria-label="coral_pytorch">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            coral_pytorch
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              MNIST
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/rasbt/coral_pytorch/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="http://rasbt.github.io/coral_pytorch" title="coral_pytorch" class="md-nav__button md-logo" aria-label="coral_pytorch">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    coral_pytorch
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/rasbt/coral_pytorch/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    <label class="md-nav__link" for="nav-2">
+      Tutorials
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        <span class="md-nav__icon md-icon"></span>
+        Tutorials
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        MNIST
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" class="md-nav__link md-nav__link--active">
+      MNIST
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-setting-up-the-dataset-and-dataloader" class="md-nav__link">
+    1 -- Setting up the dataset and dataloader
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-equipping-cnn-with-coral-layer" class="md-nav__link">
+    2 - Equipping CNN with CORAL layer
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-using-the-coral-loss-for-model-training" class="md-nav__link">
+    3 - Using the CORAL loss for model training
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-evaluate-model" class="md-nav__link">
+    4 -- Evaluate model
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../poker/" class="md-nav__link">
+      Poker Hands
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" >
+    <label class="md-nav__link" for="nav-3">
+      API
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="API" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon"></span>
+        API
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../api_subpackages/coral_pytorch.dataset/" class="md-nav__link">
+      coral_pytorch.dataset
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../api_subpackages/coral_pytorch.layers/" class="md-nav__link">
+      coral_pytorch.layers
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../api_subpackages/coral_pytorch.losses/" class="md-nav__link">
+      coral_pytorch.losses
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../installation/" class="md-nav__link">
+      Installation
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../changelog/" class="md-nav__link">
+      Changelog
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../citing/" class="md-nav__link">
+      Citing
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../license/" class="md-nav__link">
+      License
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-setting-up-the-dataset-and-dataloader" class="md-nav__link">
+    1 -- Setting up the dataset and dataloader
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-equipping-cnn-with-coral-layer" class="md-nav__link">
+    2 - Equipping CNN with CORAL layer
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-using-the-coral-loss-for-model-training" class="md-nav__link">
+    3 - Using the CORAL loss for model training
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-evaluate-model" class="md-nav__link">
+    4 -- Evaluate model
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/rasbt/coral_pytorch/edit/master/docs/tutorials/mnist.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="coral-cnn-for-predicting-handwritten-digits-mnist">CORAL CNN for predicting handwritten digits (MNIST)</h1>
+<p>This tutorial explains how to equip a deep neural network with the CORAL layer and loss function for ordinal regression. Please note that <strong>MNIST is not an ordinal dataset</strong>. The reason why we use MNIST in this tutorial is that it is included in the PyTorch's <code>torchvision</code> library and is thus easy to work with, since it doesn't require extra data downloading and preprocessing steps.</p>
+<h2 id="1-setting-up-the-dataset-and-dataloader">1 -- Setting up the dataset and dataloader</h2>
+<p>In this section, we set up the data set and data loaders. This is a general procedure that is not specific to CORAL.</p>
+<pre><code class="language-python">import torch
+from torchvision import datasets
+from torchvision import transforms
+from torch.utils.data import DataLoader
+
+##########################
+### SETTINGS
+##########################
+
+# Hyperparameters
+random_seed = 1
+learning_rate = 0.05
+num_epochs = 10
+batch_size = 128
+
+# Architecture
+NUM_CLASSES = 10
+
+# Other
+DEVICE = torch.device(&quot;cuda:0&quot; if torch.cuda.is_available() else &quot;cpu&quot;)
+print('Training on', DEVICE)
+
+##########################
+### MNIST DATASET
+##########################
+
+
+# Note transforms.ToTensor() scales input images
+# to 0-1 range
+train_dataset = datasets.MNIST(root='data', 
+                               train=True, 
+                               transform=transforms.ToTensor(),
+                               download=True)
+
+test_dataset = datasets.MNIST(root='data', 
+                              train=False, 
+                              transform=transforms.ToTensor())
+
+
+train_loader = DataLoader(dataset=train_dataset, 
+                          batch_size=batch_size, 
+                          drop_last=True,
+                          shuffle=True)
+
+test_loader = DataLoader(dataset=test_dataset, 
+                         batch_size=batch_size, 
+                         drop_last=True,
+                         shuffle=False)
+
+# Checking the dataset
+for images, labels in train_loader:  
+    print('Image batch dimensions:', images.shape)
+    print('Image label dimensions:', labels.shape)
+    break
+</code></pre>
+<pre><code>Training on cpu
+Image batch dimensions: torch.Size([128, 1, 28, 28])
+Image label dimensions: torch.Size([128])
+</code></pre>
+<h2 id="2-equipping-cnn-with-coral-layer">2 - Equipping CNN with CORAL layer</h2>
+<p>In this section, we are using the CoralLayer implemented in <code>coral_pytorch</code> to outfit a convolutional neural network for ordinal regression. Note that the CORAL method only requires replacing the last (output) layer, which is typically a fully-connected layer, by the CORAL layer.</p>
+<p>Using the <code>Sequential</code> API, we specify the CORAl layer as </p>
+<pre><code class="language-python">        self.fc = CoralLayer(size_in=294, num_classes=num_classes)
+</code></pre>
+<p>This is because the convolutional and pooling layers </p>
+<pre><code class="language-python">            torch.nn.Conv2d(1, 3, (3, 3), (1, 1), 1),
+            torch.nn.MaxPool2d((2, 2), (2, 2)),
+            torch.nn.Conv2d(3, 6, (3, 3), (1, 1), 1),
+            torch.nn.MaxPool2d((2, 2), (2, 2)))
+</code></pre>
+<p>produce a flattened feature vector of 294 units. Then, when using the CORAL layer in the forward function</p>
+<pre><code class="language-python">        logits =  self.fc(x)
+        probas = torch.sigmoid(logits)
+</code></pre>
+<p>please use the <code>sigmoid</code> not softmax function (since the CORAL method uses a concept known as extended binary classification as described in the paper).</p>
+<pre><code class="language-python">from coral_pytorch.layers import CoralLayer
+
+
+
+class ConvNet(torch.nn.Module):
+
+    def __init__(self, num_classes):
+        super(ConvNet, self).__init__()
+
+        self.features = torch.nn.Sequential(
+            torch.nn.Conv2d(1, 3, (3, 3), (1, 1), 1),
+            torch.nn.MaxPool2d((2, 2), (2, 2)),
+            torch.nn.Conv2d(3, 6, (3, 3), (1, 1), 1),
+            torch.nn.MaxPool2d((2, 2), (2, 2)))
+
+        ### Specify CORAL layer
+        self.fc = CoralLayer(size_in=294, num_classes=num_classes)
+        ###--------------------------------------------------------------------###
+
+    def forward(self, x):
+        x = self.features(x)
+        x = x.view(x.size(0), -1) # flatten
+
+        ##### Use CORAL layer #####
+        logits =  self.fc(x)
+        probas = torch.sigmoid(logits)
+        ###--------------------------------------------------------------------###
+
+        return logits, probas
+
+
+
+torch.manual_seed(random_seed)
+model = ConvNet(num_classes=NUM_CLASSES)
+model.to(DEVICE)
+
+optimizer = torch.optim.Adam(model.parameters())
+</code></pre>
+<h2 id="3-using-the-coral-loss-for-model-training">3 - Using the CORAL loss for model training</h2>
+<p>During training, all you need to do is to </p>
+<p>1) convert the integer class labels into the extended binary label format using the <code>levels_from_labelbatch</code> provided via <code>coral_pytorch</code>:</p>
+<pre><code class="language-python">        levels = levels_from_labelbatch(class_labels, 
+                                        num_classes=NUM_CLASSES)
+</code></pre>
+<p>2) Apply the CORAL loss (also provided via <code>coral_pytorch</code>):</p>
+<pre><code class="language-python">        cost = coral_loss(logits, levels)
+</code></pre>
+<pre><code class="language-python">from coral_pytorch.dataset import levels_from_labelbatch
+from coral_pytorch.losses import coral_loss
+
+
+for epoch in range(num_epochs):
+
+    model = model.train()
+    for batch_idx, (features, class_labels) in enumerate(train_loader):
+
+        ##### Convert class labels for CORAL
+        levels = levels_from_labelbatch(class_labels, 
+                                        num_classes=NUM_CLASSES)
+        ###--------------------------------------------------------------------###
+
+        features = features.to(DEVICE)
+        levels = levels.to(DEVICE)
+        logits, probas = model(features)
+
+        #### CORAL loss 
+        cost = coral_loss(logits, levels)
+        ###--------------------------------------------------------------------###   
+
+
+        optimizer.zero_grad()
+        cost.backward()
+        optimizer.step()
+
+        ### LOGGING
+        if not batch_idx % 200:
+            print ('Epoch: %03d/%03d | Batch %03d/%03d | Cost: %.4f' 
+                   %(epoch+1, num_epochs, batch_idx, 
+                     len(train_loader), cost))
+</code></pre>
+<pre><code>Epoch: 001/010 | Batch 000/468 | Cost: 6.2250
+Epoch: 001/010 | Batch 200/468 | Cost: 4.5538
+Epoch: 001/010 | Batch 400/468 | Cost: 4.1572
+Epoch: 002/010 | Batch 000/468 | Cost: 4.2916
+Epoch: 002/010 | Batch 200/468 | Cost: 3.7469
+Epoch: 002/010 | Batch 400/468 | Cost: 3.7111
+Epoch: 003/010 | Batch 000/468 | Cost: 3.5796
+Epoch: 003/010 | Batch 200/468 | Cost: 3.2361
+Epoch: 003/010 | Batch 400/468 | Cost: 3.1930
+Epoch: 004/010 | Batch 000/468 | Cost: 3.2449
+Epoch: 004/010 | Batch 200/468 | Cost: 2.9884
+Epoch: 004/010 | Batch 400/468 | Cost: 2.7252
+Epoch: 005/010 | Batch 000/468 | Cost: 2.9845
+Epoch: 005/010 | Batch 200/468 | Cost: 2.7993
+Epoch: 005/010 | Batch 400/468 | Cost: 2.6468
+Epoch: 006/010 | Batch 000/468 | Cost: 2.7458
+Epoch: 006/010 | Batch 200/468 | Cost: 2.4976
+Epoch: 006/010 | Batch 400/468 | Cost: 2.5533
+Epoch: 007/010 | Batch 000/468 | Cost: 2.6634
+Epoch: 007/010 | Batch 200/468 | Cost: 2.5637
+Epoch: 007/010 | Batch 400/468 | Cost: 2.3448
+Epoch: 008/010 | Batch 000/468 | Cost: 2.3006
+Epoch: 008/010 | Batch 200/468 | Cost: 2.7393
+Epoch: 008/010 | Batch 400/468 | Cost: 2.1759
+Epoch: 009/010 | Batch 000/468 | Cost: 2.3998
+Epoch: 009/010 | Batch 200/468 | Cost: 2.2425
+Epoch: 009/010 | Batch 400/468 | Cost: 2.1656
+Epoch: 010/010 | Batch 000/468 | Cost: 2.3247
+Epoch: 010/010 | Batch 200/468 | Cost: 2.3120
+Epoch: 010/010 | Batch 400/468 | Cost: 2.4770
+</code></pre>
+<h2 id="4-evaluate-model">4 -- Evaluate model</h2>
+<p>Finally, after model training, we can evaluate the performance of the model. For example, via the mean absolute error and mean squared error measures.</p>
+<p>For this, we are going to use the <code>proba_to_label</code> utility function from <code>coral_pytorch</code> to convert the probabilities back to the orginal label.</p>
+<pre><code class="language-python">from coral_pytorch.dataset import proba_to_label
+
+
+def compute_mae_and_mse(model, data_loader, device):
+
+    with torch.no_grad():
+
+        mae, mse, acc, num_examples = 0., 0., 0., 0
+
+        for i, (features, targets) in enumerate(data_loader):
+
+            features = features.to(device)
+            targets = targets.float().to(device)
+
+            logits, probas = model(features)
+            predicted_labels = proba_to_label(probas).float()
+
+            num_examples += targets.size(0)
+            mae += torch.sum(torch.abs(predicted_labels - targets))
+            mse += torch.sum((predicted_labels - targets)**2)
+
+        mae = mae / num_examples
+        mse = mse / num_examples
+        return mae, mse
+</code></pre>
+<pre><code class="language-python">train_mae, train_mse = compute_mae_and_mse(model, train_loader, DEVICE)
+test_mae, test_mse = compute_mae_and_mse(model, test_loader, DEVICE)
+</code></pre>
+<pre><code class="language-python">print(f'Mean absolute error (train/test): {train_mae:.2f} | {test_mae:.2f}')
+print(f'Mean squared error (train/test): {train_mse:.2f} | {test_mse:.2f}')
+</code></pre>
+<pre><code>Mean absolute error (train/test): 0.90 | 0.91
+Mean squared error (train/test): 1.84 | 1.87
+</code></pre>
+<p>Note that MNIST is not an ordinal dataset (there is no order between the image categories), so computing the MAE or MSE doesn't really make sense but we use it anyways for demonstration purposes.</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../.." class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Home
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../poker/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Poker Hands
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2020 <a href="http://sebastianraschka.com">Sebastian Raschka</a>
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/vendor.7e0ee788.min.js"></script>
+      <script src="../../assets/javascripts/bundle.b3a72adc.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../..",
+          features: [],
+          search: Object.assign({
+            worker: "../../assets/javascripts/worker/search.4ac00218.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+      
+        <script src="../../mathjaxhelper.js"></script>
+      
+    
+  </body>
+</html>
