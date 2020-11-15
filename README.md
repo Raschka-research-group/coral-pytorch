@@ -1,5 +1,5 @@
 
-<img src="./img/coral-logo-alpha.png" width=300>
+<img src="docs/img/coral-logo-alpha.png" width=300>
 
 **CORAL implementation for ordinal regression with deep neural networks.**
 
@@ -11,7 +11,7 @@
 
 <br>
 
-**Documentation: https://rasbt.github.io/mlxtend/coral_pytorch](https://rasbt.github.io/mlxtend/coral_pytorch)**
+**Documentation: [https://rasbt.github.io/mlxtend/coral_pytorch](https://rasbt.github.io/mlxtend/coral_pytorch)**
 
 ---
 
@@ -19,7 +19,7 @@
 
 CORAL, short for COnsistent RAnk Logits, is a method for ordinal regression with deep neural networks, which addresses the rank inconsistency issue of other ordinal regression frameworks.
 
-<img src="img/figure1.jpg" width=400>
+<img src="docs/img/figure1.jpg" width=400>
 
 Originally, developed this method in the context of age prediction from face images. Our approach was evaluated on several face image datasets for age prediction using ResNet-34, but it is compatible with other state-of-the-art deep neural networks.
 
