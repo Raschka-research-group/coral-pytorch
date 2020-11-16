@@ -11,7 +11,7 @@
 
 <br>
 
-**Documentation: [https://rasbt.github.io/mlxtend/coral_pytorch](https://rasbt.github.io/mlxtend/coral_pytorch)**
+**Documentation: [https://rasbt.github.io/coral_pytorch](https://rasbt.github.io/coral_pytorch)**
 
 ---
 
@@ -23,7 +23,7 @@ CORAL, short for COnsistent RAnk Logits, is a method for ordinal regression with
 
 Originally, developed this method in the context of age prediction from face images. Our approach was evaluated on several face image datasets for age prediction using ResNet-34, but it is compatible with other state-of-the-art deep neural networks.
 
-This repository implements the CORAL functionality (neural network layer, loss function, and dataset utilities) for convenient use. Examples are provided via the "Tutorials" that can be found on the documentation website at [https://rasbt.github.io/mlxtend/coral_pytorch](https://rasbt.github.io/mlxtend/coral_pytorch).
+This repository implements the CORAL functionality (neural network layer, loss function, and dataset utilities) for convenient use. Examples are provided via the "Tutorials" that can be found on the documentation website at [https://rasbt.github.io/coral_pytorch](https://rasbt.github.io/coral_pytorch).
 
 If you are looking for the orginal implementation, training datasets, and training log files corresponding to the paper, you can find these here: [https://github.com/Raschka-research-group/coral-cnn](https://github.com/Raschka-research-group/coral-cnn).
 
