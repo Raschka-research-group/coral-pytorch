@@ -1,43 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>
      <loc>http://rasbt.github.io/coral_pytorch/</loc>
-     <lastmod>2020-11-15</lastmod>
+     <lastmod>2020-11-16</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>http://rasbt.github.io/coral_pytorch/tutorials/mnist/</loc>
-     <lastmod>2020-11-15</lastmod>
+     <lastmod>2020-11-16</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>http://rasbt.github.io/coral_pytorch/tutorials/poker/</loc>
-     <lastmod>2020-11-15</lastmod>
+     <lastmod>2020-11-16</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>http://rasbt.github.io/coral_pytorch/api_subpackages/coral_pytorch.dataset/</loc>
-     <lastmod>2020-11-15</lastmod>
+     <lastmod>2020-11-16</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>http://rasbt.github.io/coral_pytorch/api_subpackages/coral_pytorch.layers/</loc>
-     <lastmod>2020-11-15</lastmod>
+     <lastmod>2020-11-16</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>http://rasbt.github.io/coral_pytorch/api_subpackages/coral_pytorch.losses/</loc>
-     <lastmod>2020-11-15</lastmod>
+     <lastmod>2020-11-16</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>http://rasbt.github.io/coral_pytorch/installation/</loc>
-     <lastmod>2020-11-15</lastmod>
-     <changefreq>daily</changefreq>
-    </url><url>
-     <loc>http://rasbt.github.io/coral_pytorch/changelog/</loc>
-     <lastmod>2020-11-15</lastmod>
+     <lastmod>2020-11-16</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>http://rasbt.github.io/coral_pytorch/citing/</loc>
-     <lastmod>2020-11-15</lastmod>
+     <lastmod>2020-11-16</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>http://rasbt.github.io/coral_pytorch/license/</loc>
-     <lastmod>2020-11-15</lastmod>
+     <lastmod>2020-11-16</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>
