@@ -4,9 +4,9 @@
 **CORAL implementation for ordinal regression with deep neural networks.**
 
 
-[![Continuous Integration](https://travis-ci.com/rasbt/coral_pytorch.svg?branch=main)](https://travis-ci.com/rasbt/coral_pytorch)
+[![Continuous Integration](https://travis-ci.com/raschka-research-group/coral_pytorch.svg?branch=main)](https://travis-ci.com/raschka-research-group/coral_pytorch)
 [![PyPi version](https://pypip.in/v/coral_pytorch/badge.png)](https://pypi.org/project/coral_pytorc/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/rasbt/coral_pytorch/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/raschka-research-group/coral_pytorch/blob/main/LICENSE)
 ![Python 3](https://img.shields.io/badge/python-3-blue.svg)
 
 <br>

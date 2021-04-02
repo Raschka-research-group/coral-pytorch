@@ -1,9 +1,9 @@
 site_name: coral_pytorch
-site_url: http://rasbt.github.io/coral_pytorch
+site_url: http://raschka-research-group.github.io/coral_pytorch
 site_author: Sebastian Raschka
 site_description: coral_pytorch is a package implementing the CORAL PyTorch utilities.
 
-repo_url: https://github.com/rasbt/coral_pytorch
+repo_url: https://github.com/raschka-research-group/coral_pytorch
 
 #include_search: true
 #theme: yeti
@@ -26,7 +26,7 @@ extra_css:
   - extra.css
 
 copyright: Copyright &copy; 2020 <a href="http://sebastianraschka.com">Sebastian Raschka</a>
-#google_analytics: ['UA-38457794-3', 'rasbt.github.io/pytorch_coral']
+#google_analytics: ['UA-38457794-3', 'raschka-research-group.github.io/pytorch_coral']
 
 nav:
     - Home: index.md
