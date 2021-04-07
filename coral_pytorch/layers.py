@@ -32,7 +32,7 @@ class CoralLayer(torch.nn.Module):
 
         self.coral_weights = torch.nn.Linear(self.size_in, 1, bias=False)
         self.coral_bias = torch.nn.Parameter(
-             torch.zeros(num_classes-1).float())
+             torch.range(num_classes - 2, 0, -1).float() )
 
     def forward(self, x):
         """
