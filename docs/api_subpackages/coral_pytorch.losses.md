@@ -1,4 +1,4 @@
-coral_pytorch version: 0.1.0dev
+coral_pytorch version: 1.1.0
 ## coral_loss
 
 *coral_loss(logits, levels, importance_weights=None, reduction='mean')*

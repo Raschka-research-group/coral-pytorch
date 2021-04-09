@@ -1,3 +1,7 @@
+# Temporary documentation files
+docs/api_modules
+docs/api_subpackages
+
 # Temp files
 .DS_Store
 

@@ -1,6 +1,6 @@
 ## CoralLayer
 
-*CoralLayer(size_in, num_classes)*
+*CoralLayer(size_in, num_classes, preinit_bias=True)*
 
 Implements CORAL layer described in
 
@@ -20,4 +20,12 @@ Implements CORAL layer described in
 - `num_classes` : int
 
     Number of classes in the dataset.
+
+
+- `preinit_bias` : bool (default=True)
+
+    If true, it will pre-initialize the biases to descending values in
+    [0, 1] range instead of initializing it to all zeros. This pre-
+    initialization scheme results in faster learning and better
+    generalization performance in practice.
 

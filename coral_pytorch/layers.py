@@ -1,4 +1,4 @@
-# Sebastian Raschka 2020
+# Sebastian Raschka 2020-2021
 # coral_pytorch
 # Author: Sebastian Raschka <sebastianraschka.com>
 #
@@ -24,15 +24,25 @@ class CoralLayer(torch.nn.Module):
     num_classes : int
         Number of classes in the dataset.
 
+    preinit_bias : bool (default=True)
+        If true, it will pre-initialize the biases to descending values in
+        [0, 1] range instead of initializing it to all zeros. This pre-
+        initialization scheme results in faster learning and better
+        generalization performance in practice.
+
 
     """
-    def __init__(self, size_in, num_classes):
+    def __init__(self, size_in, num_classes, preinit_bias=True):
         super().__init__()
         self.size_in, self.size_out = size_in, 1
 
         self.coral_weights = torch.nn.Linear(self.size_in, 1, bias=False)
-        self.coral_bias = torch.nn.Parameter(
-             torch.range(num_classes - 2, 0, -1).float() )
+        if preinit_bias:
+            self.coral_bias = torch.nn.Parameter(
+                torch.arange(num_classes - 1, 0, -1).float() / (num_classes-1))
+        else:
+            self.coral_bias = torch.nn.Parameter(
+                torch.zeros(num_classes-1).float())
 
     def forward(self, x):
         """
