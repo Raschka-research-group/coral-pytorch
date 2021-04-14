@@ -441,11 +441,11 @@
                 <h2 id="coral_loss">coral_loss</h2>
 <p><em>coral_loss(logits, levels, importance_weights=None, reduction='mean')</em></p>
 <p>Computes the CORAL loss described in</p>
-<pre><code>Cao, Mirjalili, and Raschka (2020)
+<div class="highlight"><pre><span></span><code>Cao, Mirjalili, and Raschka (2020)
 *Rank Consistent Ordinal Regression for Neural Networks
 with Application to Age Estimation*
 Pattern Recognition Letters, https://doi.org/10.1016/j.patrec.2020.11.008
-</code></pre>
+</code></pre></div>
 <p><strong>Parameters</strong></p>
 <ul>
 <li>
@@ -480,7 +480,7 @@ or a loss value for each data record (if <code>reduction=None</code>).</p>
 </li>
 </ul>
 <p><strong>Examples</strong></p>
-<pre><code>    &gt;&gt;&gt; import torch
+<div class="highlight"><pre><span></span><code>    &gt;&gt;&gt; import torch
     &gt;&gt;&gt; levels = torch.tensor(
     ...    [[1., 1., 0., 0.],
     ...     [1., 0., 0., 0.],
@@ -491,7 +491,7 @@ or a loss value for each data record (if <code>reduction=None</code>).</p>
     ...     [1.9, 1.8, 1.7, 1.6]])
     &gt;&gt;&gt; coral_loss(logits, levels)
     tensor(0.6920)
-</code></pre>
+</code></pre></div>
                 
               
               

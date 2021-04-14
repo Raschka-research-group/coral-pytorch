@@ -539,7 +539,7 @@
 <h2 id="0-obtaining-and-preparing-the-poker-hand-dataset-from-the-uci-ml-repository">0 -- Obtaining and preparing the Poker Hand dataset from the UCI ML repository</h2>
 <p>First, we are going to download and prepare the UCI Poker Hand dataset from <a href="https://archive.ics.uci.edu/ml/datasets/Poker+Hand">https://archive.ics.uci.edu/ml/datasets/Poker+Hand</a> and save it as CSV files locally. This is a general procedure that is not specific to CORAL.</p>
 <p>This dataset has 10 ordinal labels, </p>
-<pre><code>0: Nothing in hand; not a recognized poker hand 
+<div class="highlight"><pre><span></span><code>0: Nothing in hand; not a recognized poker hand 
 1: One pair; one pair of equal ranks within five cards 
 2: Two pairs; two pairs of equal ranks within five cards 
 3: Three of a kind; three equal ranks within five cards 
@@ -549,206 +549,206 @@
 7: Four of a kind; four equal ranks within five cards 
 8: Straight flush; straight + flush 
 9: Royal flush; {Ace, King, Queen, Jack, Ten} + flush 
-</code></pre>
+</code></pre></div>
 <p>where 0 &lt; 1 &lt; 2 ... &lt; 9.</p>
 <p>Download training examples and test dataset:</p>
-<pre><code class="language-python">import pandas as pd
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 
-train_df = pd.read_csv(&quot;https://archive.ics.uci.edu/ml/machine-learning-databases/poker/poker-hand-training-true.data&quot;, header=None)
-train_features = train_df.loc[:, 0:10]
-train_labels = train_df.loc[:, 10]
+<span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://archive.ics.uci.edu/ml/machine-learning-databases/poker/poker-hand-training-true.data&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">train_features</span> <span class="o">=</span> <span class="n">train_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+<span class="n">train_labels</span> <span class="o">=</span> <span class="n">train_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="mi">10</span><span class="p">]</span>
 
-print('Number of features:', train_features.shape[1])
-print('Number of training examples:', train_features.shape[0])
-</code></pre>
-<pre><code>Number of features: 11
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of features:&#39;</span><span class="p">,</span> <span class="n">train_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of training examples:&#39;</span><span class="p">,</span> <span class="n">train_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Number of features: 11
 Number of training examples: 25010
-</code></pre>
-<pre><code class="language-python">test_df = pd.read_csv(&quot;https://archive.ics.uci.edu/ml/machine-learning-databases/poker/poker-hand-testing.data&quot;, header=None)
-test_df.head()
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">test_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://archive.ics.uci.edu/ml/machine-learning-databases/poker/poker-hand-testing.data&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">test_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 
-test_features = test_df.loc[:, 0:10]
-test_labels = test_df.loc[:, 10]
+<span class="n">test_features</span> <span class="o">=</span> <span class="n">test_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+<span class="n">test_labels</span> <span class="o">=</span> <span class="n">test_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="mi">10</span><span class="p">]</span>
 
-print('Number of test examples:', test_features.shape[0])
-</code></pre>
-<pre><code>Number of test examples: 1000000
-</code></pre>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of test examples:&#39;</span><span class="p">,</span> <span class="n">test_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Number of test examples: 1000000
+</code></pre></div>
 <p>Standardize features:</p>
-<pre><code class="language-python">from sklearn.preprocessing import StandardScaler
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
 
 
-sc = StandardScaler()
-train_features_sc = sc.fit_transform(train_features)
-test_features_sc = sc.transform(test_features)
-</code></pre>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">train_features_sc</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train_features</span><span class="p">)</span>
+<span class="n">test_features_sc</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_features</span><span class="p">)</span>
+</code></pre></div>
 <p>Save training and test set as CSV files locally</p>
-<pre><code class="language-python">pd.DataFrame(train_features_sc).to_csv('train_features.csv', index=False)
-train_labels.to_csv('train_labels.csv', index=False)
+<div class="highlight"><pre><span></span><code><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">train_features_sc</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;train_features.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">train_labels</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;train_labels.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-pd.DataFrame(test_features_sc).to_csv('test_features.csv', index=False)
-test_labels.to_csv('test_labels.csv', index=False)
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">test_features_sc</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;test_features.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">test_labels</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;test_labels.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-# don't need those anymore
-del test_features
-del train_features
-del train_labels
-del test_labels
-</code></pre>
+<span class="c1"># don&#39;t need those anymore</span>
+<span class="k">del</span> <span class="n">test_features</span>
+<span class="k">del</span> <span class="n">train_features</span>
+<span class="k">del</span> <span class="n">train_labels</span>
+<span class="k">del</span> <span class="n">test_labels</span>
+</code></pre></div>
 <h2 id="1-setting-up-the-dataset-and-dataloader">1 -- Setting up the dataset and dataloader</h2>
 <p>In this section, we set up the data set and data loaders using PyTorch utilities. This is a general procedure that is not specific to CORAL.</p>
-<pre><code class="language-python">import torch
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
 
 
-##########################
-### SETTINGS
-##########################
+<span class="c1">##########################</span>
+<span class="c1">### SETTINGS</span>
+<span class="c1">##########################</span>
 
-# Hyperparameters
-random_seed = 1
-learning_rate = 0.001
-num_epochs = 20
-batch_size = 128
+<span class="c1"># Hyperparameters</span>
+<span class="n">random_seed</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.001</span>
+<span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">128</span>
 
-# Architecture
-NUM_CLASSES = 10
+<span class="c1"># Architecture</span>
+<span class="n">NUM_CLASSES</span> <span class="o">=</span> <span class="mi">10</span>
 
-# Other
-DEVICE = torch.device(&quot;cuda:0&quot; if torch.cuda.is_available() else &quot;cpu&quot;)
-print('Training on', DEVICE)
-</code></pre>
-<pre><code>Training on cpu
-</code></pre>
-<pre><code class="language-python">from torch.utils.data import Dataset
-import numpy as np
-
-
-class MyDataset(Dataset):
-
-    def __init__(self, csv_path_features, csv_path_labels, dtype=np.float32):
-
-        self.features = pd.read_csv(csv_path_features).values.astype(np.float32)
-        self.labels = pd.read_csv(csv_path_labels).values.flatten()
-
-    def __getitem__(self, index):
-        inputs = self.features[index]
-        label = self.labels[index]
-        return inputs, label
-
-    def __len__(self):
-        return self.labels.shape[0]
-</code></pre>
-<pre><code class="language-python">import torch
-from torch.utils.data import DataLoader
+<span class="c1"># Other</span>
+<span class="n">DEVICE</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda:0&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Training on&#39;</span><span class="p">,</span> <span class="n">DEVICE</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Training on cpu
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-# Note transforms.ToTensor() scales input images
-# to 0-1 range
-train_dataset = MyDataset('train_features.csv', 'train_labels.csv')
-test_dataset = MyDataset('test_features.csv', 'test_labels.csv')
+<span class="k">class</span> <span class="nc">MyDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">csv_path_features</span><span class="p">,</span> <span class="n">csv_path_labels</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">csv_path_features</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">csv_path_labels</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">label</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
 
 
-train_loader = DataLoader(dataset=train_dataset,
-                          batch_size=batch_size,
-                          shuffle=True, # want to shuffle the dataset
-                          num_workers=0) # number processes/CPUs to use
+<span class="c1"># Note transforms.ToTensor() scales input images</span>
+<span class="c1"># to 0-1 range</span>
+<span class="n">train_dataset</span> <span class="o">=</span> <span class="n">MyDataset</span><span class="p">(</span><span class="s1">&#39;train_features.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;train_labels.csv&#39;</span><span class="p">)</span>
+<span class="n">test_dataset</span> <span class="o">=</span> <span class="n">MyDataset</span><span class="p">(</span><span class="s1">&#39;test_features.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;test_labels.csv&#39;</span><span class="p">)</span>
 
-test_loader = DataLoader(dataset=test_dataset,
-                         batch_size=batch_size,
-                         shuffle=True, # want to shuffle the dataset
-                         num_workers=0) # number processes/CPUs to use
 
-# Checking the dataset
-for inputs, labels in train_loader:  
-    print('Input batch dimensions:', inputs.shape)
-    print('Input label dimensions:', labels.shape)
-    break
-</code></pre>
-<pre><code>Input batch dimensions: torch.Size([128, 11])
+<span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span>
+                          <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                          <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="c1"># want to shuffle the dataset</span>
+                          <span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># number processes/CPUs to use</span>
+
+<span class="n">test_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">test_dataset</span><span class="p">,</span>
+                         <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                         <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="c1"># want to shuffle the dataset</span>
+                         <span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># number processes/CPUs to use</span>
+
+<span class="c1"># Checking the dataset</span>
+<span class="k">for</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">labels</span> <span class="ow">in</span> <span class="n">train_loader</span><span class="p">:</span>  
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Input batch dimensions:&#39;</span><span class="p">,</span> <span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Input label dimensions:&#39;</span><span class="p">,</span> <span class="n">labels</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">break</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Input batch dimensions: torch.Size([128, 11])
 Input label dimensions: torch.Size([128])
-</code></pre>
+</code></pre></div>
 <h2 id="2-equipping-mlp-with-coral-layer">2 - Equipping MLP with CORAL layer</h2>
 <p>In this section, we are using the CoralLayer implemented in <code>coral_pytorch</code> to outfit a multilayer perceptron for ordinal regression. Note that the CORAL method only requires replacing the last (output) layer, which is typically a fully-connected layer, by the CORAL layer.</p>
 <p>Also, please use the <code>sigmoid</code> not softmax function (since the CORAL method uses a concept known as extended binary classification as described in the paper).</p>
-<pre><code class="language-python">from coral_pytorch.layers import CoralLayer
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">coral_pytorch.layers</span> <span class="kn">import</span> <span class="n">CoralLayer</span>
 
 
 
-class CoralMLP(torch.nn.Module):
+<span class="k">class</span> <span class="nc">CoralMLP</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 
-    def __init__(self, num_classes):
-        super(CoralMLP, self).__init__()
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CoralMLP</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        self.features = torch.nn.Sequential(
-            torch.nn.Linear(11, 5),
-            torch.nn.Linear(5, 5))
+        <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 
-        ### Specify CORAL layer
-        self.fc = CoralLayer(size_in=5, num_classes=num_classes)
-        ###--------------------------------------------------------------------###
+        <span class="c1">### Specify CORAL layer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc</span> <span class="o">=</span> <span class="n">CoralLayer</span><span class="p">(</span><span class="n">size_in</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="n">num_classes</span><span class="p">)</span>
+        <span class="c1">###--------------------------------------------------------------------###</span>
 
-    def forward(self, x):
-        x = self.features(x)
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
-        ##### Use CORAL layer #####
-        logits =  self.fc(x)
-        probas = torch.sigmoid(logits)
-        ###--------------------------------------------------------------------###
+        <span class="c1">##### Use CORAL layer #####</span>
+        <span class="n">logits</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">probas</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">logits</span><span class="p">)</span>
+        <span class="c1">###--------------------------------------------------------------------###</span>
 
-        return logits, probas
+        <span class="k">return</span> <span class="n">logits</span><span class="p">,</span> <span class="n">probas</span>
 
 
 
-torch.manual_seed(random_seed)
-model = CoralMLP(num_classes=NUM_CLASSES)
-model.to(DEVICE)
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">random_seed</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">CoralMLP</span><span class="p">(</span><span class="n">num_classes</span><span class="o">=</span><span class="n">NUM_CLASSES</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">DEVICE</span><span class="p">)</span>
 
-optimizer = torch.optim.Adam(model.parameters())
-</code></pre>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+</code></pre></div>
 <h2 id="3-using-the-coral-loss-for-model-training">3 - Using the CORAL loss for model training</h2>
 <p>During training, all you need to do is to </p>
 <p>1) convert the integer class labels into the extended binary label format using the <code>levels_from_labelbatch</code> provided via <code>coral_pytorch</code>:</p>
-<pre><code class="language-python">        levels = levels_from_labelbatch(class_labels, 
-                                        num_classes=NUM_CLASSES)
-</code></pre>
+<div class="highlight"><pre><span></span><code>        <span class="n">levels</span> <span class="o">=</span> <span class="n">levels_from_labelbatch</span><span class="p">(</span><span class="n">class_labels</span><span class="p">,</span> 
+                                        <span class="n">num_classes</span><span class="o">=</span><span class="n">NUM_CLASSES</span><span class="p">)</span>
+</code></pre></div>
 <p>2) Apply the CORAL loss (also provided via <code>coral_pytorch</code>):</p>
-<pre><code class="language-python">        cost = coral_loss(logits, levels)
-</code></pre>
-<pre><code class="language-python">from coral_pytorch.dataset import levels_from_labelbatch
-from coral_pytorch.losses import coral_loss
+<div class="highlight"><pre><span></span><code>        <span class="n">cost</span> <span class="o">=</span> <span class="n">coral_loss</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">levels</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">coral_pytorch.dataset</span> <span class="kn">import</span> <span class="n">levels_from_labelbatch</span>
+<span class="kn">from</span> <span class="nn">coral_pytorch.losses</span> <span class="kn">import</span> <span class="n">coral_loss</span>
 
 
-for epoch in range(num_epochs):
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_epochs</span><span class="p">):</span>
 
-    model = model.train()
-    for batch_idx, (features, class_labels) in enumerate(train_loader):
+    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">class_labels</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_loader</span><span class="p">):</span>
 
-        ##### Convert class labels for CORAL
-        levels = levels_from_labelbatch(class_labels, 
-                                        num_classes=NUM_CLASSES)
-        ###--------------------------------------------------------------------###
+        <span class="c1">##### Convert class labels for CORAL</span>
+        <span class="n">levels</span> <span class="o">=</span> <span class="n">levels_from_labelbatch</span><span class="p">(</span><span class="n">class_labels</span><span class="p">,</span> 
+                                        <span class="n">num_classes</span><span class="o">=</span><span class="n">NUM_CLASSES</span><span class="p">)</span>
+        <span class="c1">###--------------------------------------------------------------------###</span>
 
-        features = features.to(DEVICE)
-        levels = levels.to(DEVICE)
-        logits, probas = model(features)
+        <span class="n">features</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">DEVICE</span><span class="p">)</span>
+        <span class="n">levels</span> <span class="o">=</span> <span class="n">levels</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">DEVICE</span><span class="p">)</span>
+        <span class="n">logits</span><span class="p">,</span> <span class="n">probas</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
 
-        #### CORAL loss 
-        cost = coral_loss(logits, levels)
-        ###--------------------------------------------------------------------###   
+        <span class="c1">#### CORAL loss </span>
+        <span class="n">cost</span> <span class="o">=</span> <span class="n">coral_loss</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">levels</span><span class="p">)</span>
+        <span class="c1">###--------------------------------------------------------------------###   </span>
 
 
-        optimizer.zero_grad()
-        cost.backward()
-        optimizer.step()
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">cost</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 
-        ### LOGGING
-        if not batch_idx % 200:
-            print ('Epoch: %03d/%03d | Batch %03d/%03d | Cost: %.4f' 
-                   %(epoch+1, num_epochs, batch_idx, 
-                     len(train_loader), cost))
-</code></pre>
-<pre><code>Epoch: 001/020 | Batch 000/196 | Cost: 6.5905
+        <span class="c1">### LOGGING</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">batch_idx</span> <span class="o">%</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Epoch: </span><span class="si">%03d</span><span class="s1">/</span><span class="si">%03d</span><span class="s1"> | Batch </span><span class="si">%03d</span><span class="s1">/</span><span class="si">%03d</span><span class="s1"> | Cost: </span><span class="si">%.4f</span><span class="s1">&#39;</span> 
+                   <span class="o">%</span><span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">,</span> 
+                     <span class="nb">len</span><span class="p">(</span><span class="n">train_loader</span><span class="p">),</span> <span class="n">cost</span><span class="p">))</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Epoch: 001/020 | Batch 000/196 | Cost: 6.5905
 Epoch: 002/020 | Batch 000/196 | Cost: 3.0309
 Epoch: 003/020 | Batch 000/196 | Cost: 1.7885
 Epoch: 004/020 | Batch 000/196 | Cost: 1.2904
@@ -768,44 +768,44 @@ Epoch: 017/020 | Batch 000/196 | Cost: 0.8270
 Epoch: 018/020 | Batch 000/196 | Cost: 0.6653
 Epoch: 019/020 | Batch 000/196 | Cost: 0.6094
 Epoch: 020/020 | Batch 000/196 | Cost: 0.7930
-</code></pre>
+</code></pre></div>
 <h2 id="4-evaluate-model">4 -- Evaluate model</h2>
 <p>Finally, after model training, we can evaluate the performance of the model. For example, via the mean absolute error and mean squared error measures.</p>
 <p>For this, we are going to use the <code>proba_to_label</code> utility function from <code>coral_pytorch</code> to convert the probabilities back to the orginal label.</p>
-<pre><code class="language-python">from coral_pytorch.dataset import proba_to_label
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">coral_pytorch.dataset</span> <span class="kn">import</span> <span class="n">proba_to_label</span>
 
 
-def compute_mae_and_mse(model, data_loader, device):
+<span class="k">def</span> <span class="nf">compute_mae_and_mse</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data_loader</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
 
-    with torch.no_grad():
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
 
-        mae, mse, acc, num_examples = 0., 0., 0., 0
+        <span class="n">mae</span><span class="p">,</span> <span class="n">mse</span><span class="p">,</span> <span class="n">acc</span><span class="p">,</span> <span class="n">num_examples</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mi">0</span>
 
-        for i, (features, targets) in enumerate(data_loader):
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">targets</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data_loader</span><span class="p">):</span>
 
-            features = features.to(device)
-            targets = targets.float().to(device)
+            <span class="n">features</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">targets</span> <span class="o">=</span> <span class="n">targets</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
-            logits, probas = model(features)
-            predicted_labels = proba_to_label(probas).float()
+            <span class="n">logits</span><span class="p">,</span> <span class="n">probas</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+            <span class="n">predicted_labels</span> <span class="o">=</span> <span class="n">proba_to_label</span><span class="p">(</span><span class="n">probas</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
 
-            num_examples += targets.size(0)
-            mae += torch.sum(torch.abs(predicted_labels - targets))
-            mse += torch.sum((predicted_labels - targets)**2)
+            <span class="n">num_examples</span> <span class="o">+=</span> <span class="n">targets</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">mae</span> <span class="o">+=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">predicted_labels</span> <span class="o">-</span> <span class="n">targets</span><span class="p">))</span>
+            <span class="n">mse</span> <span class="o">+=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">predicted_labels</span> <span class="o">-</span> <span class="n">targets</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
-        mae = mae / num_examples
-        mse = mse / num_examples
-        return mae, mse
-</code></pre>
-<pre><code class="language-python">train_mae, train_mse = compute_mae_and_mse(model, train_loader, DEVICE)
-test_mae, test_mse = compute_mae_and_mse(model, test_loader, DEVICE)
-</code></pre>
-<pre><code class="language-python">print(f'Mean absolute error (train/test): {train_mae:.2f} | {test_mae:.2f}')
-print(f'Mean squared error (train/test): {train_mse:.2f} | {test_mse:.2f}')
-</code></pre>
-<pre><code>Mean absolute error (train/test): 0.10 | 0.10
+        <span class="n">mae</span> <span class="o">=</span> <span class="n">mae</span> <span class="o">/</span> <span class="n">num_examples</span>
+        <span class="n">mse</span> <span class="o">=</span> <span class="n">mse</span> <span class="o">/</span> <span class="n">num_examples</span>
+        <span class="k">return</span> <span class="n">mae</span><span class="p">,</span> <span class="n">mse</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">train_mae</span><span class="p">,</span> <span class="n">train_mse</span> <span class="o">=</span> <span class="n">compute_mae_and_mse</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">DEVICE</span><span class="p">)</span>
+<span class="n">test_mae</span><span class="p">,</span> <span class="n">test_mse</span> <span class="o">=</span> <span class="n">compute_mae_and_mse</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">test_loader</span><span class="p">,</span> <span class="n">DEVICE</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Mean absolute error (train/test): </span><span class="si">{</span><span class="n">train_mae</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> | </span><span class="si">{</span><span class="n">test_mae</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Mean squared error (train/test): </span><span class="si">{</span><span class="n">train_mse</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> | </span><span class="si">{</span><span class="n">test_mse</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Mean absolute error (train/test): 0.10 | 0.10
 Mean squared error (train/test): 0.21 | 0.21
-</code></pre>
+</code></pre></div>
                 
               
               
