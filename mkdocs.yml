@@ -15,10 +15,12 @@ site_favicon: favicon.ico
 theme: material
 
 markdown_extensions:
+  - pymdownx.highlight # syntax highlighting
+  - pymdownx.superfences # syntax highlighting
   - tables
   - fenced_code
   - mdx_math:
-      enable_dollar_delimiter: True #for use of inline $..$
+      enable_dollar_delimiter: True # for use of inline $..$
 extra_javascript:
   - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML
   - mathjaxhelper.js
