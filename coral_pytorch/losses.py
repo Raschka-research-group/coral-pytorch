@@ -58,7 +58,7 @@ def coral_loss(logits, levels, importance_weights=None, reduction='mean'):
     """
 
     if not logits.shape == levels.shape:
-        raise ValueError("Please ensure that logits (%s) has the same shape as logits (%s). "
+        raise ValueError("Please ensure that logits (%s) has the same shape as levels (%s). "
                          % (logits.shape, levels.shape))
 
     term1 = (F.logsigmoid(logits)*levels
