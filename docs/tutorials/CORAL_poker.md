@@ -228,7 +228,7 @@ During training, all you need to do is to
 2) Apply the CORAL loss (also provided via `coral_pytorch`):
 
 ```python
-        cost = coral_loss(logits, levels)
+        loss = coral_loss(logits, levels)
 ```
 
 
@@ -253,41 +253,41 @@ for epoch in range(num_epochs):
         logits, probas = model(features)
         
         #### CORAL loss 
-        cost = coral_loss(logits, levels)
+        loss = coral_loss(logits, levels)
         ###--------------------------------------------------------------------###   
         
         
         optimizer.zero_grad()
-        cost.backward()
+        loss.backward()
         optimizer.step()
         
         ### LOGGING
         if not batch_idx % 200:
-            print ('Epoch: %03d/%03d | Batch %03d/%03d | Cost: %.4f' 
+            print ('Epoch: %03d/%03d | Batch %03d/%03d | Loss: %.4f' 
                    %(epoch+1, num_epochs, batch_idx, 
-                     len(train_loader), cost))
+                     len(train_loader), loss))
 ```
 
-    Epoch: 001/020 | Batch 000/196 | Cost: 6.5905
-    Epoch: 002/020 | Batch 000/196 | Cost: 3.0309
-    Epoch: 003/020 | Batch 000/196 | Cost: 1.7885
-    Epoch: 004/020 | Batch 000/196 | Cost: 1.2904
-    Epoch: 005/020 | Batch 000/196 | Cost: 1.2604
-    Epoch: 006/020 | Batch 000/196 | Cost: 1.3774
-    Epoch: 007/020 | Batch 000/196 | Cost: 1.0882
-    Epoch: 008/020 | Batch 000/196 | Cost: 1.1178
-    Epoch: 009/020 | Batch 000/196 | Cost: 1.0749
-    Epoch: 010/020 | Batch 000/196 | Cost: 1.0276
-    Epoch: 011/020 | Batch 000/196 | Cost: 0.9430
-    Epoch: 012/020 | Batch 000/196 | Cost: 0.9547
-    Epoch: 013/020 | Batch 000/196 | Cost: 0.7979
-    Epoch: 014/020 | Batch 000/196 | Cost: 0.9496
-    Epoch: 015/020 | Batch 000/196 | Cost: 0.6845
-    Epoch: 016/020 | Batch 000/196 | Cost: 0.9132
-    Epoch: 017/020 | Batch 000/196 | Cost: 0.8270
-    Epoch: 018/020 | Batch 000/196 | Cost: 0.6653
-    Epoch: 019/020 | Batch 000/196 | Cost: 0.6094
-    Epoch: 020/020 | Batch 000/196 | Cost: 0.7930
+    Epoch: 001/020 | Batch 000/196 | Loss: 9.0919
+    Epoch: 002/020 | Batch 000/196 | Loss: 3.7998
+    Epoch: 003/020 | Batch 000/196 | Loss: 1.4505
+    Epoch: 004/020 | Batch 000/196 | Loss: 1.5629
+    Epoch: 005/020 | Batch 000/196 | Loss: 1.4695
+    Epoch: 006/020 | Batch 000/196 | Loss: 1.1261
+    Epoch: 007/020 | Batch 000/196 | Loss: 1.0789
+    Epoch: 008/020 | Batch 000/196 | Loss: 1.3151
+    Epoch: 009/020 | Batch 000/196 | Loss: 1.1998
+    Epoch: 010/020 | Batch 000/196 | Loss: 0.9775
+    Epoch: 011/020 | Batch 000/196 | Loss: 0.9414
+    Epoch: 012/020 | Batch 000/196 | Loss: 0.8363
+    Epoch: 013/020 | Batch 000/196 | Loss: 0.8292
+    Epoch: 014/020 | Batch 000/196 | Loss: 0.7139
+    Epoch: 015/020 | Batch 000/196 | Loss: 0.6953
+    Epoch: 016/020 | Batch 000/196 | Loss: 0.7651
+    Epoch: 017/020 | Batch 000/196 | Loss: 0.6434
+    Epoch: 018/020 | Batch 000/196 | Loss: 0.6914
+    Epoch: 019/020 | Batch 000/196 | Loss: 0.6330
+    Epoch: 020/020 | Batch 000/196 | Loss: 0.5410
 
 
 ## 4 -- Evaluate model

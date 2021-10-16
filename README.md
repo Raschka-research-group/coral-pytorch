@@ -5,7 +5,7 @@
 
 
 [![Continuous Integration](https://travis-ci.com/rasbt/coral_pytorch.svg?branch=main)](https://travis-ci.com/rasbt/coral_pytorch)
-[![PyPi version](https://pypip.in/v/coral_pytorch/badge.png)](https://pypi.org/project/coral_pytorc/)
+[![PyPi version](https://pypip.in/v/coral_pytorch/badge.png)](https://pypi.org/project/coral_pytorch)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/rasbt/coral_pytorch/blob/master/LICENSE)
 ![Python 3](https://img.shields.io/badge/python-3-blue.svg)
 

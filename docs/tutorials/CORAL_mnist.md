@@ -153,7 +153,7 @@ During training, all you need to do is to
 2) Apply the CORAL loss (also provided via `coral_pytorch`):
 
 ```python
-        cost = coral_loss(logits, levels)
+        loss = coral_loss(logits, levels)
 ```
 
 
@@ -178,51 +178,57 @@ for epoch in range(num_epochs):
         logits, probas = model(features)
         
         #### CORAL loss 
-        cost = coral_loss(logits, levels)
+        loss = coral_loss(logits, levels)
         ###--------------------------------------------------------------------###   
         
         
         optimizer.zero_grad()
-        cost.backward()
+        loss.backward()
         optimizer.step()
         
         ### LOGGING
         if not batch_idx % 200:
-            print ('Epoch: %03d/%03d | Batch %03d/%03d | Cost: %.4f' 
+            print ('Epoch: %03d/%03d | Batch %03d/%03d | Loss: %.4f' 
                    %(epoch+1, num_epochs, batch_idx, 
-                     len(train_loader), cost))
+                     len(train_loader), loss))
 ```
 
-    Epoch: 001/010 | Batch 000/468 | Cost: 6.2250
-    Epoch: 001/010 | Batch 200/468 | Cost: 4.5538
-    Epoch: 001/010 | Batch 400/468 | Cost: 4.1572
-    Epoch: 002/010 | Batch 000/468 | Cost: 4.2916
-    Epoch: 002/010 | Batch 200/468 | Cost: 3.7469
-    Epoch: 002/010 | Batch 400/468 | Cost: 3.7111
-    Epoch: 003/010 | Batch 000/468 | Cost: 3.5796
-    Epoch: 003/010 | Batch 200/468 | Cost: 3.2361
-    Epoch: 003/010 | Batch 400/468 | Cost: 3.1930
-    Epoch: 004/010 | Batch 000/468 | Cost: 3.2449
-    Epoch: 004/010 | Batch 200/468 | Cost: 2.9884
-    Epoch: 004/010 | Batch 400/468 | Cost: 2.7252
-    Epoch: 005/010 | Batch 000/468 | Cost: 2.9845
-    Epoch: 005/010 | Batch 200/468 | Cost: 2.7993
-    Epoch: 005/010 | Batch 400/468 | Cost: 2.6468
-    Epoch: 006/010 | Batch 000/468 | Cost: 2.7458
-    Epoch: 006/010 | Batch 200/468 | Cost: 2.4976
-    Epoch: 006/010 | Batch 400/468 | Cost: 2.5533
-    Epoch: 007/010 | Batch 000/468 | Cost: 2.6634
-    Epoch: 007/010 | Batch 200/468 | Cost: 2.5637
-    Epoch: 007/010 | Batch 400/468 | Cost: 2.3448
-    Epoch: 008/010 | Batch 000/468 | Cost: 2.3006
-    Epoch: 008/010 | Batch 200/468 | Cost: 2.7393
-    Epoch: 008/010 | Batch 400/468 | Cost: 2.1759
-    Epoch: 009/010 | Batch 000/468 | Cost: 2.3998
-    Epoch: 009/010 | Batch 200/468 | Cost: 2.2425
-    Epoch: 009/010 | Batch 400/468 | Cost: 2.1656
-    Epoch: 010/010 | Batch 000/468 | Cost: 2.3247
-    Epoch: 010/010 | Batch 200/468 | Cost: 2.3120
-    Epoch: 010/010 | Batch 400/468 | Cost: 2.4770
+    Epoch: 001/010 | Batch 000/468 | Loss: 5.9835
+
+
+    /Users/sebastian/miniforge3/lib/python3.9/site-packages/torch/nn/functional.py:718: UserWarning: Named tensors and all their associated APIs are an experimental feature and subject to change. Please do not use them for anything important until they are released as stable. (Triggered internally at  /tmp/pip-req-build-gqmopi53/c10/core/TensorImpl.h:1156.)
+      return torch.max_pool2d(input, kernel_size, stride, padding, dilation, ceil_mode)
+
+
+    Epoch: 001/010 | Batch 200/468 | Loss: 4.2022
+    Epoch: 001/010 | Batch 400/468 | Loss: 3.6785
+    Epoch: 002/010 | Batch 000/468 | Loss: 3.5811
+    Epoch: 002/010 | Batch 200/468 | Loss: 3.0574
+    Epoch: 002/010 | Batch 400/468 | Loss: 3.3966
+    Epoch: 003/010 | Batch 000/468 | Loss: 2.9386
+    Epoch: 003/010 | Batch 200/468 | Loss: 2.9354
+    Epoch: 003/010 | Batch 400/468 | Loss: 3.0238
+    Epoch: 004/010 | Batch 000/468 | Loss: 2.7420
+    Epoch: 004/010 | Batch 200/468 | Loss: 2.5817
+    Epoch: 004/010 | Batch 400/468 | Loss: 2.5847
+    Epoch: 005/010 | Batch 000/468 | Loss: 2.6086
+    Epoch: 005/010 | Batch 200/468 | Loss: 2.4370
+    Epoch: 005/010 | Batch 400/468 | Loss: 2.4903
+    Epoch: 006/010 | Batch 000/468 | Loss: 2.3428
+    Epoch: 006/010 | Batch 200/468 | Loss: 2.4846
+    Epoch: 006/010 | Batch 400/468 | Loss: 2.3392
+    Epoch: 007/010 | Batch 000/468 | Loss: 2.4983
+    Epoch: 007/010 | Batch 200/468 | Loss: 2.4828
+    Epoch: 007/010 | Batch 400/468 | Loss: 2.2048
+    Epoch: 008/010 | Batch 000/468 | Loss: 2.3902
+    Epoch: 008/010 | Batch 200/468 | Loss: 2.2189
+    Epoch: 008/010 | Batch 400/468 | Loss: 2.1895
+    Epoch: 009/010 | Batch 000/468 | Loss: 2.2189
+    Epoch: 009/010 | Batch 200/468 | Loss: 2.1120
+    Epoch: 009/010 | Batch 400/468 | Loss: 2.1923
+    Epoch: 010/010 | Batch 000/468 | Loss: 2.1188
+    Epoch: 010/010 | Batch 200/468 | Loss: 2.0416
+    Epoch: 010/010 | Batch 400/468 | Loss: 1.9729
 
 
 ## 4 -- Evaluate model
@@ -272,8 +278,8 @@ print(f'Mean absolute error (train/test): {train_mae:.2f} | {test_mae:.2f}')
 print(f'Mean squared error (train/test): {train_mse:.2f} | {test_mse:.2f}')
 ```
 
-    Mean absolute error (train/test): 0.90 | 0.91
-    Mean squared error (train/test): 1.84 | 1.87
+    Mean absolute error (train/test): 3.45 | 3.34
+    Mean squared error (train/test): 18.00 | 16.91
 
 
 Note that MNIST is not an ordinal dataset (there is no order between the image categories), so computing the MAE or MSE doesn't really make sense but we use it anyways for demonstration purposes.
