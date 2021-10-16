@@ -3,6 +3,29 @@
 The changelog for the current development version is available at
 [https://github.com/raschka-research-group/coral_pytorch/blob/main/docs/CHANGELOG.md](https://github.com/raschka-research-group/coral_pytorch/blob/main/docs/CHANGELOG.md.
 
+
+
+### 1.2.0dev (TBD)
+
+##### Downloads
+
+- [Source code (zip)](https://github.com/raschka-research-group/coral_pytorch/archive/v1.2.0.zip)
+- [Source code (tar.gz)](https://github.com/raschka-research-group/coral_pytorch/archive/v1.2.0.tar.gz)
+
+##### New Features
+
+- Add CORN loss for upcoming manuscript.
+
+##### Changes
+
+- - 
+
+##### Bug Fixes
+
+- -
+
+
+
 ### 1.1.0 (04/08/2021)
 
 ##### Downloads

@@ -1,3 +1,7 @@
+# Datasets
+docs/tutorials/*.csv
+docs/tutorials/data/MNIST
+
 # Temporary documentation files
 docs/api_modules
 docs/api_subpackages
