@@ -5,13 +5,13 @@
 
 
 [![Continuous Integration](https://travis-ci.com/rasbt/coral_pytorch.svg?branch=main)](https://travis-ci.com/rasbt/coral_pytorch)
-[![PyPI version](https://badge.fury.io/py/pytorch_coral.svg)](http://badge.fury.io/py/coral_pytorch)(https://pypi.org/project/coral_pytorch)
+[![PyPI version](https://badge.fury.io/py/coral-pytorch.svg)](https://badge.fury.io/py/coral-pytorch)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/rasbt/coral_pytorch/blob/master/LICENSE)
 ![Python 3](https://img.shields.io/badge/python-3-blue.svg)
 
 <br>
 
-**Documentation: [https://Raschka-research-group.github.io/coral_pytorch](https://Raschka-research-group.github.io/coral_pytorch)**
+**Documentation: [https://Raschka-research-group.github.io/coral_pytorch](https://Raschka-research-group.github.io/coral-pytorch)**
 
 ---
 
