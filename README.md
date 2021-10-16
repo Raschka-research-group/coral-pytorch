@@ -11,7 +11,7 @@
 
 <br>
 
-**Documentation: [https://Raschka-research-group.github.io/coral_pytorch](https://Raschka-research-group.github.io/coral-pytorch)**
+**Documentation: [https://Raschka-research-group.github.io/coral-pytorch](https://Raschka-research-group.github.io/coral-pytorch)**
 
 ---
 
