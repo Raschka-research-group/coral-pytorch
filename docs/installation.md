@@ -1,4 +1,4 @@
-# Installing `coral_pytorch`
+# Installing `coral-pytorch`
 
 
 ## Requirements
@@ -14,7 +14,7 @@ BioPandas requires the following software and packages:
 You can install the latest stable release of `coral_pytorch` directly from Python's package index via `pip` by executing the following code from your command line:  
 
 ```bash
-pip install coral_pytorch
+pip install coral-pytorch
 ```
 
 
@@ -25,7 +25,7 @@ pip install coral_pytorch
 You want to try out the latest features before they go live on PyPI? Install the `coral_pytorch` dev-version latest development version from the GitHub repository by executing
 
 ```bash
-pip install git+git://github.com/rasbt/coral_pytorch.git
+pip install git+git://github.com/Raschka-research-group/coral-pytorch.git
 ```
 
 <br>
@@ -36,5 +36,4 @@ Alternatively, you download the package manually from [GitHub](https://github.co
 ```bash
 python setup.py install
 ```
-
 
