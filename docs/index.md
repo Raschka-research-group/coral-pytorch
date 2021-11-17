@@ -1,12 +1,11 @@
 
-<img src="./img/coral-logo-alpha.png" width=300>
+<img src="./img/corn-coral-logo-alpha.png" width=300>
 
 **CORAL implementation for ordinal regression with deep neural networks.**
 
 
-[![Continuous Integration](https://travis-ci.com/raschka-research-group/coral_pytorch.svg?branch=main)](https://travis-ci.com/raschka-research-group/coral_pytorch)
-[![PyPi version](https://pypip.in/v/coral_pytorch/badge.png)](https://pypi.org/project/coral_pytorc/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/raschka-research-group/coral_pytorch/blob/main/LICENSE)
+[![PyPI version](https://badge.fury.io/py/coral-pytorch.svg)](https://badge.fury.io/py/coral-pytorch)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/rasbt/coral_pytorch/blob/master/LICENSE)
 ![Python 3](https://img.shields.io/badge/python-3-blue.svg)
 
 <br>
@@ -15,15 +14,18 @@
 
 ## About  
 
-CORAL, short for COnsistent RAnk Logits, is a method for ordinal regression with deep neural networks, which addresses the rank inconsistency issue of other ordinal regression frameworks.
+CORAL (COnsistent RAnk Logits) and CORN (Conditional Ordinal Regression for Neural networks) are methods for ordinal regression with deep neural networks, which address the rank inconsistency issue of other ordinal regression frameworks.
 
 <img src="img/figure1.jpg" width=400>
 
 Originally, developed this method in the context of age prediction from face images. Our approach was evaluated on several face image datasets for age prediction using ResNet-34, but it is compatible with other state-of-the-art deep neural networks.
 
-This repository implements the CORAL functionality (neural network layer, loss function, and dataset utilities) for convenient use. Examples are provided via the "Tutorials" in the upper left menu bar.
+This repository implements the CORAL and CORN functionality (neural network layer, loss function, and dataset utilities) for convenient use. Examples are provided via the "Tutorials" that can be found on the documentation website at [https://Raschka-research-group.github.io/coral_pytorch](https://Raschka-research-group.github.io/coral_pytorch).
 
-If you are looking for the orginal implementation, training datasets, and training log files corresponding to the paper, you can find these here: [https://github.com/Raschka-research-group/coral-cnn](https://github.com/Raschka-research-group/coral-cnn).
+If you are looking for the orginal implementation, training datasets, and training log files corresponding to the paper, you can find these here: 
+
+- CORAL: [https://github.com/Raschka-research-group/coral-cnn](https://github.com/Raschka-research-group/coral-cnn).
+- CORN: [https://github.com/Raschka-research-group/corn-ordinal-neuralnet](https://github.com/Raschka-research-group/corn-ordinal-neuralnet) 
 
 
 
@@ -31,7 +33,9 @@ If you are looking for the orginal implementation, training datasets, and traini
 
 ## Cite as
 
-If you use BioPandas as part of your workflow in a scientific publication, please consider citing the BioPandas repository with the following DOI:
+If you use CORAL or CORAL  as part of your workflow in a scientific publication, please consider citing the corresponding paper:
+
+**CORAL**
 
 - Wenzhi Cao, Vahid Mirjalili, and Sebastian Raschka (2020).  *Rank Consistent Ordinal Regression for Neural Networks with Application to Age Estimation*. Pattern Recognition Letters 140, pp. 325-331; [https://doi.org/10.1016/j.patrec.2020.11.008](https://doi.org/10.1016/j.patrec.2020.11.008).
 
@@ -52,3 +56,6 @@ keywords = "Deep learning, Ordinal regression, Convolutional neural networks, Ag
 }
 ```
 
+**CORN**
+
+TBD

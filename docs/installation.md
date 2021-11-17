@@ -3,7 +3,7 @@
 
 ## Requirements
 
-BioPandas requires the following software and packages:
+Coral-pytorch requires the following software and packages:
 
 - [Python](https://www.python.org) >= 3.6
 - [PyTorch](http://www.pytorch.org) >= 1.5.0
@@ -36,5 +36,4 @@ Alternatively, you download the package manually from [GitHub](https://github.co
 ```bash
 python setup.py install
 ```
-
 

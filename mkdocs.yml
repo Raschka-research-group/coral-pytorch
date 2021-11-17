@@ -27,14 +27,16 @@ extra_javascript:
 extra_css:
   - extra.css
 
-copyright: Copyright &copy; 2020 <a href="http://sebastianraschka.com">Sebastian Raschka</a>
+copyright: Copyright &copy; 2020-2021 <a href="http://sebastianraschka.com">Sebastian Raschka</a>
 #google_analytics: ['UA-38457794-3', 'raschka-research-group.github.io/pytorch_coral']
 
 nav:
     - Home: index.md
     - Tutorials:
-      - MNIST: tutorials/mnist.md
-      - Poker Hands: tutorials/poker.md
+      - CORAL MNIST (image, CNN): tutorials/CORAL_mnist.md
+      - CORN Cement (tabular, MLP): tutorials/CORAL_cement.md
+      - CORN MNIST (image, CNN): tutorials/CORN_mnist.md
+      - CORN Cement (tabular, MLP): tutorials/CORN_cement.md
     - API:
           - coral_pytorch.dataset: api_subpackages/coral_pytorch.dataset.md
           - coral_pytorch.layers: api_subpackages/coral_pytorch.layers.md
