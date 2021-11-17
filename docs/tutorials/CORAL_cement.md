@@ -1,62 +1,54 @@
-# CORAL MLP for predicting poker hands
+# CORAL MLP for predicting cement strength (cement_strength)
 
 This tutorial explains how to train a deep neural network (here: multilayer perceptron) with the CORAL layer and loss function for ordinal regression. 
 
 ## 0 -- Obtaining and preparing the cement_strength dataset
 
-First, we are going to download and prepare the UCI Poker Hand dataset from [https://archive.ics.uci.edu/ml/datasets/Poker+Hand](https://archive.ics.uci.edu/ml/datasets/Poker+Hand) and save it as CSV files locally. This is a general procedure that is not specific to CORAL.
+We will be using the cement_strength dataset from [https://github.com/gagolews/ordinal_regression_data/blob/master/cement_strength.csv](https://github.com/gagolews/ordinal_regression_data/blob/master/cement_strength.csv).
 
-This dataset has 10 ordinal labels, 
+First, we are going to download and prepare the and save it as CSV files locally. This is a general procedure that is not specific to CORN.
 
-```
-0: Nothing in hand; not a recognized poker hand 
-1: One pair; one pair of equal ranks within five cards 
-2: Two pairs; two pairs of equal ranks within five cards 
-3: Three of a kind; three equal ranks within five cards 
-4: Straight; five cards, sequentially ranked with no gaps 
-5: Flush; five cards with the same suit 
-6: Full house; pair + different rank three of a kind 
-7: Four of a kind; four equal ranks within five cards 
-8: Straight flush; straight + flush 
-9: Royal flush; {Ace, King, Queen, Jack, Ten} + flush 
-```
-
-where 0 < 1 < 2 ... < 9.
-
-Download training examples and test dataset:
+This dataset has 5 ordinal labels (1, 2, 3, 4, and 5). Note that CORN requires labels to be starting at 0, which is why we subtract "1" from the label column.
 
 
 ```python
 import pandas as pd
+import numpy as np
 
 
-train_df = pd.read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/poker/poker-hand-training-true.data", header=None)
-train_features = train_df.loc[:, 0:10]
-train_labels = train_df.loc[:, 10]
+data_df = pd.read_csv("https://raw.githubusercontent.com/gagolews/ordinal_regression_data/master/cement_strength.csv")
 
-print('Number of features:', train_features.shape[1])
-print('Number of training examples:', train_features.shape[0])
+data_df["response"] = data_df["response"]-1 # labels should start at 0
+
+data_labels = data_df["response"]
+data_features = data_df.loc[:, ["V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8"]]
+
+print('Number of features:', data_features.shape[1])
+print('Number of examples:', data_features.shape[0])
+print('Labels:', np.unique(data_labels.values))
 ```
 
-    Number of features: 11
-    Number of training examples: 25010
+    Number of features: 8
+    Number of examples: 998
+    Labels: [0 1 2 3 4]
 
+
+### Split into training and test data
 
 
 ```python
-test_df = pd.read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/poker/poker-hand-testing.data", header=None)
-test_df.head()
+from sklearn.model_selection import train_test_split
 
-test_features = test_df.loc[:, 0:10]
-test_labels = test_df.loc[:, 10]
 
-print('Number of test examples:', test_features.shape[0])
+X_train, X_test, y_train, y_test = train_test_split(
+    data_features.values,
+    data_labels.values,
+    test_size=0.2,
+    random_state=1,
+    stratify=data_labels.values)
 ```
 
-    Number of test examples: 1000000
-
-
-Standardize features:
+### Standardize features
 
 
 ```python
@@ -64,25 +56,8 @@ from sklearn.preprocessing import StandardScaler
 
 
 sc = StandardScaler()
-train_features_sc = sc.fit_transform(train_features)
-test_features_sc = sc.transform(test_features)
-```
-
-Save training and test set as CSV files locally
-
-
-```python
-pd.DataFrame(train_features_sc).to_csv('train_features.csv', index=False)
-train_labels.to_csv('train_labels.csv', index=False)
-
-pd.DataFrame(test_features_sc).to_csv('test_features.csv', index=False)
-test_labels.to_csv('test_labels.csv', index=False)
-
-# don't need those anymore
-del test_features
-del train_features
-del train_labels
-del test_labels
+X_train_std = sc.fit_transform(X_train)
+X_test_std = sc.transform(X_test)
 ```
 
 ## 1 -- Setting up the dataset and dataloader
@@ -100,7 +75,7 @@ import torch
 
 # Hyperparameters
 random_seed = 1
-learning_rate = 0.001
+learning_rate = 0.05
 num_epochs = 20
 batch_size = 128
 
@@ -118,15 +93,14 @@ print('Training on', DEVICE)
 
 ```python
 from torch.utils.data import Dataset
-import numpy as np
 
 
 class MyDataset(Dataset):
 
-    def __init__(self, csv_path_features, csv_path_labels, dtype=np.float32):
+    def __init__(self, feature_array, label_array, dtype=np.float32):
     
-        self.features = pd.read_csv(csv_path_features).values.astype(np.float32)
-        self.labels = pd.read_csv(csv_path_labels).values.flatten()
+        self.features = feature_array.astype(np.float32)
+        self.labels = label_array
 
     def __getitem__(self, index):
         inputs = self.features[index]
@@ -145,8 +119,8 @@ from torch.utils.data import DataLoader
 
 # Note transforms.ToTensor() scales input images
 # to 0-1 range
-train_dataset = MyDataset('train_features.csv', 'train_labels.csv')
-test_dataset = MyDataset('test_features.csv', 'test_labels.csv')
+train_dataset = MyDataset(X_train_std, y_train)
+test_dataset = MyDataset(X_test_std, y_test)
 
 
 train_loader = DataLoader(dataset=train_dataset,
@@ -166,7 +140,7 @@ for inputs, labels in train_loader:
     break
 ```
 
-    Input batch dimensions: torch.Size([128, 11])
+    Input batch dimensions: torch.Size([128, 8])
     Input label dimensions: torch.Size([128])
 
 
@@ -182,21 +156,32 @@ from coral_pytorch.layers import CoralLayer
 
 
 
-class CoralMLP(torch.nn.Module):
+class MLP(torch.nn.Module):
 
-    def __init__(self, num_classes):
-        super(CoralMLP, self).__init__()
+    def __init__(self, in_features, num_classes, num_hidden_1=300, num_hidden_2=300):
+        super().__init__()
         
-        self.features = torch.nn.Sequential(
-            torch.nn.Linear(11, 5),
-            torch.nn.Linear(5, 5))
+        self.my_network = torch.nn.Sequential(
+            
+            # 1st hidden layer
+            torch.nn.Linear(in_features, num_hidden_1, bias=False),
+            torch.nn.LeakyReLU(),
+            torch.nn.Dropout(0.2),
+            torch.nn.BatchNorm1d(num_hidden_1),
+            
+            # 2nd hidden layer
+            torch.nn.Linear(num_hidden_1, num_hidden_2, bias=False),
+            torch.nn.LeakyReLU(),
+            torch.nn.Dropout(0.2),
+            torch.nn.BatchNorm1d(num_hidden_2),
+        )
         
         ### Specify CORAL layer
-        self.fc = CoralLayer(size_in=5, num_classes=num_classes)
+        self.fc = CoralLayer(size_in=num_hidden_2, num_classes=num_classes)
         ###--------------------------------------------------------------------###
         
     def forward(self, x):
-        x = self.features(x)
+        x = self.my_network(x)
         
         ##### Use CORAL layer #####
         logits =  self.fc(x)
@@ -208,10 +193,10 @@ class CoralMLP(torch.nn.Module):
     
     
 torch.manual_seed(random_seed)
-model = CoralMLP(num_classes=NUM_CLASSES)
+model = MLP(in_features=8, num_classes=NUM_CLASSES)
 model.to(DEVICE)
 
-optimizer = torch.optim.Adam(model.parameters())
+optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 ```
 
 ## 3 - Using the CORAL loss for model training
@@ -268,27 +253,55 @@ for epoch in range(num_epochs):
                      len(train_loader), loss))
 ```
 
-    Epoch: 001/020 | Batch 000/196 | Loss: 9.0919
-    Epoch: 002/020 | Batch 000/196 | Loss: 3.7998
-    Epoch: 003/020 | Batch 000/196 | Loss: 1.4505
-    Epoch: 004/020 | Batch 000/196 | Loss: 1.5629
-    Epoch: 005/020 | Batch 000/196 | Loss: 1.4695
-    Epoch: 006/020 | Batch 000/196 | Loss: 1.1261
-    Epoch: 007/020 | Batch 000/196 | Loss: 1.0789
-    Epoch: 008/020 | Batch 000/196 | Loss: 1.3151
-    Epoch: 009/020 | Batch 000/196 | Loss: 1.1998
-    Epoch: 010/020 | Batch 000/196 | Loss: 0.9775
-    Epoch: 011/020 | Batch 000/196 | Loss: 0.9414
-    Epoch: 012/020 | Batch 000/196 | Loss: 0.8363
-    Epoch: 013/020 | Batch 000/196 | Loss: 0.8292
-    Epoch: 014/020 | Batch 000/196 | Loss: 0.7139
-    Epoch: 015/020 | Batch 000/196 | Loss: 0.6953
-    Epoch: 016/020 | Batch 000/196 | Loss: 0.7651
-    Epoch: 017/020 | Batch 000/196 | Loss: 0.6434
-    Epoch: 018/020 | Batch 000/196 | Loss: 0.6914
-    Epoch: 019/020 | Batch 000/196 | Loss: 0.6330
-    Epoch: 020/020 | Batch 000/196 | Loss: 0.5410
+    Epoch: 001/020 | Batch 000/007 | Loss: 1.0222
+    Epoch: 002/020 | Batch 000/007 | Loss: 1.1131
+    Epoch: 003/020 | Batch 000/007 | Loss: 0.9594
+    Epoch: 004/020 | Batch 000/007 | Loss: 0.9661
+    Epoch: 005/020 | Batch 000/007 | Loss: 0.9792
+    Epoch: 006/020 | Batch 000/007 | Loss: 1.0311
+    Epoch: 007/020 | Batch 000/007 | Loss: 0.9157
+    Epoch: 008/020 | Batch 000/007 | Loss: 0.8542
+    Epoch: 009/020 | Batch 000/007 | Loss: 0.9652
+    Epoch: 010/020 | Batch 000/007 | Loss: 0.9483
+    Epoch: 011/020 | Batch 000/007 | Loss: 0.8316
+    Epoch: 012/020 | Batch 000/007 | Loss: 0.9067
+    Epoch: 013/020 | Batch 000/007 | Loss: 1.0139
+    Epoch: 014/020 | Batch 000/007 | Loss: 0.8505
+    Epoch: 015/020 | Batch 000/007 | Loss: 0.8289
+    Epoch: 016/020 | Batch 000/007 | Loss: 0.8277
+    Epoch: 017/020 | Batch 000/007 | Loss: 0.7669
+    Epoch: 018/020 | Batch 000/007 | Loss: 0.8366
+    Epoch: 019/020 | Batch 000/007 | Loss: 0.7514
+    Epoch: 020/020 | Batch 000/007 | Loss: 0.8221
 
+
+
+```python
+from coral_pytorch.dataset import proba_to_label
+
+
+def compute_mae_and_mse(model, data_loader, device):
+
+    with torch.no_grad():
+    
+        mae, mse, acc, num_examples = 0., 0., 0., 0
+
+        for i, (features, targets) in enumerate(data_loader):
+
+            features = features.to(device)
+            targets = targets.float().to(device)
+
+            logits, probas = model(features)
+            predicted_labels = proba_to_label(probas).float()
+
+            num_examples += targets.size(0)
+            mae += torch.sum(torch.abs(predicted_labels - targets))
+            mse += torch.sum((predicted_labels - targets)**2)
+
+        mae = mae / num_examples
+        mse = mse / num_examples
+        return mae, mse
+```
 
 ## 4 -- Evaluate model
 
@@ -337,6 +350,6 @@ print(f'Mean absolute error (train/test): {train_mae:.2f} | {test_mae:.2f}')
 print(f'Mean squared error (train/test): {train_mse:.2f} | {test_mse:.2f}')
 ```
 
-    Mean absolute error (train/test): 0.10 | 0.10
-    Mean squared error (train/test): 0.21 | 0.21
+    Mean absolute error (train/test): 0.27 | 0.34
+    Mean squared error (train/test): 0.28 | 0.34
 

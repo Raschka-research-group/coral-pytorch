@@ -1,6 +1,10 @@
-If you use BioPandas as part of your workflow in a scientific publication, please consider citing the BioPandas repository with the following DOI:
+If you use CORAL or CORN  as part of your workflow in a scientific publication, please consider citing the corresponding paper:
+
+**CORAL**
 
 - Wenzhi Cao, Vahid Mirjalili, and Sebastian Raschka (2020).  *Rank Consistent Ordinal Regression for Neural Networks with Application to Age Estimation*. Pattern Recognition Letters 140, pp. 325-331; [https://doi.org/10.1016/j.patrec.2020.11.008](https://doi.org/10.1016/j.patrec.2020.11.008).
+
+
 
 ```
 @article{coral2020,
@@ -16,3 +20,7 @@ author = "Wenzhi Cao and Vahid Mirjalili and Sebastian Raschka",
 keywords = "Deep learning, Ordinal regression, Convolutional neural networks, Age prediction, Machine learning, Biometrics"
 }
 ```
+
+**CORN**
+
+TBD

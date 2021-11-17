@@ -1,4 +1,4 @@
-# Sebastian Raschka 2020
+# Sebastian Raschka 2020-2021
 # coral_pytorch
 # Author: Sebastian Raschka <sebastianraschka.com>
 #
