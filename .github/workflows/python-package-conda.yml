@@ -31,5 +31,5 @@ jobs:
     - name: Test with pytest
       run: |
         conda install pytest
-        conda install markdown
+        pip install markdown
         pytest coral_pytorch
