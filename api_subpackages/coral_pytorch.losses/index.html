@@ -16,7 +16,7 @@
         <link rel="canonical" href="http://raschka-research-group.github.io/coral_pytorch/api_subpackages/coral_pytorch.losses/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.0">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.6">
     
     
       
@@ -24,10 +24,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.33e2939f.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.a57b2b03.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ef6f36e2.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
         
       
     
@@ -46,6 +46,8 @@
     
     
       
+
+
     
     
   </head>
@@ -67,7 +69,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#coral_loss" class="md-skip">
+        <a href="#corn_loss" class="md-skip">
           Skip to content
         </a>
       
@@ -76,7 +78,9 @@
       
     </div>
     
-      <header class="md-header" data-md-component="header">
+      
+
+<header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="../.." title="coral_pytorch" class="md-header__button md-logo" aria-label="coral_pytorch" data-md-component="logo">
       
@@ -114,14 +118,18 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
       </label>
-      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
-      </button>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
@@ -151,11 +159,14 @@
       </div>
     
   </nav>
+  
 </header>
     
     <div class="md-container" data-md-component="container">
       
       
+        
+          
         
       
       <main class="md-main" data-md-component="main">
@@ -223,10 +234,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
       
-      <label class="md-nav__link" for="__nav_2">
-        Tutorials
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Tutorials
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
         <label class="md-nav__title" for="__nav_2">
           <span class="md-nav__icon md-icon"></span>
@@ -235,28 +250,60 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
     <li class="md-nav__item">
-      <a href="../../tutorials/mnist/" class="md-nav__link">
-        MNIST
+      <a href="../../tutorials/CORAL_mnist/" class="md-nav__link">
+        CORAL MNIST (image, CNN)
       </a>
     </li>
   
 
+            
           
             
+              
   
   
   
     <li class="md-nav__item">
-      <a href="../../tutorials/poker/" class="md-nav__link">
-        Poker Hands
+      <a href="../../tutorials/CORAL_cement/" class="md-nav__link">
+        CORN Cement (tabular, MLP)
       </a>
     </li>
   
 
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/CORN_mnist/" class="md-nav__link">
+        CORN MNIST (image, CNN)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/CORN_cement/" class="md-nav__link">
+        CORN Cement (tabular, MLP)
+      </a>
+    </li>
+  
+
+            
           
         </ul>
       </nav>
@@ -279,10 +326,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
       
-      <label class="md-nav__link" for="__nav_3">
-        API
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          API
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="API" data-md-level="1">
         <label class="md-nav__title" for="__nav_3">
           <span class="md-nav__icon md-icon"></span>
@@ -291,6 +342,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -301,8 +353,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -313,8 +367,10 @@
     </li>
   
 
+            
           
             
+              
   
   
     
@@ -323,6 +379,7 @@
     <li class="md-nav__item md-nav__item--active">
       
       <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
@@ -335,7 +392,10 @@
       </a>
       
         
+
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
   
   
   
@@ -344,6 +404,13 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#corn_loss" class="md-nav__link">
+    corn_loss
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#coral_loss" class="md-nav__link">
@@ -359,6 +426,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -389,7 +457,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../changelog/" class="md-nav__link">
+      <a href="../../changelog.md" class="md-nav__link">
         Changelog
       </a>
     </li>
@@ -438,7 +506,10 @@
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
+
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
   
   
   
@@ -447,6 +518,13 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#corn_loss" class="md-nav__link">
+    corn_loss
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#coral_loss" class="md-nav__link">
@@ -467,14 +545,62 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/raschka-research-group/coral_pytorch/edit/main/docs/api_subpackages/coral_pytorch.losses.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/raschka-research-group/coral_pytorch/edit/master/docs/api_subpackages/coral_pytorch.losses.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
                   <h1>coral_pytorch.losses</h1>
                 
-                <p>coral_pytorch version: 1.1.0</p>
+                <p>coral_pytorch version: 1.2.0dev0</p>
+<h2 id="corn_loss">corn_loss</h2>
+<p><em>corn_loss(logits, y_train, num_classes)</em></p>
+<p>Computes the CORN loss described in our forthcoming
+    'Deep Neural Networks for Rank Consistent Ordinal
+    Regression based on Conditional Probabilities'
+    manuscript.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li>
+<p><code>logits</code> : torch.tensor, shape=(num_examples, num_classes-1)</p>
+<p>Outputs of the CORN layer.</p>
+</li>
+<li>
+<p><code>y_train</code> : torch.tensor, shape=(num_examples)</p>
+<p>Torch tensor containing the class labels.</p>
+</li>
+<li>
+<p><code>num_classes</code> : int</p>
+<p>Number of unique class labels (class labels should start at 0).</p>
+</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>
+<p><code>loss</code> : torch.tensor</p>
+<p>A torch.tensor containing a single loss value.</p>
+</li>
+</ul>
+<p><strong>Examples</strong></p>
+<div class="highlight"><pre><span></span><code>    &gt;&gt;&gt; import torch
+    &gt;&gt;&gt; # Consider 8 training examples
+    &gt;&gt;&gt; _  = torch.manual_seed(123)
+    &gt;&gt;&gt; X_train = torch.rand(8, 99)
+    &gt;&gt;&gt; y_train = torch.tensor([0, 1, 2, 2, 2, 3, 4, 4])
+    &gt;&gt;&gt; NUM_CLASSES = 5
+    &gt;&gt;&gt; #
+    &gt;&gt;&gt; #
+    &gt;&gt;&gt; # def __init__(self):
+    &gt;&gt;&gt; corn_net = torch.nn.Linear(99, NUM_CLASSES-1)
+    &gt;&gt;&gt; #
+    &gt;&gt;&gt; #
+    &gt;&gt;&gt; # def forward(self, X_train):
+    &gt;&gt;&gt; logits = corn_net(X_train)
+    &gt;&gt;&gt; logits.shape
+    torch.Size([8, 4])
+    &gt;&gt;&gt; corn_loss(logits, y_train, NUM_CLASSES)
+    tensor(3.4210, grad_fn=&lt;DivBackward0&gt;)
+</code></pre></div>
 <h2 id="coral_loss">coral_loss</h2>
 <p><em>coral_loss(logits, levels, importance_weights=None, reduction='mean')</em></p>
 <p>Computes the CORAL loss described in</p>
@@ -547,7 +673,8 @@ or a loss value for each data record (if <code>reduction=None</code>).</p>
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
-        <a href="../coral_pytorch.layers/" class="md-footer__link md-footer__link--prev" rel="prev">
+        
+        <a href="../coral_pytorch.layers/" class="md-footer__link md-footer__link--prev" aria-label="Previous: coral_pytorch.layers" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -562,7 +689,8 @@ or a loss value for each data record (if <code>reduction=None</code>).</p>
         </a>
       
       
-        <a href="../../installation/" class="md-footer__link md-footer__link--next" rel="next">
+        
+        <a href="../../installation/" class="md-footer__link md-footer__link--next" aria-label="Next: Installation" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
@@ -586,10 +714,12 @@ or a loss value for each data record (if <code>reduction=None</code>).</p>
             Copyright &copy; 2020 <a href="http://sebastianraschka.com">Sebastian Raschka</a>
           </div>
         
-        Made with
-        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-          Material for MkDocs
-        </a>
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
         
       </div>
       
@@ -601,10 +731,10 @@ or a loss value for each data record (if <code>reduction=None</code>).</p>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.fe42c31b.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.fcfe8b6d.min.js", "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d892486b.min.js"></script>
+      <script src="../../assets/javascripts/bundle.b1047164.min.js"></script>
       
         <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
       

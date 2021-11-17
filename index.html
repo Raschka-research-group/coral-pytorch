@@ -16,7 +16,7 @@
         <link rel="canonical" href="http://raschka-research-group.github.io/coral_pytorch/">
       
       <link rel="icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.0">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.6">
     
     
       
@@ -24,10 +24,10 @@
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.33e2939f.min.css">
+      <link rel="stylesheet" href="assets/stylesheets/main.a57b2b03.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ef6f36e2.min.css">
+        <link rel="stylesheet" href="assets/stylesheets/palette.3f5d1f46.min.css">
         
       
     
@@ -46,6 +46,8 @@
     
     
       
+
+
     
     
   </head>
@@ -76,7 +78,9 @@
       
     </div>
     
-      <header class="md-header" data-md-component="header">
+      
+
+<header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="." title="coral_pytorch" class="md-header__button md-logo" aria-label="coral_pytorch" data-md-component="logo">
       
@@ -114,14 +118,18 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
       </label>
-      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
-      </button>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
@@ -151,11 +159,14 @@
       </div>
     
   </nav>
+  
 </header>
     
     <div class="md-container" data-md-component="container">
       
       
+        
+          
         
       
       <main class="md-main" data-md-component="main">
@@ -209,6 +220,7 @@
       <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
       
       
+      
         <label class="md-nav__link md-nav__link--active" for="__toc">
           Home
           <span class="md-nav__icon md-icon"></span>
@@ -219,7 +231,10 @@
       </a>
       
         
+
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
   
   
   
@@ -264,10 +279,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
       
-      <label class="md-nav__link" for="__nav_2">
-        Tutorials
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Tutorials
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
         <label class="md-nav__title" for="__nav_2">
           <span class="md-nav__icon md-icon"></span>
@@ -276,28 +295,60 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
     <li class="md-nav__item">
-      <a href="tutorials/mnist/" class="md-nav__link">
-        MNIST
+      <a href="tutorials/CORAL_mnist/" class="md-nav__link">
+        CORAL MNIST (image, CNN)
       </a>
     </li>
   
 
+            
           
             
+              
   
   
   
     <li class="md-nav__item">
-      <a href="tutorials/poker/" class="md-nav__link">
-        Poker Hands
+      <a href="tutorials/CORAL_cement/" class="md-nav__link">
+        CORN Cement (tabular, MLP)
       </a>
     </li>
   
 
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tutorials/CORN_mnist/" class="md-nav__link">
+        CORN MNIST (image, CNN)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tutorials/CORN_cement/" class="md-nav__link">
+        CORN Cement (tabular, MLP)
+      </a>
+    </li>
+  
+
+            
           
         </ul>
       </nav>
@@ -318,10 +369,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
       
-      <label class="md-nav__link" for="__nav_3">
-        API
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          API
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="API" data-md-level="1">
         <label class="md-nav__title" for="__nav_3">
           <span class="md-nav__icon md-icon"></span>
@@ -330,6 +385,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -340,8 +396,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -352,8 +410,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -364,6 +424,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -394,7 +455,7 @@
   
   
     <li class="md-nav__item">
-      <a href="changelog/" class="md-nav__link">
+      <a href="changelog.md" class="md-nav__link">
         Changelog
       </a>
     </li>
@@ -443,7 +504,10 @@
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
+
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
   
   
   
@@ -479,30 +543,34 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/raschka-research-group/coral_pytorch/edit/main/docs/index.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/raschka-research-group/coral_pytorch/edit/master/docs/index.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
                   <h1>Home</h1>
                 
-                <p><img src="./img/coral-logo-alpha.png" width=300></p>
+                <p><img src="./img/corn-coral-logo-alpha.png" width=300></p>
 <p><strong>CORAL implementation for ordinal regression with deep neural networks.</strong></p>
-<p><a href="https://travis-ci.com/raschka-research-group/coral_pytorch"><img alt="Continuous Integration" src="https://travis-ci.com/raschka-research-group/coral_pytorch.svg?branch=main" /></a>
-<a href="https://pypi.org/project/coral_pytorc/"><img alt="PyPi version" src="https://pypip.in/v/coral_pytorch/badge.png" /></a>
-<a href="https://github.com/raschka-research-group/coral_pytorch/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-blue.svg" /></a>
+<p><a href="https://badge.fury.io/py/coral-pytorch"><img alt="PyPI version" src="https://badge.fury.io/py/coral-pytorch.svg" /></a>
+<a href="https://github.com/rasbt/coral_pytorch/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-blue.svg" /></a>
 <img alt="Python 3" src="https://img.shields.io/badge/python-3-blue.svg" /></p>
 <p><br></p>
 <hr />
 <h2 id="about">About</h2>
-<p>CORAL, short for COnsistent RAnk Logits, is a method for ordinal regression with deep neural networks, which addresses the rank inconsistency issue of other ordinal regression frameworks.</p>
+<p>CORAL (COnsistent RAnk Logits) and CORN (Conditional Ordinal Regression for Neural networks) are methods for ordinal regression with deep neural networks, which address the rank inconsistency issue of other ordinal regression frameworks.</p>
 <p><img src="img/figure1.jpg" width=400></p>
 <p>Originally, developed this method in the context of age prediction from face images. Our approach was evaluated on several face image datasets for age prediction using ResNet-34, but it is compatible with other state-of-the-art deep neural networks.</p>
-<p>This repository implements the CORAL functionality (neural network layer, loss function, and dataset utilities) for convenient use. Examples are provided via the "Tutorials" in the upper left menu bar.</p>
-<p>If you are looking for the orginal implementation, training datasets, and training log files corresponding to the paper, you can find these here: <a href="https://github.com/Raschka-research-group/coral-cnn">https://github.com/Raschka-research-group/coral-cnn</a>.</p>
+<p>This repository implements the CORAL and CORN functionality (neural network layer, loss function, and dataset utilities) for convenient use. Examples are provided via the "Tutorials" that can be found on the documentation website at <a href="https://Raschka-research-group.github.io/coral_pytorch">https://Raschka-research-group.github.io/coral_pytorch</a>.</p>
+<p>If you are looking for the orginal implementation, training datasets, and training log files corresponding to the paper, you can find these here: </p>
+<ul>
+<li>CORAL: <a href="https://github.com/Raschka-research-group/coral-cnn">https://github.com/Raschka-research-group/coral-cnn</a>.</li>
+<li>CORN: <a href="https://github.com/Raschka-research-group/corn-ordinal-neuralnet">https://github.com/Raschka-research-group/corn-ordinal-neuralnet</a> </li>
+</ul>
 <hr />
 <h2 id="cite-as">Cite as</h2>
-<p>If you use BioPandas as part of your workflow in a scientific publication, please consider citing the BioPandas repository with the following DOI:</p>
+<p>If you use CORAL or CORAL  as part of your workflow in a scientific publication, please consider citing the corresponding paper:</p>
+<p><strong>CORAL</strong></p>
 <ul>
 <li>Wenzhi Cao, Vahid Mirjalili, and Sebastian Raschka (2020).  <em>Rank Consistent Ordinal Regression for Neural Networks with Application to Age Estimation</em>. Pattern Recognition Letters 140, pp. 325-331; <a href="https://doi.org/10.1016/j.patrec.2020.11.008">https://doi.org/10.1016/j.patrec.2020.11.008</a>.</li>
 </ul>
@@ -519,6 +587,8 @@ author = &quot;Wenzhi Cao and Vahid Mirjalili and Sebastian Raschka&quot;,
 keywords = &quot;Deep learning, Ordinal regression, Convolutional neural networks, Age prediction, Machine learning, Biometrics&quot;
 }
 </code></pre></div>
+<p><strong>CORN</strong></p>
+<p>TBD</p>
                 
               
               
@@ -538,13 +608,14 @@ keywords = &quot;Deep learning, Ordinal regression, Convolutional neural network
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
       
-        <a href="tutorials/mnist/" class="md-footer__link md-footer__link--next" rel="next">
+        
+        <a href="tutorials/CORAL_mnist/" class="md-footer__link md-footer__link--next" aria-label="Next: CORAL MNIST (image, CNN)" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              MNIST
+              CORAL MNIST (image, CNN)
             </div>
           </div>
           <div class="md-footer__button md-icon">
@@ -562,10 +633,12 @@ keywords = &quot;Deep learning, Ordinal regression, Convolutional neural network
             Copyright &copy; 2020 <a href="http://sebastianraschka.com">Sebastian Raschka</a>
           </div>
         
-        Made with
-        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-          Material for MkDocs
-        </a>
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
         
       </div>
       
@@ -577,10 +650,10 @@ keywords = &quot;Deep learning, Ordinal regression, Convolutional neural network
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": ".", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "assets/javascripts/workers/search.fe42c31b.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": ".", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "assets/javascripts/workers/search.fcfe8b6d.min.js", "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.d892486b.min.js"></script>
+      <script src="assets/javascripts/bundle.b1047164.min.js"></script>
       
         <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
       
