@@ -4,4 +4,4 @@ channels:
   - defaults
 dependencies:
   - python>=3.6
-  - pytorch>=1.8
+  - cpuonly pytorch>=1.8
