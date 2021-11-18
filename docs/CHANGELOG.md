@@ -5,7 +5,7 @@ The changelog for the current development version is available at
 
 
 
-### 1.2.0dev (11-18-2021)
+### 1.2.0dev (11-17-2021)
 
 ##### Downloads
 
@@ -14,7 +14,7 @@ The changelog for the current development version is available at
 
 ##### New Features
 
-- Add CORN loss corresponding to the upcoming manuscript, "Deep Neural Networks for Rank-Consistent Ordinal Regression Based On Conditional Probabilities"
+- Add CORN loss corresponding to the manuscript, "[Deep Neural Networks for Rank-Consistent Ordinal Regression Based On Conditional Probabilities](https://arxiv.org/abs/2111.08851)"
 
 ##### Changes
 
