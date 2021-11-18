@@ -1,7 +1,7 @@
 
 <img src="./img/corn-coral-logo-alpha.png" width=300>
 
-**CORAL implementation for ordinal regression with deep neural networks.**
+**CORAL and CORAL  implementations for ordinal regression with deep neural networks.**
 
 
 [![PyPI version](https://badge.fury.io/py/coral-pytorch.svg)](https://badge.fury.io/py/coral-pytorch)
@@ -40,4 +40,4 @@ If you are looking for the orginal implementation, training datasets, and traini
 
 **CORN**
 
-- Xintong Shi, Wenzhi Cao, and Sebastian Raschka (2021). Deep Neural Networks for Rank-Consistent Ordinal Regression Based On Conditional Probabilities. Arxiv preprint;  https://arxiv.org/abs/2111.08851
+- Xintong Shi, Wenzhi Cao, and Sebastian Raschka (2021). Deep Neural Networks for Rank-Consistent Ordinal Regression Based On Conditional Probabilities. Arxiv preprint; [ https://arxiv.org/abs/2111.08851](https://arxiv.org/abs/2111.08851)
