@@ -741,8 +741,8 @@ Labels: [0 1 2 3 4]
 
 <span class="n">test_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">test_dataset</span><span class="p">,</span>
                          <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
-                         <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="c1"># want to shuffle the dataset</span>
-                         <span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># number processes/CPUs to use</span>
+                         <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                         <span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="c1"># Checking the dataset</span>
 <span class="k">for</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">labels</span> <span class="ow">in</span> <span class="n">train_loader</span><span class="p">:</span>  
