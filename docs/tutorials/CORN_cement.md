@@ -130,8 +130,8 @@ train_loader = DataLoader(dataset=train_dataset,
 
 test_loader = DataLoader(dataset=test_dataset,
                          batch_size=batch_size,
-                         shuffle=True, # want to shuffle the dataset
-                         num_workers=0) # number processes/CPUs to use
+                         shuffle=False,
+                         num_workers=0)
 
 # Checking the dataset
 for inputs, labels in train_loader:  
