@@ -278,7 +278,7 @@ print(f'Baseline MAE: {baseline_mae:.2f}')
 
 - In other words, a model that would always predict the dataset median would achieve a MAE of 1.03. In other words, a model that has an MAE of > 1 is certainly a bad model.
 
-### Setting Dataset class
+### Creating a `Dataset` class
 
 - Next, let us set up a data loading mechanism for our model.
 - Note that the Cement dataset is a relatively small dataset that fits into memory quite comfortably so this may seem like overkill. However, the following steps are useful as a template since you can use those for arbitrarily-sized datatsets.
@@ -304,7 +304,7 @@ class MyDataset(Dataset):
         return self.features.shape[0]
 ```
 
-### Setting up DataModule
+### Setting up a `DataModule`
 
 - There are three main ways we can prepare the dataset for Lightning. We can
   1. make the dataset part of the model;
