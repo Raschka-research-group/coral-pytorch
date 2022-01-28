@@ -24,7 +24,7 @@ num_epochs = 10
 batch_size = 128
 
 # Architecture
-NUM_CLASSES = 10
+NUM_CLASSES = 10 
 
 # Other
 DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -37,12 +37,12 @@ print('Training on', DEVICE)
 
 # Note transforms.ToTensor() scales input images
 # to 0-1 range
-train_dataset = datasets.MNIST(root='data', 
+train_dataset = datasets.MNIST(root='../data', 
                                train=True, 
                                transform=transforms.ToTensor(),
                                download=True)
 
-test_dataset = datasets.MNIST(root='data', 
+test_dataset = datasets.MNIST(root='../data', 
                               train=False, 
                               transform=transforms.ToTensor())
 

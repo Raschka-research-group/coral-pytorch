@@ -37,12 +37,12 @@ print('Training on', DEVICE)
 
 # Note transforms.ToTensor() scales input images
 # to 0-1 range
-train_dataset = datasets.MNIST(root='data', 
+train_dataset = datasets.MNIST(root='../data', 
                                train=True, 
                                transform=transforms.ToTensor(),
                                download=True)
 
-test_dataset = datasets.MNIST(root='data', 
+test_dataset = datasets.MNIST(root='../data', 
                               train=False, 
                               transform=transforms.ToTensor())
 

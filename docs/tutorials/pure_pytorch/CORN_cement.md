@@ -17,7 +17,7 @@ import numpy as np
 
 
 data_df = pd.read_csv("https://raw.githubusercontent.com/gagolews/ordinal_regression_data/master/cement_strength.csv")
-
+ 
 data_df["response"] = data_df["response"]-1 # labels should start at 0
 
 data_labels = data_df["response"]

@@ -33,10 +33,13 @@ copyright: Copyright &copy; 2020-2022 <a href="http://sebastianraschka.com">Seba
 nav:
     - Home: index.md
     - Tutorials:
-      - CORAL MNIST (image, CNN): tutorials/CORAL_mnist.md
-      - CORAL Cement (tabular, MLP): tutorials/CORAL_cement.md
-      - CORN MNIST (image, CNN): tutorials/CORN_mnist.md
-      - CORN Cement (tabular, MLP): tutorials/CORN_cement.md
+      - PyTorch Lightning:
+        - CORN MLP model for tabular data (Cement dataset): tutorials/pytorch_lightning/ordinal-corn_cement.md
+      - Pure PyTorch:
+        - CORAL CNN model for image data (MNIST dataset): tutorials/pure_pytorch/CORAL_mnist.md
+        - CORAL MLP model for tabular data (Cement dataset): tutorials/pure_pytorch/CORAL_cement.md
+        - CORN CNN model for image data (MNIST dataset): tutorials/pure_pytorch/CORN_mnist.md
+        - CORN MLP model for tabular data (Cement dataset): tutorials/pure_pytorch/CORN_cement.md
     - API:
           - coral_pytorch.dataset: api_subpackages/coral_pytorch.dataset.md
           - coral_pytorch.layers: api_subpackages/coral_pytorch.layers.md
