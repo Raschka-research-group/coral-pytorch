@@ -350,15 +350,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#setting-dataset-class" class="md-nav__link">
-    Setting Dataset class
+  <a href="#creating-a-dataset-class" class="md-nav__link">
+    Creating a Dataset class
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#setting-up-datamodule" class="md-nav__link">
-    Setting up DataModule
+  <a href="#setting-up-a-datamodule" class="md-nav__link">
+    Setting up a DataModule
   </a>
   
 </li>
@@ -699,15 +699,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#setting-dataset-class" class="md-nav__link">
-    Setting Dataset class
+  <a href="#creating-a-dataset-class" class="md-nav__link">
+    Creating a Dataset class
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#setting-up-datamodule" class="md-nav__link">
-    Setting up DataModule
+  <a href="#setting-up-a-datamodule" class="md-nav__link">
+    Setting up a DataModule
   </a>
   
 </li>
@@ -1014,7 +1014,7 @@ Label distribution: [196 310 244 152  96]
 <ul>
 <li>In other words, a model that would always predict the dataset median would achieve a MAE of 1.03. In other words, a model that has an MAE of &gt; 1 is certainly a bad model.</li>
 </ul>
-<h3 id="setting-dataset-class">Setting Dataset class</h3>
+<h3 id="creating-a-dataset-class">Creating a <code>Dataset</code> class</h3>
 <ul>
 <li>Next, let us set up a data loading mechanism for our model.</li>
 <li>Note that the Cement dataset is a relatively small dataset that fits into memory quite comfortably so this may seem like overkill. However, the following steps are useful as a template since you can use those for arbitrarily-sized datatsets.</li>
@@ -1037,7 +1037,7 @@ Label distribution: [196 310 244 152  96]
     <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </code></pre></div>
-<h3 id="setting-up-datamodule">Setting up DataModule</h3>
+<h3 id="setting-up-a-datamodule">Setting up a <code>DataModule</code></h3>
 <ul>
 <li>There are three main ways we can prepare the dataset for Lightning. We can</li>
 <li>make the dataset part of the model;</li>
