@@ -1,6 +1,8 @@
-<a href="https://pytorch.org"><img src="https://raw.githubusercontent.com/pytorch/pytorch/master/docs/source/_static/img/pytorch-logo-dark.svg" width="90"/></a> &nbsp; &nbsp;&nbsp;&nbsp;<a href="https://www.pytorchlightning.ai"><img src="https://raw.githubusercontent.com/PyTorchLightning/pytorch-lightning/master/docs/source/_static/images/logo.svg" width="150"/></a>
-
 # A Multilayer Perceptron for Ordinal Regression using CORN -- Cement Dataset
+
+In this tutorial, we implement a multilayer perceptron for ordinal regression based on the CORN method. To learn more about CORN, please have a look at our preprint:
+
+- Xintong Shi, Wenzhi Cao, and Sebastian Raschka (2021). Deep Neural Networks for Rank-Consistent Ordinal Regression Based On Conditional Probabilities. Arxiv preprint;  [https://arxiv.org/abs/2111.08851](https://arxiv.org/abs/2111.08851)
 
 ## General settings and hyperparameters
 
@@ -15,10 +17,42 @@ LEARNING_RATE = 0.005
 NUM_WORKERS = 0
 ```
 
-## Implementing a ` MultiLayerPerceptron` using PyTorch Lightning's `LightningModule`
+## Implementing a `MultiLayerPerceptron` using PyTorch Lightning's `LightningModule`
 
 - In this section, we set up the main model architecture using the `LightningModule` from PyTorch Lightning.
-- We use loggers to track mean absolute errors for both the training and validation set during training; this allows us to select the best model based on validation set performance later
+- We start with defining our `MultiLayerPerceptron` model in pure PyTorch, and then we use it in the `LightningModule` to get all the extra benefits that PyTorch Lightning provides.
+
+
+```python
+import torch
+
+
+# Regular PyTorch module
+class MultiLayerPerceptron(torch.nn.Module):
+    def __init__(self, input_size, hidden_units, num_classes):
+        super().__init__()
+
+        # num_classes is used by the corn loss function
+        self.num_classes = num_classes
+        
+        # Initialize MLP layers
+        all_layers = []
+        for hidden_unit in hidden_units:
+            layer = torch.nn.Linear(input_size, hidden_unit)
+            all_layers.append(layer)
+            all_layers.append(torch.nn.ReLU())
+            input_size = hidden_unit
+
+        output_layer = torch.nn.Linear(hidden_units[-1], num_classes)
+        all_layers.append(output_layer)
+        self.model = torch.nn.Sequential(*all_layers)
+        
+    def forward(self, x):
+        x = self.model(x)
+        return x
+```
+
+- In our `LightningModule` we use loggers to track mean absolute errors for both the training and validation set during training; this allows us to select the best model based on validation set performance later.
 - Given a multilayer perceptron classifier with cross-entropy loss, it is very easy to change this classifier into a ordinal regression model using CORN. In essence, it only requires two changes:
     1. Change the loss from  
     `loss = torch.nn.functional.cross_entropy(logits, y)` to  
@@ -33,16 +67,16 @@ from coral_pytorch.losses import corn_loss
 from coral_pytorch.dataset import corn_label_from_logits
 
 import pytorch_lightning as pl
-import torch
 import torchmetrics
 
 
-class MultiLayerPerceptron(pl.LightningModule):
-    def __init__(self, input_size, hidden_units, num_classes):
+# LightningModule that receives a PyTorch model as input
+class LightningMLP(pl.LightningModule):
+    def __init__(self, model):
         super().__init__()
 
-        # num_classes is used by the corn loss function
-        self.num_classes = num_classes
+        # the inherited PyTorch module
+        self.model = model
 
         # Save hyperparameters to the log directory
         self.save_hyperparameters()
@@ -51,71 +85,53 @@ class MultiLayerPerceptron(pl.LightningModule):
         self.train_mae = torchmetrics.MeanAbsoluteError()
         self.valid_mae = torchmetrics.MeanAbsoluteError()
         self.test_mae = torchmetrics.MeanAbsoluteError()
-
-        # Initialize MLP layers
-        all_layers = []
-        for hidden_unit in hidden_units:
-            layer = torch.nn.Linear(input_size, hidden_unit)
-            all_layers.append(layer)
-            all_layers.append(torch.nn.ReLU())
-            input_size = hidden_unit
-
-        output_layer = torch.nn.Linear(hidden_units[-1], num_classes)
-        all_layers.append(output_layer)
-        self.model = torch.nn.Sequential(*all_layers)
-
+        
+    # Defining the forward method is only necessary 
+    # if you want to use a Trainer's .predict() method (optional)
     def forward(self, x):
-        x = self.model(x)
-        return x
-
-    def training_step(self, batch, batch_idx):
-        x, y = batch
+        return self.model(x)
+        
+    # a common forward step to compute the loss and labels
+    # this is used for training, validation, and testing below
+    def _shared_step(self, x, y):
         logits = self(x)
 
         # A regular classifier uses:
         # loss = torch.nn.functional.cross_entropy(logits, y)
-        loss = corn_loss(logits, y, num_classes=self.num_classes)
-        self.log("train_loss", loss)
+        loss = corn_loss(logits, y, num_classes=self.model.num_classes)
 
         # A regular classifier uses:
         # predicted_labels = torch.argmax(logits, dim=1)
         predicted_labels = corn_label_from_logits(logits)
+        
+        return loss, predicted_labels
 
+    def training_step(self, batch, batch_idx):
+        x, y = batch
+        loss, predicted_labels = self._shared_step(x, y)
+        self.log("train_loss", loss)
         self.train_mae.update(predicted_labels, y)
         self.log("train_mae", self.train_mae, on_epoch=True, on_step=False)
         return loss
 
     def validation_step(self, batch, batch_idx):
         x, y = batch
-        logits = self(x)
-
-        # A regular classifier uses:
-        # loss = torch.nn.functional.cross_entropy(logits, y)
-        loss = corn_loss(logits, y, num_classes=self.num_classes)
+        loss, predicted_labels = self._shared_step(x, y)
         self.log("valid_loss", loss)
-
-        # A regular classifier uses:
-        # predicted_labels = torch.argmax(logits, dim=1)
-        predicted_labels = corn_label_from_logits(logits)
-
         self.valid_mae.update(predicted_labels, y)
         self.log("valid_mae", self.valid_mae,
                  on_epoch=True, on_step=False, prog_bar=True)
 
     def test_step(self, batch, batch_idx):
         x, y = batch
-        logits = self(x)
-
-        # A regular classifier uses:
-        # predicted_labels = torch.argmax(logits, dim=1)
-        predicted_labels = corn_label_from_logits(logits)
-
+        _, predicted_labels = self._shared_step(x, y)
         self.test_mae.update(predicted_labels, y)
         self.log("test_mae", self.test_mae, on_epoch=True, on_step=False)
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.parameters(), lr=LEARNING_RATE)
         return optimizer
+    
 ```
 
 ## Setting up the dataset
@@ -276,7 +292,7 @@ print(f'Baseline MAE: {baseline_mae:.2f}')
     Baseline MAE: 1.03
 
 
-- In other words, a model that would always predict the dataset median would achieve a MAE of 1.03. In other words, a model that has an MAE of > 1 is certainly a bad model.
+- In other words, a model that would always predict the dataset median would achieve a MAE of 1.03. A model that has an MAE of > 1 is certainly a bad model.
 
 ### Creating a `Dataset` class
 
@@ -325,7 +341,6 @@ class DataModule(pl.LightningDataModule):
     def __init__(self, data_path='./'):
         super().__init__()
         self.data_path = data_path
-        self.transform = None
         
     def prepare_data(self):
         data_df = pd.read_csv(
@@ -392,9 +407,10 @@ data_module = DataModule(data_path='../data')
 
 ## Training the model using the PyTorch Lightning Trainer class
 
-- Next, we define our multilayer perceptron (MLP) model (here, a 2-layer MLP with 24 units in the first hidden layer, and 16 units in the second hidden layer).
-- Also, we define a call back so that we can obtain the model with the best validation set performance after training.
-- PyTorch Lightning offers [many advanced logging services](https://pytorch-lightning.readthedocs.io/en/latest/extensions/logging.html) like Weights & Biases. Here, we will keep things simple and use the `CSVLogger`:
+- Next, we initialize our multilayer perceptron model (here, a 2-layer MLP with 24 units in the first hidden layer, and 16 units in the second hidden layer).
+- We wrap the model in our `LightningMLP` so that we can use PyTorch Lightning's powerful `Trainer` API.
+- Also, we define a callback so that we can obtain the model with the best validation set performance after training.
+- Note PyTorch Lightning offers [many advanced logging services](https://pytorch-lightning.readthedocs.io/en/latest/extensions/logging.html) like Weights & Biases. However, here, we will keep things simple and use the `CSVLogger`:
 
 
 ```python
@@ -402,14 +418,16 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import CSVLogger
 
 
-model = MultiLayerPerceptron(
+pytorch_model = MultiLayerPerceptron(
     input_size=data_features.shape[1],
     hidden_units=(24, 16),
     num_classes=np.bincount(data_labels).shape[0])
 
+lightning_model = LightningMLP(pytorch_model)
+
 
 callbacks = [ModelCheckpoint(
-    save_top_k=1, mode='min', monitor="valid_mae")]  # save top 1 model 
+    save_top_k=1, mode="min", monitor="valid_mae")]  # save top 1 model 
 logger = CSVLogger(save_dir="logs/", name="mlp-corn-cement")
 ```
 
@@ -420,24 +438,25 @@ logger = CSVLogger(save_dir="logs/", name="mlp-corn-cement")
 trainer = pl.Trainer(
     max_epochs=NUM_EPOCHS,
     callbacks=callbacks,
-    gpus=int(torch.cuda.is_available()),  # use 1 GPU if available
+    accelerator="auto",  # uses CPU by default or a GPU/TPU if avail
+    devices="auto", # uses all available GPUs/TPUs if applicable
     logger=logger,
     log_every_n_steps=1)
 
-trainer.fit(model=model, datamodule=data_module)
+trainer.fit(model=lightning_model, datamodule=data_module)
 ```
 
     GPU available: False, used: False
     TPU available: False, using: 0 TPU cores
     IPU available: False, using: 0 IPUs
     
-      | Name      | Type              | Params
-    ------------------------------------------------
-    0 | train_mae | MeanAbsoluteError | 0     
-    1 | valid_mae | MeanAbsoluteError | 0     
-    2 | test_mae  | MeanAbsoluteError | 0     
-    3 | model     | Sequential        | 701   
-    ------------------------------------------------
+      | Name      | Type                 | Params
+    ---------------------------------------------------
+    0 | model     | MultiLayerPerceptron | 701   
+    1 | train_mae | MeanAbsoluteError    | 0     
+    2 | valid_mae | MeanAbsoluteError    | 0     
+    3 | test_mae  | MeanAbsoluteError    | 0     
+    ---------------------------------------------------
     701       Trainable params
     0         Non-trainable params
     701       Total params
@@ -445,10 +464,825 @@ trainer.fit(model=model, datamodule=data_module)
 
 
 
+    Validation sanity check: 0it [00:00, ?it/s]
+
+
+    /Users/sebastian/miniconda3/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:132: UserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 8 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+      rank_zero_warn(
+    /Users/sebastian/miniconda3/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:132: UserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 8 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+      rank_zero_warn(
+
+
+
+    Training: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+    5:20: E261 at least two spaces before inline comment
+
 
 ## Evaluating the model
 
-- After training, let's plot our training MAE and validation MAE using Pandas, which uses matplotlib (you may want to consider a [more advanced logger](https://pytorch-lightning.readthedocs.io/en/latest/extensions/logging.html) that does that for you:
+- After training, let's plot our training MAE and validation MAE using pandas, which, in turn, uses matplotlib for plotting (you may want to consider a [more advanced logger](https://pytorch-lightning.readthedocs.io/en/latest/extensions/logging.html) that does that for you):
 
 
 ```python
@@ -477,13 +1311,13 @@ df_metrics[["valid_mae", "train_mae"]].plot(
 
 
     
-![png](ordinal-corn_cement_files/ordinal-corn_cement_34_1.png)
+![png](ordinal-corn_cement_files/ordinal-corn_cement_37_1.png)
     
 
 
 
     
-![png](ordinal-corn_cement_files/ordinal-corn_cement_34_2.png)
+![png](ordinal-corn_cement_files/ordinal-corn_cement_37_2.png)
     
 
 
@@ -492,11 +1326,11 @@ df_metrics[["valid_mae", "train_mae"]].plot(
 
 
 ```python
-trainer.test(model=model, datamodule=data_module, ckpt_path='best')
+trainer.test(model=lightning_model, datamodule=data_module, ckpt_path='best')
 ```
 
-    Restoring states from the checkpoint path at logs/mlp-corn-cement/version_8/checkpoints/epoch=184-step=2034.ckpt
-    Loaded model weights from checkpoint at logs/mlp-corn-cement/version_8/checkpoints/epoch=184-step=2034.ckpt
+    Restoring states from the checkpoint path at logs/mlp-corn-cement/version_19/checkpoints/epoch=184-step=2034.ckpt
+    Loaded model weights from checkpoint at logs/mlp-corn-cement/version_19/checkpoints/epoch=184-step=2034.ckpt
     /Users/sebastian/miniconda3/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:132: UserWarning: The dataloader, test_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 8 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
       rank_zero_warn(
 
@@ -522,15 +1356,18 @@ trainer.test(model=model, datamodule=data_module, ckpt_path='best')
 
 ## Predicting labels of new data
 
-- You can use the `trainer.predict` method to apply the model to new data.
+- You can use the `trainer.predict` method on a new `DataLoader` or `DataModule` to apply the model to new data.
 - Alternatively, you can also manually load the best model from a checkpoint as shown below:
 
 
 ```python
 path = f'{trainer.logger.log_dir}/checkpoints/epoch=184-step=2034.ckpt'
 
-model = MultiLayerPerceptron.load_from_checkpoint(path)
+lightning_model = LightningMLP.load_from_checkpoint(path)
 ```
+
+- Note that our `MultilayerPerceptron`, which is passed to `LightningMLP` requires input arguments. However, this is automatically being taken care of since we used `self.save_hyperparameters()` in `LightningMLP`'s `__init__` method.
+- Now, below is an example applying the model manually. Here, pretend that the `test_dataloader` is a new data loader.
 
 
 ```python
@@ -538,10 +1375,10 @@ test_dataloader = data_module.test_dataloader()
 
 all_predicted_labels = []
 for batch in test_dataloader:
-    features, labels = batch
-    logits = model(features)
+    features, _ = batch
+    logits = lightning_model.model(features)
     predicted_labels = corn_label_from_logits(logits)
-    all_predicted_labels.append(labels)
+    all_predicted_labels.append(predicted_labels)
     
 all_predicted_labels = torch.cat(all_predicted_labels)
 all_predicted_labels[:5]
@@ -550,6 +1387,6 @@ all_predicted_labels[:5]
 
 
 
-    tensor([0, 4, 1, 2, 1])
+    tensor([0, 4, 1, 3, 0])
 
 
