@@ -34,7 +34,9 @@ nav:
     - Home: index.md
     - Tutorials:
       - PyTorch Lightning:
-        - CORN MLP model for tabular data (Cement dataset): tutorials/pytorch_lightning/ordinal-corn_cement.md
+        - CORN multilayer perceptron for tabular data (Cement dataset): tutorials/pytorch_lightning/ordinal-corn_cement.md
+        - CORN convolutional neural net for image data (MNIST dataset): tutorials/pytorch_lightning/ordinal-corn_mnist.md
+        - CORN recurrent neural net for text data (TripAdvisor dataset): tutorials/pytorch_lightning/ordinal-corn_tripadvisor.md
       - Pure PyTorch:
         - CORAL CNN model for image data (MNIST dataset): tutorials/pure_pytorch/CORAL_mnist.md
         - CORAL MLP model for tabular data (Cement dataset): tutorials/pure_pytorch/CORAL_cement.md

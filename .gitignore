@@ -1,3 +1,6 @@
+# Log files
+docs/tutorials/pytorch_lightning/logs
+
 # Datasets
 docs/tutorials/*.csv
 docs/tutorials/data/MNIST
