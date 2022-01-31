@@ -12,14 +12,14 @@
         <meta name="author" content="Sebastian Raschka">
       
       
-        <link rel="canonical" href="http://raschka-research-group.github.io/coral_pytorch/tutorials/pytorch_lightning/ordinal-corn_cement/">
+        <link rel="canonical" href="http://raschka-research-group.github.io/coral_pytorch/tutorials/pytorch_lightning/ordinal-corn_mnist/">
       
       <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.8">
     
     
       
-        <title>CORN multilayer perceptron for tabular data (Cement dataset) - coral_pytorch</title>
+        <title>CORN convolutional neural net for image data (MNIST dataset) - coral_pytorch</title>
       
     
     
@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#a-multilayer-perceptron-for-ordinal-regression-using-corn-cement-dataset" class="md-skip">
+        <a href="#a-convolutional-neural-net-for-ordinal-regression-using-corn-mnist-dataset" class="md-skip">
           Skip to content
         </a>
       
@@ -99,7 +99,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              CORN multilayer perceptron for tabular data (Cement dataset)
+              CORN convolutional neural net for image data (MNIST dataset)
             
           </span>
         </div>
@@ -278,6 +278,20 @@
               
   
   
+  
+    <li class="md-nav__item">
+      <a href="../ordinal-corn_cement/" class="md-nav__link">
+        CORN multilayer perceptron for tabular data (Cement dataset)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
     
   
   
@@ -290,12 +304,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          CORN multilayer perceptron for tabular data (Cement dataset)
+          CORN convolutional neural net for image data (MNIST dataset)
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        CORN multilayer perceptron for tabular data (Cement dataset)
+        CORN convolutional neural net for image data (MNIST dataset)
       </a>
       
         
@@ -321,8 +335,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#implementing-a-multilayerperceptron-using-pytorch-lightnings-lightningmodule" class="md-nav__link">
-    Implementing a MultiLayerPerceptron using PyTorch Lightning's LightningModule
+  <a href="#implementing-a-convnet-using-pytorch-lightnings-lightningmodule" class="md-nav__link">
+    Implementing a ConvNet using PyTorch Lightning's LightningModule
   </a>
   
 </li>
@@ -345,13 +359,6 @@
           <li class="md-nav__item">
   <a href="#performance-baseline" class="md-nav__link">
     Performance baseline
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#creating-a-dataset-class" class="md-nav__link">
-    Creating a Dataset class
   </a>
   
 </li>
@@ -393,20 +400,6 @@
   
 </nav>
       
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../ordinal-corn_mnist/" class="md-nav__link">
-        CORN convolutional neural net for image data (MNIST dataset)
-      </a>
     </li>
   
 
@@ -698,8 +691,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#implementing-a-multilayerperceptron-using-pytorch-lightnings-lightningmodule" class="md-nav__link">
-    Implementing a MultiLayerPerceptron using PyTorch Lightning's LightningModule
+  <a href="#implementing-a-convnet-using-pytorch-lightnings-lightningmodule" class="md-nav__link">
+    Implementing a ConvNet using PyTorch Lightning's LightningModule
   </a>
   
 </li>
@@ -722,13 +715,6 @@
           <li class="md-nav__item">
   <a href="#performance-baseline" class="md-nav__link">
     Performance baseline
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#creating-a-dataset-class" class="md-nav__link">
-    Creating a Dataset class
   </a>
   
 </li>
@@ -778,53 +764,59 @@
             <article class="md-content__inner md-typeset">
               
                 
-<a href="https://github.com/raschka-research-group/coral_pytorch/edit/master/docs/tutorials/pytorch_lightning/ordinal-corn_cement.md" title="Edit this page" class="md-content__button md-icon">
+<a href="https://github.com/raschka-research-group/coral_pytorch/edit/master/docs/tutorials/pytorch_lightning/ordinal-corn_mnist.md" title="Edit this page" class="md-content__button md-icon">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
 </a>
 
 
-<h1 id="a-multilayer-perceptron-for-ordinal-regression-using-corn-cement-dataset">A Multilayer Perceptron for Ordinal Regression using CORN -- Cement Dataset</h1>
-<p>In this tutorial, we implement a multilayer perceptron for ordinal regression based on the CORN method. To learn more about CORN, please have a look at our preprint:</p>
+<h1 id="a-convolutional-neural-net-for-ordinal-regression-using-corn-mnist-dataset">A Convolutional Neural Net for Ordinal Regression using CORN -- MNIST Dataset</h1>
+<p>In this tutorial, we implement a convolutional neural network for ordinal regression based on the CORN method. To learn more about CORN, please have a look at our preprint:</p>
 <ul>
 <li>Xintong Shi, Wenzhi Cao, and Sebastian Raschka (2021). Deep Neural Networks for Rank-Consistent Ordinal Regression Based On Conditional Probabilities. Arxiv preprint;  <a href="https://arxiv.org/abs/2111.08851">https://arxiv.org/abs/2111.08851</a></li>
 </ul>
+<p>Please note that <strong>MNIST is not an ordinal dataset</strong>. The reason why we use MNIST in this tutorial is that it is included in the PyTorch's <code>torchvision</code> library and is thus easy to work with, since it doesn't require extra data downloading and preprocessing steps.</p>
 <h2 id="general-settings-and-hyperparameters">General settings and hyperparameters</h2>
 <ul>
 <li>Here, we specify some general hyperparameter values and general settings</li>
-<li>Note that for small datatsets, it is not necessary and better not to use multiple workers as it can sometimes cause issues with too many open files in PyTorch</li>
+<li>Note that for small datatsets, it is not necessary and better not to use multiple workers as it can sometimes cause issues with too many open files in PyTorch. So, if you have problems with the data loader later, try setting <code>NUM_WORKERS = 0</code> instead.</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">64</span>
-<span class="n">NUM_EPOCHS</span> <span class="o">=</span> <span class="mi">200</span>
+<div class="highlight"><pre><span></span><code><span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="n">NUM_EPOCHS</span> <span class="o">=</span> <span class="mi">20</span>
 <span class="n">LEARNING_RATE</span> <span class="o">=</span> <span class="mf">0.005</span>
-<span class="n">NUM_WORKERS</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">NUM_WORKERS</span> <span class="o">=</span> <span class="mi">4</span>
 </code></pre></div>
-<h2 id="implementing-a-multilayerperceptron-using-pytorch-lightnings-lightningmodule">Implementing a <code>MultiLayerPerceptron</code> using PyTorch Lightning's <code>LightningModule</code></h2>
+<h2 id="implementing-a-convnet-using-pytorch-lightnings-lightningmodule">Implementing a <code>ConvNet</code> using PyTorch Lightning's <code>LightningModule</code></h2>
 <ul>
 <li>In this section, we set up the main model architecture using the <code>LightningModule</code> from PyTorch Lightning.</li>
-<li>We start with defining our <code>MultiLayerPerceptron</code> model in pure PyTorch, and then we use it in the <code>LightningModule</code> to get all the extra benefits that PyTorch Lightning provides.</li>
+<li>We start with defining our convolutional neural network <code>ConvNet</code> model in pure PyTorch, and then we use it in the <code>LightningModule</code> to get all the extra benefits that PyTorch Lightning provides.</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
 
 
 <span class="c1"># Regular PyTorch Module</span>
-<span class="k">class</span> <span class="nc">MultiLayerPerceptron</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_units</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">ConvNet</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># num_classes is used by the corn loss function</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span> <span class="o">=</span> <span class="n">num_classes</span>
 
-        <span class="c1"># Initialize MLP layers</span>
-        <span class="n">all_layers</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">hidden_unit</span> <span class="ow">in</span> <span class="n">hidden_units</span><span class="p">:</span>
-            <span class="n">layer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_unit</span><span class="p">)</span>
-            <span class="n">all_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
-            <span class="n">all_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">())</span>
-            <span class="n">input_size</span> <span class="o">=</span> <span class="n">hidden_unit</span>
+        <span class="c1"># Initialize CNN layers</span>
+        <span class="n">all_layers</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
+                            <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">stride</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> 
+                            <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">MaxPool2d</span><span class="p">(</span><span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>  <span class="n">stride</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> 
+                            <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">stride</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> 
+                            <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">MaxPool2d</span><span class="p">(</span><span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>  <span class="n">stride</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Flatten</span><span class="p">()</span>
+        <span class="p">]</span>
 
         <span class="c1"># Regular classifier would use num_classes instead of </span>
         <span class="c1"># num_classes-1 below</span>
-        <span class="n">output_layer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_units</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">num_classes</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">output_layer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">294</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">all_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output_layer</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="n">all_layers</span><span class="p">)</span>
 
@@ -834,7 +826,7 @@
 </code></pre></div>
 <ul>
 <li>In our <code>LightningModule</code> we use loggers to track mean absolute errors for both the training and validation set during training; this allows us to select the best model based on validation set performance later.</li>
-<li>Given a multilayer perceptron classifier with cross-entropy loss, it is very easy to change this classifier into a ordinal regression model using CORN. In essence, it only requires three changes:<ol>
+<li>Given a CNN classifier with cross-entropy loss, it is very easy to change this classifier into a ordinal regression model using CORN. In essence, it only requires three changes:<ol>
 <li>Instead of using <code>num_classes</code> in the output layer, use <code>num_classes-1</code> as shown above</li>
 <li>Change the loss from <br />
 <code>loss = torch.nn.functional.cross_entropy(logits, y)</code> to<br />
@@ -853,7 +845,7 @@
 
 
 <span class="c1"># LightningModule that receives a PyTorch model as input</span>
-<span class="k">class</span> <span class="nc">LightningMLP</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningModule</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">LightningCNN</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningModule</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
@@ -917,126 +909,60 @@
 <h2 id="setting-up-the-dataset">Setting up the dataset</h2>
 <ul>
 <li>In this section, we are going to set up our dataset.</li>
-<li>We start by downloading and taking a look at the Cement dataset:</li>
+<li>Please note that <strong>MNIST is not an ordinal dataset</strong>. The reason why we use MNIST in this tutorial is that it is included in the PyTorch's <code>torchvision</code> library and is thus easy to work with, since it doesn't require extra data downloading and preprocessing steps.</li>
 </ul>
 <h3 id="inspecting-the-dataset">Inspecting the dataset</h3>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">from</span> <span class="nn">torchvision</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="kn">from</span> <span class="nn">torchvision</span> <span class="kn">import</span> <span class="n">transforms</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
 
 
-<span class="n">data_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/gagolews/&quot;</span>
-                      <span class="s2">&quot;ordinal_regression_data/master/cement_strength.csv&quot;</span><span class="p">)</span>
-<span class="n">data_df</span><span class="p">[</span><span class="s2">&quot;response&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_df</span><span class="p">[</span><span class="s2">&quot;response&quot;</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span>  <span class="c1"># labels should start at 0</span>
+<span class="n">train_dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;../data&#39;</span><span class="p">,</span> 
+                               <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                               <span class="n">transform</span><span class="o">=</span><span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+                               <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="n">data_labels</span> <span class="o">=</span> <span class="n">data_df</span><span class="p">[</span><span class="s2">&quot;response&quot;</span><span class="p">]</span>
-<span class="n">data_features</span> <span class="o">=</span> <span class="n">data_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span>
-    <span class="s2">&quot;V1&quot;</span><span class="p">,</span> <span class="s2">&quot;V2&quot;</span><span class="p">,</span> <span class="s2">&quot;V3&quot;</span><span class="p">,</span> <span class="s2">&quot;V4&quot;</span><span class="p">,</span> <span class="s2">&quot;V5&quot;</span><span class="p">,</span> <span class="s2">&quot;V6&quot;</span><span class="p">,</span> <span class="s2">&quot;V7&quot;</span><span class="p">,</span> <span class="s2">&quot;V8&quot;</span><span class="p">]]</span>
+<span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span> 
+                          <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span> 
+                          <span class="n">num_workers</span><span class="o">=</span><span class="n">NUM_WORKERS</span><span class="p">,</span>
+                          <span class="n">drop_last</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                          <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="n">data_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="n">test_dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;../data&#39;</span><span class="p">,</span> 
+                              <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">transform</span><span class="o">=</span><span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">())</span>
+
+<span class="n">test_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">test_dataset</span><span class="p">,</span> 
+                         <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span>
+                         <span class="n">num_workers</span><span class="o">=</span><span class="n">NUM_WORKERS</span><span class="p">,</span>
+                         <span class="n">drop_last</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                         <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Checking the dataset</span>
+<span class="n">all_train_labels</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">all_test_labels</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="ow">in</span> <span class="n">train_loader</span><span class="p">:</span>  
+    <span class="n">all_train_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+<span class="n">all_train_labels</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">all_train_labels</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="ow">in</span> <span class="n">test_loader</span><span class="p">:</span>  
+    <span class="n">all_test_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+<span class="n">all_test_labels</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">all_test_labels</span><span class="p">)</span>
 </code></pre></div>
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Training labels:&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">all_train_labels</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Training label distribution:&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">all_train_labels</span><span class="p">))</span>
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>response</th>
-      <th>V1</th>
-      <th>V2</th>
-      <th>V3</th>
-      <th>V4</th>
-      <th>V5</th>
-      <th>V6</th>
-      <th>V7</th>
-      <th>V8</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>4</td>
-      <td>540.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>162.0</td>
-      <td>2.5</td>
-      <td>1040.0</td>
-      <td>676.0</td>
-      <td>28</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>4</td>
-      <td>540.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>162.0</td>
-      <td>2.5</td>
-      <td>1055.0</td>
-      <td>676.0</td>
-      <td>28</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2</td>
-      <td>332.5</td>
-      <td>142.5</td>
-      <td>0.0</td>
-      <td>228.0</td>
-      <td>0.0</td>
-      <td>932.0</td>
-      <td>594.0</td>
-      <td>270</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>2</td>
-      <td>332.5</td>
-      <td>142.5</td>
-      <td>0.0</td>
-      <td>228.0</td>
-      <td>0.0</td>
-      <td>932.0</td>
-      <td>594.0</td>
-      <td>365</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>2</td>
-      <td>198.6</td>
-      <td>132.4</td>
-      <td>0.0</td>
-      <td>192.0</td>
-      <td>0.0</td>
-      <td>978.4</td>
-      <td>825.5</td>
-      <td>360</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of features:&#39;</span><span class="p">,</span> <span class="n">data_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of examples:&#39;</span><span class="p">,</span> <span class="n">data_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Labels:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">data_labels</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Label distribution:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">data_labels</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Test labels:&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">all_test_labels</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Test label distribution:&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">all_test_labels</span><span class="p">))</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>Number of features: 8
-Number of examples: 998
-Labels: [0 1 2 3 4]
-Label distribution: [196 310 244 152  96]
+<div class="highlight"><pre><span></span><code>Training labels: tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+Training label distribution: tensor([5912, 6734, 5948, 6119, 5833, 5411, 5906, 6258, 5843, 5940])
+
+Test labels: tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+Test label distribution: tensor([ 980, 1135, 1032, 1010,  982,  892,  958, 1028,  974, 1009])
 </code></pre></div>
 <ul>
 <li>Above, we can see that the dataset consists of 8 features, and there are 998 examples in total.</li>
@@ -1050,38 +976,16 @@ Label distribution: [196 310 244 152  96]
 <li>Note that if you are intersted in a single number that minimized the dataset mean squared error (MSE), that's the mean; similary, the median is a number that minimzes the mean absolute error (MAE).</li>
 <li>So, if we use the mean absolute error, <script type="math/tex">\mathrm{MAE}=\frac{1}{N} \sum_{i=1}^{N}\left|y_{i}-\hat{y}_{i}\right|</script>, to evaluate the model, it is useful to compute the MAE pretending the predicted label is always the median:</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="n">avg_prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">data_labels</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>  <span class="c1"># median minimizes MAE</span>
-<span class="n">baseline_mae</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">data_labels</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">avg_prediction</span><span class="p">))</span>
+<div class="highlight"><pre><span></span><code><span class="n">all_test_labels</span> <span class="o">=</span> <span class="n">all_test_labels</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+<span class="n">avg_prediction</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">all_test_labels</span><span class="p">)</span>  <span class="c1"># median minimizes MAE</span>
+<span class="n">baseline_mae</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">all_test_labels</span> <span class="o">-</span> <span class="n">avg_prediction</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Baseline MAE: </span><span class="si">{</span><span class="n">baseline_mae</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>Baseline MAE: 1.03
+<div class="highlight"><pre><span></span><code>Baseline MAE: 2.52
 </code></pre></div>
 <ul>
-<li>In other words, a model that would always predict the dataset median would achieve a MAE of 1.03. A model that has an MAE of &gt; 1 is certainly a bad model.</li>
+<li>In other words, a model that would always predict the dataset median would achieve a MAE of 2.52. A model that has an MAE of &gt; 2.52 is certainly a bad model.</li>
 </ul>
-<h3 id="creating-a-dataset-class">Creating a <code>Dataset</code> class</h3>
-<ul>
-<li>Next, let us set up a data loading mechanism for our model.</li>
-<li>Note that the Cement dataset is a relatively small dataset that fits into memory quite comfortably so this may seem like overkill. However, the following steps are useful as a template since you can use those for arbitrarily-sized datatsets.</li>
-<li>First, we define a PyTorch <code>Dataset</code> class that returns the features (inputs) and labels:</li>
-</ul>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">Dataset</span>
-
-
-<span class="k">class</span> <span class="nc">MyDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature_array</span><span class="p">,</span> <span class="n">label_array</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">feature_array</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">label_array</span>
-
-    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
-        <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-        <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">label</span>
-
-    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</code></pre></div>
 <h3 id="setting-up-a-datamodule">Setting up a <code>DataModule</code></h3>
 <ul>
 <li>There are three main ways we can prepare the dataset for Lightning. We can</li>
@@ -1091,8 +995,8 @@ Label distribution: [196 310 244 152  96]
 <li>Here, we are going to use approach 3, which is the most organized approach. The <code>LightningDataModule</code> consists of several self-explanatory methods as we can see below:</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+
+<span class="kn">from</span> <span class="nn">torch.utils.data.dataset</span> <span class="kn">import</span> <span class="n">random_split</span>
 <span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
 
 
@@ -1102,57 +1006,48 @@ Label distribution: [196 310 244 152  96]
         <span class="bp">self</span><span class="o">.</span><span class="n">data_path</span> <span class="o">=</span> <span class="n">data_path</span>
 
     <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">data_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-            <span class="s1">&#39;https://raw.githubusercontent.com/gagolews/&#39;</span>
-            <span class="s1">&#39;ordinal_regression_data/master/cement_strength.csv&#39;</span><span class="p">)</span>
-        <span class="n">data_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_path</span><span class="p">,</span> <span class="s1">&#39;cement_strength.csv&#39;</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data_path</span><span class="p">,</span>
+                       <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">data_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_path</span><span class="p">,</span> <span class="s1">&#39;cement_strength.csv&#39;</span><span class="p">))</span>
-        <span class="n">data_df</span><span class="p">[</span><span class="s2">&quot;response&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_df</span><span class="p">[</span><span class="s2">&quot;response&quot;</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span>  <span class="c1"># labels should start at 0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data_labels</span> <span class="o">=</span> <span class="n">data_df</span><span class="p">[</span><span class="s2">&quot;response&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data_features</span> <span class="o">=</span> <span class="n">data_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span>
-            <span class="s2">&quot;V1&quot;</span><span class="p">,</span> <span class="s2">&quot;V2&quot;</span><span class="p">,</span> <span class="s2">&quot;V3&quot;</span><span class="p">,</span> <span class="s2">&quot;V4&quot;</span><span class="p">,</span> <span class="s2">&quot;V5&quot;</span><span class="p">,</span> <span class="s2">&quot;V6&quot;</span><span class="p">,</span> <span class="s2">&quot;V7&quot;</span><span class="p">,</span> <span class="s2">&quot;V8&quot;</span><span class="p">]]</span>
+        <span class="c1"># Note transforms.ToTensor() scales input images</span>
+        <span class="c1"># to 0-1 range</span>
+        <span class="n">train</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data_path</span><span class="p">,</span> 
+                               <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                               <span class="n">transform</span><span class="o">=</span><span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+                               <span class="n">download</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-        <span class="c1"># Split into</span>
-        <span class="c1"># 70% train, 10% validation, 20% testing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data_path</span><span class="p">,</span> 
+                                   <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                                   <span class="n">transform</span><span class="o">=</span><span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+                                   <span class="n">download</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-        <span class="n">X_temp</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_temp</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data_features</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data_labels</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
-            <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
-            <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">stratify</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data_labels</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-
-        <span class="n">X_train</span><span class="p">,</span> <span class="n">X_valid</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_valid</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
-            <span class="n">X_temp</span><span class="p">,</span>
-            <span class="n">y_temp</span><span class="p">,</span>
-            <span class="n">test_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-            <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">stratify</span><span class="o">=</span><span class="n">y_temp</span><span class="p">)</span>
-
-        <span class="c1"># Standardize features</span>
-        <span class="n">sc</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
-        <span class="n">X_train_std</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
-        <span class="n">X_valid_std</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_valid</span><span class="p">)</span>
-        <span class="n">X_test_std</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">train</span> <span class="o">=</span> <span class="n">MyDataset</span><span class="p">(</span><span class="n">X_train_std</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">valid</span> <span class="o">=</span> <span class="n">MyDataset</span><span class="p">(</span><span class="n">X_valid_std</span><span class="p">,</span> <span class="n">y_valid</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="n">MyDataset</span><span class="p">(</span><span class="n">X_test_std</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid</span> <span class="o">=</span> <span class="n">random_split</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">lengths</span><span class="o">=</span><span class="p">[</span><span class="mi">55000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">train_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">DataLoader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="n">NUM_WORKERS</span><span class="p">,</span>
-                          <span class="n">drop_last</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> 
+                                  <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span> 
+                                  <span class="n">drop_last</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                  <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                  <span class="n">num_workers</span><span class="o">=</span><span class="n">NUM_WORKERS</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">train_loader</span>
 
     <span class="k">def</span> <span class="nf">val_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">DataLoader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">valid</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="n">NUM_WORKERS</span><span class="p">)</span>
+        <span class="n">valid_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">valid</span><span class="p">,</span> 
+                                  <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span> 
+                                  <span class="n">drop_last</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                  <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                  <span class="n">num_workers</span><span class="o">=</span><span class="n">NUM_WORKERS</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">valid_loader</span>
 
     <span class="k">def</span> <span class="nf">test_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">DataLoader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="n">NUM_WORKERS</span><span class="p">)</span>
+        <span class="n">test_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="p">,</span> 
+                                 <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span> 
+                                 <span class="n">drop_last</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                 <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                 <span class="n">num_workers</span><span class="o">=</span><span class="n">NUM_WORKERS</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">test_loader</span>
 </code></pre></div>
 <ul>
 <li>Note that the <code>prepare_data</code> method is usually used for steps that only need to be executed once, for example, downloading the dataset; the <code>setup</code> method defines the the dataset loading -- if you run your code in a distributed setting, this will be called on each node / GPU. </li>
@@ -1163,26 +1058,23 @@ Label distribution: [196 310 244 152  96]
 </code></pre></div>
 <h2 id="training-the-model-using-the-pytorch-lightning-trainer-class">Training the model using the PyTorch Lightning Trainer class</h2>
 <ul>
-<li>Next, we initialize our multilayer perceptron model (here, a 2-layer MLP with 24 units in the first hidden layer, and 16 units in the second hidden layer).</li>
-<li>We wrap the model in our <code>LightningMLP</code> so that we can use PyTorch Lightning's powerful <code>Trainer</code> API.</li>
-<li>Also, we define a callback so that we can obtain the model with the best validation set performance after training.</li>
-<li>Note PyTorch Lightning offers <a href="https://pytorch-lightning.readthedocs.io/en/latest/extensions/logging.html">many advanced logging services</a> like Weights &amp; Biases. However, here, we will keep things simple and use the <code>CSVLogger</code>:</li>
+<li>Next, we initialize our CNN (<code>ConvNet</code>) model.</li>
+<li>Also, we define a call back so that we can obtain the model with the best validation set performance after training.</li>
+<li>PyTorch Lightning offers <a href="https://pytorch-lightning.readthedocs.io/en/latest/extensions/logging.html">many advanced logging services</a> like Weights &amp; Biases. Here, we will keep things simple and use the <code>CSVLogger</code>:</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pytorch_lightning.callbacks</span> <span class="kn">import</span> <span class="n">ModelCheckpoint</span>
 <span class="kn">from</span> <span class="nn">pytorch_lightning.loggers</span> <span class="kn">import</span> <span class="n">CSVLogger</span>
 
 
-<span class="n">pytorch_model</span> <span class="o">=</span> <span class="n">MultiLayerPerceptron</span><span class="p">(</span>
-    <span class="n">input_size</span><span class="o">=</span><span class="n">data_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-    <span class="n">hidden_units</span><span class="o">=</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>
-    <span class="n">num_classes</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">data_labels</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">pytorch_model</span> <span class="o">=</span> <span class="n">ConvNet</span><span class="p">(</span>
+    <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">num_classes</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">all_test_labels</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-<span class="n">lightning_model</span> <span class="o">=</span> <span class="n">LightningMLP</span><span class="p">(</span><span class="n">pytorch_model</span><span class="p">)</span>
-
+<span class="n">lightning_model</span> <span class="o">=</span> <span class="n">LightningCNN</span><span class="p">(</span><span class="n">pytorch_model</span><span class="p">)</span>
 
 <span class="n">callbacks</span> <span class="o">=</span> <span class="p">[</span><span class="n">ModelCheckpoint</span><span class="p">(</span>
-    <span class="n">save_top_k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="n">monitor</span><span class="o">=</span><span class="s2">&quot;valid_mae&quot;</span><span class="p">)]</span>  <span class="c1"># save top 1 model </span>
-<span class="n">logger</span> <span class="o">=</span> <span class="n">CSVLogger</span><span class="p">(</span><span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;logs/&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;mlp-corn-cement&quot;</span><span class="p">)</span>
+    <span class="n">save_top_k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">monitor</span><span class="o">=</span><span class="s2">&quot;valid_mae&quot;</span><span class="p">)]</span>  <span class="c1"># save top 1 model </span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">CSVLogger</span><span class="p">(</span><span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;logs/&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;cnn-corn-mnist&quot;</span><span class="p">)</span>
 </code></pre></div>
 <ul>
 <li>Now it's time to train our model:</li>
@@ -1190,34 +1082,38 @@ Label distribution: [196 310 244 152  96]
 <div class="highlight"><pre><span></span><code><span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span>
     <span class="n">max_epochs</span><span class="o">=</span><span class="n">NUM_EPOCHS</span><span class="p">,</span>
     <span class="n">callbacks</span><span class="o">=</span><span class="n">callbacks</span><span class="p">,</span>
-    <span class="n">accelerator</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>  <span class="c1"># uses CPU by default or a GPU/TPU if avail</span>
-    <span class="n">devices</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="c1"># uses all available GPUs/TPUs if applicable</span>
+    <span class="n">accelerator</span><span class="o">=</span><span class="s2">&quot;gpu&quot;</span><span class="p">,</span>
+    <span class="n">devices</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
     <span class="n">log_every_n_steps</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="n">trainer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">lightning_model</span><span class="p">,</span> <span class="n">datamodule</span><span class="o">=</span><span class="n">data_module</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>GPU available: False, used: False
+<div class="highlight"><pre><span></span><code>GPU available: True, used: True
 TPU available: False, using: 0 TPU cores
 IPU available: False, using: 0 IPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
 
-  | Name      | Type                 | Params
----------------------------------------------------
-0 | model     | MultiLayerPerceptron | 684   
-1 | train_mae | MeanAbsoluteError    | 0     
-2 | valid_mae | MeanAbsoluteError    | 0     
-3 | test_mae  | MeanAbsoluteError    | 0     
----------------------------------------------------
-684       Trainable params
+  | Name      | Type              | Params
+------------------------------------------------
+0 | model     | ConvNet           | 2.9 K 
+1 | train_mae | MeanAbsoluteError | 0     
+2 | valid_mae | MeanAbsoluteError | 0     
+3 | test_mae  | MeanAbsoluteError | 0     
+------------------------------------------------
+2.9 K     Trainable params
 0         Non-trainable params
-684       Total params
-0.003     Total estimated model params size (MB)
+2.9 K     Total params
+0.011     Total estimated model params size (MB)
 </code></pre></div>
 <h2 id="evaluating-the-model">Evaluating the model</h2>
 <ul>
 <li>After training, let's plot our training MAE and validation MAE using pandas, which, in turn, uses matplotlib for plotting (you may want to consider a <a href="https://pytorch-lightning.readthedocs.io/en/latest/extensions/logging.html">more advanced logger</a> that does that for you):</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="n">metrics</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">trainer</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">log_dir</span><span class="si">}</span><span class="s2">/metrics.csv&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+<span class="n">metrics</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">trainer</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">log_dir</span><span class="si">}</span><span class="s2">/metrics.csv&quot;</span><span class="p">)</span>
 
 <span class="n">aggreg_metrics</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">agg_col</span> <span class="o">=</span> <span class="s2">&quot;epoch&quot;</span>
@@ -1234,18 +1130,17 @@ IPU available: False, using: 0 IPUs
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>&lt;AxesSubplot:xlabel=&#39;Epoch&#39;, ylabel=&#39;MAE&#39;&gt;
 </code></pre></div>
-<p><img alt="png" src="../ordinal-corn_cement_files/ordinal-corn_cement_37_1.png" /></p>
-<p><img alt="png" src="../ordinal-corn_cement_files/ordinal-corn_cement_37_2.png" /></p>
+<p><img alt="png" src="../ordinal-corn_mnist_files/ordinal-corn_mnist_34_1.png" /></p>
+<p><img alt="png" src="../ordinal-corn_mnist_files/ordinal-corn_mnist_34_2.png" /></p>
 <ul>
-<li>As we can see from the loss plot above, the model starts overfitting pretty quickly; however the validation set MAE keeps improving. Based on the MAE plot, we can see that the best model, based on the validation set MAE, may be around epoch 110.</li>
+<li>As we can see from the loss plot above, the model starts overfitting pretty quickly; however the validation set MAE keeps improving. Based on the MAE plot, we can see that the best model, based on the validation set MAE, may be around epoch 16.</li>
 <li>The <code>trainer</code> saved this model automatically for us, we which we can load from the checkpoint via the <code>ckpt_path='best'</code> argument; below we use the <code>trainer</code> instance to evaluate the best model on the test set:</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="n">trainer</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">lightning_model</span><span class="p">,</span> <span class="n">datamodule</span><span class="o">=</span><span class="n">data_module</span><span class="p">,</span> <span class="n">ckpt_path</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>Restoring states from the checkpoint path at logs/mlp-corn-cement/version_20/checkpoints/epoch=112-step=1242.ckpt
-Loaded model weights from checkpoint at logs/mlp-corn-cement/version_20/checkpoints/epoch=112-step=1242.ckpt
-/Users/sebastian/miniconda3/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:132: UserWarning: The dataloader, test_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 8 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
-  rank_zero_warn(
+<div class="highlight"><pre><span></span><code>Restoring states from the checkpoint path at logs/cnn-corn-mnist/version_12/checkpoints/epoch=17-step=3851.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+Loaded model weights from checkpoint at logs/cnn-corn-mnist/version_12/checkpoints/epoch=17-step=3851.ckpt
 
 
 
@@ -1254,29 +1149,29 @@ Testing: 0it [00:00, ?it/s]
 
 --------------------------------------------------------------------------------
 DATALOADER:0 TEST RESULTS
-{&#39;test_mae&#39;: 0.3050000071525574}
+{&#39;test_mae&#39;: 0.11819999665021896}
 --------------------------------------------------------------------------------
 
 
 
 
 
-[{&#39;test_mae&#39;: 0.3050000071525574}]
+[{&#39;test_mae&#39;: 0.11819999665021896}]
 </code></pre></div>
 <ul>
-<li>The MAE of our model is quite good, especially compared to the 1.03 MAE baseline earlier.</li>
+<li>The MAE of our model is quite good, especially compared to the 2.52 MAE baseline earlier.</li>
 </ul>
 <h2 id="predicting-labels-of-new-data">Predicting labels of new data</h2>
 <ul>
 <li>You can use the <code>trainer.predict</code> method on a new <code>DataLoader</code> or <code>DataModule</code> to apply the model to new data.</li>
 <li>Alternatively, you can also manually load the best model from a checkpoint as shown below:</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">trainer</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">log_dir</span><span class="si">}</span><span class="s1">/checkpoints/epoch=112-step=1242.ckpt&#39;</span>
+<div class="highlight"><pre><span></span><code><span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">trainer</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">log_dir</span><span class="si">}</span><span class="s1">/checkpoints/epoch=17-step=3851.ckpt&#39;</span>
 
-<span class="n">lightning_model</span> <span class="o">=</span> <span class="n">LightningMLP</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="n">lightning_model</span> <span class="o">=</span> <span class="n">LightningCNN</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 </code></pre></div>
 <ul>
-<li>Note that our <code>MultilayerPerceptron</code>, which is passed to <code>LightningMLP</code> requires input arguments. However, this is automatically being taken care of since we used <code>self.save_hyperparameters()</code> in <code>LightningMLP</code>'s <code>__init__</code> method.</li>
+<li>Note that our <code>ConvNet</code>, which is passed to <code>LightningCNN</code> requires input arguments. However, this is automatically being taken care of since we used <code>self.save_hyperparameters()</code> in <code>LightningCNN</code>'s <code>__init__</code> method.</li>
 <li>Now, below is an example applying the model manually. Here, pretend that the <code>test_dataloader</code> is a new data loader.</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="n">test_dataloader</span> <span class="o">=</span> <span class="n">data_module</span><span class="o">.</span><span class="n">test_dataloader</span><span class="p">()</span>
@@ -1291,7 +1186,7 @@ DATALOADER:0 TEST RESULTS
 <span class="n">all_predicted_labels</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">all_predicted_labels</span><span class="p">)</span>
 <span class="n">all_predicted_labels</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>tensor([0, 4, 1, 2, 0])
+<div class="highlight"><pre><span></span><code>tensor([7, 2, 1, 0, 4])
 </code></pre></div>
 
               
@@ -1306,7 +1201,7 @@ DATALOADER:0 TEST RESULTS
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../../.." class="md-footer__link md-footer__link--prev" aria-label="Previous: Home" rel="prev">
+        <a href="../ordinal-corn_cement/" class="md-footer__link md-footer__link--prev" aria-label="Previous: CORN multilayer perceptron for tabular data (Cement dataset)" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1315,20 +1210,20 @@ DATALOADER:0 TEST RESULTS
               <span class="md-footer__direction">
                 Previous
               </span>
-              Home
+              CORN multilayer perceptron for tabular data (Cement dataset)
             </div>
           </div>
         </a>
       
       
         
-        <a href="../ordinal-corn_mnist/" class="md-footer__link md-footer__link--next" aria-label="Next: CORN convolutional neural net for image data (MNIST dataset)" rel="next">
+        <a href="../ordinal-corn_tripadvisor/" class="md-footer__link md-footer__link--next" aria-label="Next: CORN recurrent neural net for text data (TripAdvisor dataset)" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              CORN convolutional neural net for image data (MNIST dataset)
+              CORN recurrent neural net for text data (TripAdvisor dataset)
             </div>
           </div>
           <div class="md-footer__button md-icon">

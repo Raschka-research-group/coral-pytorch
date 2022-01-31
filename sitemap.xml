@@ -2,102 +2,112 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>http://raschka-research-group.github.io/coral_pytorch/</loc>
-         <lastmod>2022-01-29</lastmod>
+         <lastmod>2022-01-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://raschka-research-group.github.io/coral_pytorch/CHANGELOG/</loc>
-         <lastmod>2022-01-29</lastmod>
+         <lastmod>2022-01-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://raschka-research-group.github.io/coral_pytorch/citing/</loc>
-         <lastmod>2022-01-29</lastmod>
+         <lastmod>2022-01-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://raschka-research-group.github.io/coral_pytorch/installation/</loc>
-         <lastmod>2022-01-29</lastmod>
+         <lastmod>2022-01-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://raschka-research-group.github.io/coral_pytorch/license/</loc>
-         <lastmod>2022-01-29</lastmod>
+         <lastmod>2022-01-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://raschka-research-group.github.io/coral_pytorch/api_modules/coral_pytorch.dataset/corn_label_from_logits/</loc>
-         <lastmod>2022-01-29</lastmod>
+         <lastmod>2022-01-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://raschka-research-group.github.io/coral_pytorch/api_modules/coral_pytorch.dataset/label_to_levels/</loc>
-         <lastmod>2022-01-29</lastmod>
+         <lastmod>2022-01-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://raschka-research-group.github.io/coral_pytorch/api_modules/coral_pytorch.dataset/levels_from_labelbatch/</loc>
-         <lastmod>2022-01-29</lastmod>
+         <lastmod>2022-01-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://raschka-research-group.github.io/coral_pytorch/api_modules/coral_pytorch.dataset/proba_to_label/</loc>
-         <lastmod>2022-01-29</lastmod>
+         <lastmod>2022-01-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://raschka-research-group.github.io/coral_pytorch/api_modules/coral_pytorch.layers/CoralLayer/</loc>
-         <lastmod>2022-01-29</lastmod>
+         <lastmod>2022-01-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://raschka-research-group.github.io/coral_pytorch/api_modules/coral_pytorch.losses/coral_loss/</loc>
-         <lastmod>2022-01-29</lastmod>
+         <lastmod>2022-01-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://raschka-research-group.github.io/coral_pytorch/api_modules/coral_pytorch.losses/corn_loss/</loc>
-         <lastmod>2022-01-29</lastmod>
+         <lastmod>2022-01-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://raschka-research-group.github.io/coral_pytorch/api_subpackages/coral_pytorch.dataset/</loc>
-         <lastmod>2022-01-29</lastmod>
+         <lastmod>2022-01-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://raschka-research-group.github.io/coral_pytorch/api_subpackages/coral_pytorch.layers/</loc>
-         <lastmod>2022-01-29</lastmod>
+         <lastmod>2022-01-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://raschka-research-group.github.io/coral_pytorch/api_subpackages/coral_pytorch.losses/</loc>
-         <lastmod>2022-01-29</lastmod>
+         <lastmod>2022-01-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://raschka-research-group.github.io/coral_pytorch/tutorials/pure_pytorch/CORAL_cement/</loc>
-         <lastmod>2022-01-29</lastmod>
+         <lastmod>2022-01-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://raschka-research-group.github.io/coral_pytorch/tutorials/pure_pytorch/CORAL_mnist/</loc>
-         <lastmod>2022-01-29</lastmod>
+         <lastmod>2022-01-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://raschka-research-group.github.io/coral_pytorch/tutorials/pure_pytorch/CORN_cement/</loc>
-         <lastmod>2022-01-29</lastmod>
+         <lastmod>2022-01-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://raschka-research-group.github.io/coral_pytorch/tutorials/pure_pytorch/CORN_mnist/</loc>
-         <lastmod>2022-01-29</lastmod>
+         <lastmod>2022-01-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://raschka-research-group.github.io/coral_pytorch/tutorials/pytorch_lightning/ordinal-corn_cement/</loc>
-         <lastmod>2022-01-29</lastmod>
+         <lastmod>2022-01-31</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>http://raschka-research-group.github.io/coral_pytorch/tutorials/pytorch_lightning/ordinal-corn_mnist/</loc>
+         <lastmod>2022-01-31</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>http://raschka-research-group.github.io/coral_pytorch/tutorials/pytorch_lightning/ordinal-corn_tripadvisor/</loc>
+         <lastmod>2022-01-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
