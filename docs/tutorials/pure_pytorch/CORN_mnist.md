@@ -143,41 +143,35 @@ for epoch in range(num_epochs):
 ```
 
     Epoch: 001/010 | Batch 000/468 | Cost: 50.5479
-
-
-    /Users/sebastian/miniforge3/lib/python3.9/site-packages/torch/nn/functional.py:718: UserWarning: Named tensors and all their associated APIs are an experimental feature and subject to change. Please do not use them for anything important until they are released as stable. (Triggered internally at  /tmp/pip-req-build-gqmopi53/c10/core/TensorImpl.h:1156.)
-      return torch.max_pool2d(input, kernel_size, stride, padding, dilation, ceil_mode)
-
-
     Epoch: 001/010 | Batch 200/468 | Cost: 9.7984
     Epoch: 001/010 | Batch 400/468 | Cost: 5.6653
-    Epoch: 002/010 | Batch 000/468 | Cost: 6.6017
-    Epoch: 002/010 | Batch 200/468 | Cost: 4.7958
+    Epoch: 002/010 | Batch 000/468 | Cost: 6.6018
+    Epoch: 002/010 | Batch 200/468 | Cost: 4.7959
     Epoch: 002/010 | Batch 400/468 | Cost: 4.7984
     Epoch: 003/010 | Batch 000/468 | Cost: 3.9449
-    Epoch: 003/010 | Batch 200/468 | Cost: 3.6385
+    Epoch: 003/010 | Batch 200/468 | Cost: 3.6384
     Epoch: 003/010 | Batch 400/468 | Cost: 2.8829
-    Epoch: 004/010 | Batch 000/468 | Cost: 2.0917
+    Epoch: 004/010 | Batch 000/468 | Cost: 2.0914
     Epoch: 004/010 | Batch 200/468 | Cost: 2.8083
-    Epoch: 004/010 | Batch 400/468 | Cost: 2.6029
-    Epoch: 005/010 | Batch 000/468 | Cost: 3.0181
-    Epoch: 005/010 | Batch 200/468 | Cost: 2.5722
-    Epoch: 005/010 | Batch 400/468 | Cost: 1.0547
-    Epoch: 006/010 | Batch 000/468 | Cost: 1.8847
-    Epoch: 006/010 | Batch 200/468 | Cost: 1.8378
-    Epoch: 006/010 | Batch 400/468 | Cost: 2.7391
-    Epoch: 007/010 | Batch 000/468 | Cost: 4.4030
-    Epoch: 007/010 | Batch 200/468 | Cost: 1.7034
-    Epoch: 007/010 | Batch 400/468 | Cost: 1.4372
-    Epoch: 008/010 | Batch 000/468 | Cost: 2.5416
-    Epoch: 008/010 | Batch 200/468 | Cost: 2.0749
-    Epoch: 008/010 | Batch 400/468 | Cost: 2.3005
-    Epoch: 009/010 | Batch 000/468 | Cost: 1.7815
-    Epoch: 009/010 | Batch 200/468 | Cost: 3.4259
-    Epoch: 009/010 | Batch 400/468 | Cost: 1.8984
-    Epoch: 010/010 | Batch 000/468 | Cost: 1.4577
-    Epoch: 010/010 | Batch 200/468 | Cost: 2.1422
-    Epoch: 010/010 | Batch 400/468 | Cost: 2.0863
+    Epoch: 004/010 | Batch 400/468 | Cost: 2.6030
+    Epoch: 005/010 | Batch 000/468 | Cost: 3.0182
+    Epoch: 005/010 | Batch 200/468 | Cost: 2.5725
+    Epoch: 005/010 | Batch 400/468 | Cost: 1.0548
+    Epoch: 006/010 | Batch 000/468 | Cost: 1.8849
+    Epoch: 006/010 | Batch 200/468 | Cost: 1.8384
+    Epoch: 006/010 | Batch 400/468 | Cost: 2.7395
+    Epoch: 007/010 | Batch 000/468 | Cost: 4.4031
+    Epoch: 007/010 | Batch 200/468 | Cost: 1.7030
+    Epoch: 007/010 | Batch 400/468 | Cost: 1.4367
+    Epoch: 008/010 | Batch 000/468 | Cost: 2.5420
+    Epoch: 008/010 | Batch 200/468 | Cost: 2.0751
+    Epoch: 008/010 | Batch 400/468 | Cost: 2.3024
+    Epoch: 009/010 | Batch 000/468 | Cost: 1.7822
+    Epoch: 009/010 | Batch 200/468 | Cost: 3.4230
+    Epoch: 009/010 | Batch 400/468 | Cost: 1.8978
+    Epoch: 010/010 | Batch 000/468 | Cost: 1.4562
+    Epoch: 010/010 | Batch 200/468 | Cost: 2.1408
+    Epoch: 010/010 | Batch 400/468 | Cost: 2.0846
 
 
 ## 4 -- Evaluate model
@@ -227,8 +221,8 @@ print(f'Mean absolute error (train/test): {train_mae:.2f} | {test_mae:.2f}')
 print(f'Mean squared error (train/test): {train_mse:.2f} | {test_mse:.2f}')
 ```
 
-    Mean absolute error (train/test): 3.37 | 3.35
-    Mean squared error (train/test): 17.28 | 16.98
+    Mean absolute error (train/test): 0.15 | 0.15
+    Mean squared error (train/test): 0.69 | 0.75
 
 
 Note that MNIST is not an ordinal dataset (there is no order between the image categories), so computing the MAE or MSE doesn't really make sense but we use it anyways for demonstration purposes.
@@ -248,16 +242,16 @@ with torch.no_grad():
 ```
 
     tensor([[1.0000e+00, 1.0000e+00, 1.0000e+00,  ..., 9.9987e-01, 9.9947e-01,
-             2.6341e-08],
-            [1.0000e+00, 1.0000e+00, 9.9275e-01,  ..., 9.8443e-01, 9.8443e-01,
-             9.2676e-08],
-            [9.1224e-01, 9.1224e-01, 9.1224e-01,  ..., 8.5583e-01, 8.5442e-01,
-             1.7306e-03],
+             2.6255e-08],
+            [1.0000e+00, 1.0000e+00, 9.9285e-01,  ..., 9.8465e-01, 9.8465e-01,
+             9.2990e-08],
+            [9.1265e-01, 9.1265e-01, 9.1265e-01,  ..., 8.5624e-01, 8.5483e-01,
+             1.7284e-03],
             ...,
-            [9.9801e-01, 9.9800e-01, 9.9800e-01,  ..., 9.8942e-01, 9.8922e-01,
-             4.1247e-03],
-            [9.9977e-01, 9.9977e-01, 9.9977e-01,  ..., 1.5548e-02, 1.5543e-02,
-             2.8278e-04],
-            [7.4167e-07, 7.4167e-07, 7.2308e-07,  ..., 7.4769e-08, 7.4750e-08,
-             5.6809e-13]])
+            [9.9800e-01, 9.9800e-01, 9.9800e-01,  ..., 9.8951e-01, 9.8930e-01,
+             4.1664e-03],
+            [9.9977e-01, 9.9977e-01, 9.9977e-01,  ..., 1.5524e-02, 1.5519e-02,
+             2.7840e-04],
+            [7.3623e-07, 7.3623e-07, 7.1796e-07,  ..., 7.4244e-08, 7.4224e-08,
+             5.7044e-13]])
 

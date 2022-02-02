@@ -5,7 +5,7 @@ The changelog for the current development version is available at
 
 
 
-### 1.2.0dev (11-17-2021)
+### 1.2.0 (11-17-2021)
 
 ##### Downloads
 

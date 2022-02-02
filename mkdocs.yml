@@ -32,12 +32,15 @@ copyright: Copyright &copy; 2020-2022 <a href="http://sebastianraschka.com">Seba
 
 nav:
     - Home: index.md
-    - Tutorials:
-      - PyTorch Lightning:
+    - Tutorials:   
+      - PyTorch Lightning Examples:
+        - CORAL multilayer perceptron for tabular data (Cement dataset): tutorials/pytorch_lightning/ordinal-coral_cement.md
+        - CORAL convolutional neural net for image data (MNIST dataset): tutorials/pytorch_lightning/ordinal-coral_mnist.md
+        - CORAL recurrent neural net for text data (TripAdvisor dataset): tutorials/pytorch_lightning/ordinal-coral_tripadvisor.md
         - CORN multilayer perceptron for tabular data (Cement dataset): tutorials/pytorch_lightning/ordinal-corn_cement.md
         - CORN convolutional neural net for image data (MNIST dataset): tutorials/pytorch_lightning/ordinal-corn_mnist.md
         - CORN recurrent neural net for text data (TripAdvisor dataset): tutorials/pytorch_lightning/ordinal-corn_tripadvisor.md
-      - Pure PyTorch:
+      - Pure PyTorch Examples:
         - CORAL CNN model for image data (MNIST dataset): tutorials/pure_pytorch/CORAL_mnist.md
         - CORAL MLP model for tabular data (Cement dataset): tutorials/pure_pytorch/CORAL_cement.md
         - CORN CNN model for image data (MNIST dataset): tutorials/pure_pytorch/CORN_mnist.md
@@ -47,6 +50,6 @@ nav:
           - coral_pytorch.layers: api_subpackages/coral_pytorch.layers.md
           - coral_pytorch.losses: api_subpackages/coral_pytorch.losses.md
     - Installation: installation.md
-    - Changelog: changelog.md
+    - Changelog: CHANGELOG.md
     - Citing: citing.md
     - License: license.md
