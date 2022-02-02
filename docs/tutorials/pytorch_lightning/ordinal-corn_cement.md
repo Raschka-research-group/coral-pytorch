@@ -1,3 +1,5 @@
+<a href="https://pytorch.org"><img src="https://raw.githubusercontent.com/pytorch/pytorch/master/docs/source/_static/img/pytorch-logo-dark.svg" width="90"/></a> &nbsp; &nbsp;&nbsp;&nbsp;<a href="https://www.pytorchlightning.ai"><img src="https://raw.githubusercontent.com/PyTorchLightning/pytorch-lightning/master/docs/source/_static/images/logo.svg" width="150"/></a>
+
 # A Multilayer Perceptron for Ordinal Regression using CORN -- Cement Dataset
 
 In this tutorial, we implement a multilayer perceptron for ordinal regression based on the CORN method. To learn more about CORN, please have a look at our preprint:
@@ -11,10 +13,61 @@ In this tutorial, we implement a multilayer perceptron for ordinal regression ba
 
 
 ```python
-BATCH_SIZE = 64
+BATCH_SIZE = 128
 NUM_EPOCHS = 200
 LEARNING_RATE = 0.005
 NUM_WORKERS = 0
+```
+
+## Converting a regular classifier into a CORN ordinal regression model
+
+Changing a classifier to a CORN model for ordinal regression is actually really simple and only requires a few changes:
+
+**1)**
+
+Consider the following output layer used by a neural network classifier:
+
+```python
+output_layer = torch.nn.Linear(hidden_units[-1], num_classes)
+```
+
+In CORN we reduce the number of classes by 1:
+
+```python
+output_layer = torch.nn.Linear(hidden_units[-1], num_classes-1)
+```
+
+**2)** 
+
+We swap the cross entropy loss from PyTorch,
+
+```python
+torch.nn.functional.cross_entropy(logits, true_labels)
+```
+
+with the CORN loss (also provided via `coral_pytorch`):
+
+```python
+loss = corn_loss(logits, true_labels,
+                 num_classes=num_classes)
+```
+
+Note that we pass `num_classes` instead of `num_classes-1` 
+to the `corn_loss` as it takes care of the rest internally.
+
+
+**3)**
+
+In a regular classifier, we usually obtain the predicted class labels as follows:
+
+```python
+predicted_labels = torch.argmax(logits, dim=1)
+```
+
+In CORN, w replace this with the following code to convert the predicted probabilities into the predicted labels:
+
+```python
+predicted_labels = corn_label_from_logits(logits)
 ```
 
 ## Implementing a `MultiLayerPerceptron` using PyTorch Lightning's `LightningModule`
@@ -43,9 +96,12 @@ class MultiLayerPerceptron(torch.nn.Module):
             all_layers.append(torch.nn.ReLU())
             input_size = hidden_unit
 
+        # CORN output layer -------------------------------------------
         # Regular classifier would use num_classes instead of 
         # num_classes-1 below
         output_layer = torch.nn.Linear(hidden_units[-1], num_classes-1)
+        # -------------------------------------------------------------
+        
         all_layers.append(output_layer)
         self.model = torch.nn.Sequential(*all_layers)
         
@@ -78,7 +134,7 @@ class LightningMLP(pl.LightningModule):
     def __init__(self, model):
         super().__init__()
 
-        # the inherited PyTorch module
+        # The inherited PyTorch module
         self.model = model
 
         # Save hyperparameters to the log directory
@@ -94,47 +150,49 @@ class LightningMLP(pl.LightningModule):
     def forward(self, x):
         return self.model(x)
         
-    # a common forward step to compute the loss and labels
+    # A common forward step to compute the loss and labels
     # this is used for training, validation, and testing below
-    def _shared_step(self, x, y):
-        logits = self(x)
+    def _shared_step(self, batch):
+        features, true_labels = batch
+        logits = self(features)
 
+        # Use CORN loss --------------------------------------
         # A regular classifier uses:
         # loss = torch.nn.functional.cross_entropy(logits, y)
-        loss = corn_loss(logits, y, num_classes=self.model.num_classes)
-
+        loss = corn_loss(logits, true_labels,
+                         num_classes=self.model.num_classes)
+        # ----------------------------------------------------
+        
+        # CORN logits to labels ------------------------------
         # A regular classifier uses:
         # predicted_labels = torch.argmax(logits, dim=1)
         predicted_labels = corn_label_from_logits(logits)
+        # ----------------------------------------------------
         
-        return loss, predicted_labels
+        return loss, true_labels, predicted_labels
 
     def training_step(self, batch, batch_idx):
-        x, y = batch
-        loss, predicted_labels = self._shared_step(x, y)
+        loss, true_labels, predicted_labels = self._shared_step(batch)
         self.log("train_loss", loss)
-        self.train_mae.update(predicted_labels, y)
+        self.train_mae.update(predicted_labels, true_labels)
         self.log("train_mae", self.train_mae, on_epoch=True, on_step=False)
         return loss
 
     def validation_step(self, batch, batch_idx):
-        x, y = batch
-        loss, predicted_labels = self._shared_step(x, y)
+        loss, true_labels, predicted_labels = self._shared_step(batch)
         self.log("valid_loss", loss)
-        self.valid_mae.update(predicted_labels, y)
+        self.valid_mae.update(predicted_labels, true_labels)
         self.log("valid_mae", self.valid_mae,
                  on_epoch=True, on_step=False, prog_bar=True)
 
     def test_step(self, batch, batch_idx):
-        x, y = batch
-        _, predicted_labels = self._shared_step(x, y)
-        self.test_mae.update(predicted_labels, y)
+        loss, true_labels, predicted_labels = self._shared_step(batch)
+        self.test_mae.update(predicted_labels, true_labels)
         self.log("test_mae", self.test_mae, on_epoch=True, on_step=False)
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.parameters(), lr=LEARNING_RATE)
         return optimizer
-    
 ```
 
 ## Setting up the dataset
@@ -389,14 +447,17 @@ class DataModule(pl.LightningDataModule):
         self.test = MyDataset(X_test_std, y_test)
 
     def train_dataloader(self):
-        return DataLoader(self.train, batch_size=64, num_workers=NUM_WORKERS,
+        return DataLoader(self.train, batch_size=BATCH_SIZE,
+                          num_workers=NUM_WORKERS,
                           drop_last=True)
 
     def val_dataloader(self):
-        return DataLoader(self.valid, batch_size=64, num_workers=NUM_WORKERS)
+        return DataLoader(self.valid, batch_size=BATCH_SIZE,
+                          num_workers=NUM_WORKERS)
 
     def test_dataloader(self):
-        return DataLoader(self.test, batch_size=64, num_workers=NUM_WORKERS)
+        return DataLoader(self.test, batch_size=BATCH_SIZE,
+                          num_workers=NUM_WORKERS)
 ```
 
 - Note that the `prepare_data` method is usually used for steps that only need to be executed once, for example, downloading the dataset; the `setup` method defines the the dataset loading -- if you run your code in a distributed setting, this will be called on each node / GPU. 
@@ -423,7 +484,7 @@ from pytorch_lightning.loggers import CSVLogger
 
 pytorch_model = MultiLayerPerceptron(
     input_size=data_features.shape[1],
-    hidden_units=(24, 16),
+    hidden_units=(40, 20),
     num_classes=np.bincount(data_labels).shape[0])
 
 lightning_model = LightningMLP(pytorch_model)
@@ -441,8 +502,8 @@ logger = CSVLogger(save_dir="logs/", name="mlp-corn-cement")
 trainer = pl.Trainer(
     max_epochs=NUM_EPOCHS,
     callbacks=callbacks,
-    accelerator="auto",  # uses CPU by default or a GPU/TPU if avail
-    devices="auto", # uses all available GPUs/TPUs if applicable
+    accelerator="auto",  # uses CPU by default or a GPU/TPU if available
+    devices="auto",  # uses all available GPUs/TPUs if applicable
     logger=logger,
     log_every_n_steps=1)
 
@@ -455,15 +516,17 @@ trainer.fit(model=lightning_model, datamodule=data_module)
     
       | Name      | Type                 | Params
     ---------------------------------------------------
-    0 | model     | MultiLayerPerceptron | 684   
+    0 | model     | MultiLayerPerceptron | 1.3 K 
     1 | train_mae | MeanAbsoluteError    | 0     
     2 | valid_mae | MeanAbsoluteError    | 0     
     3 | test_mae  | MeanAbsoluteError    | 0     
     ---------------------------------------------------
-    684       Trainable params
+    1.3 K     Trainable params
     0         Non-trainable params
-    684       Total params
-    0.003     Total estimated model params size (MB)
+    1.3 K     Total params
+    0.005     Total estimated model params size (MB)
+
+
 
 
 
@@ -485,7 +548,7 @@ for i, dfg in metrics.groupby(agg_col):
 df_metrics = pd.DataFrame(aggreg_metrics)
 df_metrics[["train_loss", "valid_loss"]].plot(
     grid=True, legend=True, xlabel='Epoch', ylabel='Loss')
-df_metrics[["valid_mae", "train_mae"]].plot(
+df_metrics[["train_mae", "valid_mae"]].plot(
     grid=True, legend=True, xlabel='Epoch', ylabel='MAE')
 ```
 
@@ -498,17 +561,17 @@ df_metrics[["valid_mae", "train_mae"]].plot(
 
 
     
-![png](ordinal-corn_cement_files/ordinal-corn_cement_37_1.png)
+![png](ordinal-corn_cement_files/ordinal-corn_cement_39_1.png)
     
 
 
 
     
-![png](ordinal-corn_cement_files/ordinal-corn_cement_37_2.png)
+![png](ordinal-corn_cement_files/ordinal-corn_cement_39_2.png)
     
 
 
-- As we can see from the loss plot above, the model starts overfitting pretty quickly; however the validation set MAE keeps improving. Based on the MAE plot, we can see that the best model, based on the validation set MAE, may be around epoch 110.
+- As we can see from the loss plot above, the model starts overfitting pretty quickly; however the validation set MAE keeps improving. Based on the MAE plot, we can see that the best model, based on the validation set MAE, may be around epoch 175.
 - The `trainer` saved this model automatically for us, we which we can load from the checkpoint via the `ckpt_path='best'` argument; below we use the `trainer` instance to evaluate the best model on the test set:
 
 
@@ -516,8 +579,8 @@ df_metrics[["valid_mae", "train_mae"]].plot(
 trainer.test(model=lightning_model, datamodule=data_module, ckpt_path='best')
 ```
 
-    Restoring states from the checkpoint path at logs/mlp-corn-cement/version_20/checkpoints/epoch=112-step=1242.ckpt
-    Loaded model weights from checkpoint at logs/mlp-corn-cement/version_20/checkpoints/epoch=112-step=1242.ckpt
+    Restoring states from the checkpoint path at logs/mlp-corn-cement/version_11/checkpoints/epoch=145-step=729.ckpt
+    Loaded model weights from checkpoint at logs/mlp-corn-cement/version_11/checkpoints/epoch=145-step=729.ckpt
     /Users/sebastian/miniconda3/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:132: UserWarning: The dataloader, test_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 8 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
       rank_zero_warn(
 
@@ -528,14 +591,14 @@ trainer.test(model=lightning_model, datamodule=data_module, ckpt_path='best')
 
     --------------------------------------------------------------------------------
     DATALOADER:0 TEST RESULTS
-    {'test_mae': 0.3050000071525574}
+    {'test_mae': 0.25}
     --------------------------------------------------------------------------------
 
 
 
 
 
-    [{'test_mae': 0.3050000071525574}]
+    [{'test_mae': 0.25}]
 
 
 
@@ -548,7 +611,7 @@ trainer.test(model=lightning_model, datamodule=data_module, ckpt_path='best')
 
 
 ```python
-path = f'{trainer.logger.log_dir}/checkpoints/epoch=112-step=1242.ckpt'
+path = f'{trainer.logger.log_dir}/checkpoints/epoch=145-step=729.ckpt'
 
 lightning_model = LightningMLP.load_from_checkpoint(path)
 ```
@@ -574,6 +637,6 @@ all_predicted_labels[:5]
 
 
 
-    tensor([0, 4, 1, 2, 0])
+    tensor([0, 3, 1, 2, 1])
 
 

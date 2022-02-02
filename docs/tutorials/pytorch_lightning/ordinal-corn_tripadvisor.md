@@ -1,3 +1,6 @@
+
+<a href="https://pytorch.org"><img src="https://raw.githubusercontent.com/pytorch/pytorch/master/docs/source/_static/img/pytorch-logo-dark.svg" width="90"/></a> &nbsp; &nbsp;&nbsp;&nbsp;<a href="https://www.pytorchlightning.ai"><img src="https://raw.githubusercontent.com/PyTorchLightning/pytorch-lightning/master/docs/source/_static/images/logo.svg" width="150"/></a>
+
 # A Recurrent Neural Net for Ordinal Regression using CORN -- TripAdvisor Dataset
 
 In this tutorial, we implement a recurrent neural network for ordinal regression based on the CORN method. To learn more about CORN, please have a look at our preprint:
@@ -5,7 +8,7 @@ In this tutorial, we implement a recurrent neural network for ordinal regression
 - Xintong Shi, Wenzhi Cao, and Sebastian Raschka (2021). Deep Neural Networks for Rank-Consistent Ordinal Regression Based On Conditional Probabilities. Arxiv preprint;  [https://arxiv.org/abs/2111.08851](https://arxiv.org/abs/2111.08851)
 
 
-We will be using a balanced version of the TripAdvisor Hotel Review dataset (https://www.kaggle.com/andrewmvd/trip-advisor-hotel-reviews) that we used in the CORN manuscript (https://github.com/Raschka-research-group/corn-ordinal-neuralnet/blob/main/datasets/tripadvisor/tripadvisor_balanced.csv).
+We will be using a balanced version of the [TripAdvisor Hotel Review](https://www.kaggle.com/andrewmvd/trip-advisor-hotel-reviews) dataset that [we used](https://github.com/Raschka-research-group/corn-ordinal-neuralnet/blob/main/datasets/tripadvisor/tripadvisor_balanced.csv) in the CORN manuscript.
 
 ## General settings and hyperparameters
 
@@ -26,6 +29,57 @@ NUM_CLASSES = 5
 VOCABULARY_SIZE = 5000
 ```
 
+## Converting a regular classifier into a CORN ordinal regression model
+
+Changing a classifier to a CORN model for ordinal regression is actually really simple and only requires a few changes:
+
+**1)**
+
+Consider the following output layer used by a neural network classifier:
+
+```python
+output_layer = torch.nn.Linear(hidden_units[-1], num_classes)
+```
+
+In CORN we reduce the number of classes by 1:
+
+```python
+output_layer = torch.nn.Linear(hidden_units[-1], num_classes-1)
+```
+
+**2)** 
+
+We swap the cross entropy loss from PyTorch,
+
+```python
+torch.nn.functional.cross_entropy(logits, true_labels)
+```
+
+with the CORN loss (also provided via `coral_pytorch`):
+
+```python
+loss = corn_loss(logits, true_labels,
+                 num_classes=num_classes)
+```
+
+Note that we pass `num_classes` instead of `num_classes-1` 
+to the `corn_loss` as it takes care of the rest internally.
+
+
+**3)**
+
+In a regular classifier, we usually obtain the predicted class labels as follows:
+
+```python
+predicted_labels = torch.argmax(logits, dim=1)
+```
+
+In CORN, w replace this with the following code to convert the predicted probabilities into the predicted labels:
+
+```python
+predicted_labels = corn_label_from_logits(logits)
+```
+
 ## Implementing an `RNN` using PyTorch Lightning's `LightningModule`
 
 - In this section, we set up the main model architecture using the `LightningModule` from PyTorch Lightning.
@@ -43,20 +97,25 @@ class RNN(torch.nn.Module):
         super().__init__()
 
         self.embedding = torch.nn.Embedding(input_dim, embedding_dim)
-        #self.rnn = torch.nn.RNN(embedding_dim,
-        #                        hidden_dim,
-        #                        nonlinearity='relu')
+        # self.rnn = torch.nn.RNN(embedding_dim,
+        #                         hidden_dim,
+        #                         nonlinearity='relu')
         self.rnn = torch.nn.LSTM(embedding_dim,
                                  hidden_dim)        
 
+        # CORN output layer ------------------------------------------
+        # Regular classifier would use num_classes instead of 
+        # num_classes-1 below
         self.output_layer = torch.nn.Linear(hidden_dim, num_classes-1)
+        # ------------------------------------------------------------
+        
         self.num_classes = num_classes
 
     def forward(self, text, text_length):
         # text dim: [sentence length, batch size]
 
         embedded = self.embedding(text)
-        # ebedded dim: [sentence length, batch size, embedding dim]
+        # embedded dim: [sentence length, batch size, embedding dim]
 
         packed = torch.nn.utils.rnn.pack_padded_sequence(
             embedded, text_length.to('cpu'))
@@ -99,7 +158,7 @@ class LightningRNN(pl.LightningModule):
     def __init__(self, model):
         super().__init__()
 
-        # the inherited PyTorch module
+        # The inherited PyTorch module
         self.model = model
 
         # Save hyperparameters to the log directory
@@ -115,9 +174,9 @@ class LightningRNN(pl.LightningModule):
     def forward(self, text, text_length):
         return self.model(text, text_length)
         
-    # a common forward step to compute the loss and labels
+    # A common forward step to compute the loss and labels
     # this is used for training, validation, and testing below
-    def _shared_step(self, batch, batch_idx):
+    def _shared_step(self, batch):
         
         # These next 3 steps are unique and look a bit tricky due to
         # how Torchtext's BucketIterator prepares the batches
@@ -128,18 +187,23 @@ class LightningRNN(pl.LightningModule):
         true_labels = batch.LABEL_COLUMN_NAME
         logits = self(features, text_length)
 
+        # Use CORN loss ---------------------------------------------------
         # A regular classifier uses:
         # loss = torch.nn.functional.cross_entropy(logits, true_labels)
-        loss = corn_loss(logits, true_labels, num_classes=self.model.num_classes)
+        loss = corn_loss(logits, true_labels,
+                         num_classes=self.model.num_classes)
+        # -----------------------------------------------------------------
 
+        # CORN logits to labels -------------------------------------------
         # A regular classifier uses:
         # predicted_labels = torch.argmax(logits, dim=1)
         predicted_labels = corn_label_from_logits(logits)
+        # -----------------------------------------------------------------
         
         return loss, true_labels, predicted_labels
 
     def training_step(self, batch, batch_idx):
-        loss, true_labels, predicted_labels = self._shared_step(batch, batch_idx)
+        loss, true_labels, predicted_labels = self._shared_step(batch)
         self.log("train_loss", loss, batch_size=true_labels.shape[0])
         self.train_mae.update(predicted_labels, true_labels)
         self.log("train_mae", self.train_mae, on_epoch=True, on_step=False,
@@ -147,7 +211,7 @@ class LightningRNN(pl.LightningModule):
         return loss
 
     def validation_step(self, batch, batch_idx):
-        loss, true_labels, predicted_labels = self._shared_step(batch, batch_idx)
+        loss, true_labels, predicted_labels = self._shared_step(batch)
         self.log("valid_loss", loss, batch_size=true_labels.shape[0])
         self.valid_mae.update(predicted_labels, true_labels)
         self.log("valid_mae", self.valid_mae,
@@ -155,7 +219,7 @@ class LightningRNN(pl.LightningModule):
                  batch_size=true_labels.shape[0])
 
     def test_step(self, batch, batch_idx):
-        _, true_labels, predicted_labels = self._shared_step(batch, batch_idx)
+        _, true_labels, predicted_labels = self._shared_step(batch)
         self.test_mae.update(predicted_labels, true_labels)
         self.log("test_mae", self.test_mae, on_epoch=True, on_step=False,
                  batch_size=true_labels.shape[0])
@@ -373,7 +437,7 @@ lightning_model = LightningRNN(pytorch_model)
 
 callbacks = [ModelCheckpoint(
     save_top_k=1, mode='min', monitor="valid_mae")]  # save top 1 model 
-logger = CSVLogger(save_dir="logs/", name="cnn-corn-mnist")
+logger = CSVLogger(save_dir="logs/", name="rnn-corn-mnist")
 ```
 
 - Note that we disable warning as the `.log()` method of the `LightningModule` currently warns us that the batch size is inconsistent. This should not happen as we define the `batch_size` manually in the `self.log` calls. However, this will be resolved in a future version (https://github.com/PyTorchLightning/pytorch-lightning/pull/10408). 
@@ -408,8 +472,8 @@ warnings.filterwarnings('ignore')
 trainer = pl.Trainer(
     max_epochs=NUM_EPOCHS,
     callbacks=callbacks,
-    accelerator="gpu",
-    devices=1,
+    accelerator="auto",  # uses CPU by default or a GPU/TPU if available
+    devices="auto",  # uses all available GPUs/TPUs if applicable
     logger=logger,
     log_every_n_steps=1)
 
@@ -418,10 +482,9 @@ trainer.fit(model=lightning_model,
             val_dataloaders=valid_loader)
 ```
 
-    GPU available: True, used: True
+    GPU available: False, used: False
     TPU available: False, using: 0 TPU cores
     IPU available: False, using: 0 IPUs
-    LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
     
       | Name      | Type              | Params
     ------------------------------------------------
@@ -435,6 +498,8 @@ trainer.fit(model=lightning_model,
     690 K     Total params
     2.761     Total estimated model params size (MB)
 
+
+    Epoch 19: 100%|█| 23/23 [02:37<00:00,  6.84s/it, loss=8.57, v_num=0, valid_mae=1[A
 
 
 ## Evaluating the model
@@ -458,7 +523,7 @@ for i, dfg in metrics.groupby(agg_col):
 df_metrics = pd.DataFrame(aggreg_metrics)
 df_metrics[["train_loss", "valid_loss"]].plot(
     grid=True, legend=True, xlabel='Epoch', ylabel='Loss')
-df_metrics[["valid_mae", "train_mae"]].plot(
+df_metrics[["train_mae", "valid_mae"]].plot(
     grid=True, legend=True, xlabel='Epoch', ylabel='MAE')
 ```
 
@@ -471,17 +536,17 @@ df_metrics[["valid_mae", "train_mae"]].plot(
 
 
     
-![png](ordinal-corn_tripadvisor_files/ordinal-corn_tripadvisor_37_1.png)
+![png](ordinal-corn_tripadvisor_files/ordinal-corn_tripadvisor_39_1.png)
     
 
 
 
     
-![png](ordinal-corn_tripadvisor_files/ordinal-corn_tripadvisor_37_2.png)
+![png](ordinal-corn_tripadvisor_files/ordinal-corn_tripadvisor_39_2.png)
     
 
 
-- As we can see from the loss plot above, the model starts overfitting pretty quickly. Based on the MAE plot, we can see that the best model, based on the validation set MAE, may be around epoch 5.
+- As we can see from the loss plot above, the model starts overfitting pretty quickly. Based on the MAE plot, we can see that the best model, based on the validation set MAE, may be around epoch 8.
 - The `trainer` saved this model automatically for us, we which we can load from the checkpoint via the `ckpt_path='best'` argument; below we use the `trainer` instance to evaluate the best model on the test set:
 
 
@@ -489,25 +554,21 @@ df_metrics[["valid_mae", "train_mae"]].plot(
 trainer.test(model=lightning_model, dataloaders=test_loader, ckpt_path='best')
 ```
 
-    Restoring states from the checkpoint path at logs/cnn-corn-mnist/version_24/checkpoints/epoch=5-step=113.ckpt
-    LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
-    Loaded model weights from checkpoint at logs/cnn-corn-mnist/version_24/checkpoints/epoch=5-step=113.ckpt
+    Restoring states from the checkpoint path at logs/rnn-corn-mnist/version_0/checkpoints/epoch=8-step=170.ckpt
+    Loaded model weights from checkpoint at logs/rnn-corn-mnist/version_0/checkpoints/epoch=8-step=170.ckpt
 
 
-
-    Testing: 0it [00:00, ?it/s]
-
-
-    --------------------------------------------------------------------------------
+    Testing: 100%|████████████████████████████████████| 6/6 [00:09<00:00,  2.49s/it]--------------------------------------------------------------------------------
     DATALOADER:0 TEST RESULTS
-    {'test_mae': 0.9242857098579407}
+    {'test_mae': 0.9214285612106323}
     --------------------------------------------------------------------------------
+    Testing: 100%|████████████████████████████████████| 6/6 [00:13<00:00,  2.25s/it]
 
 
 
 
 
-    [{'test_mae': 0.9242857098579407}]
+    [{'test_mae': 0.9214285612106323}]
 
 
 
@@ -518,7 +579,7 @@ trainer.test(model=lightning_model, dataloaders=test_loader, ckpt_path='best')
 
 
 ```python
-path = f'{trainer.logger.log_dir}/checkpoints/epoch=5-step=113.ckpt'
+path = f'{trainer.logger.log_dir}/checkpoints/epoch=8-step=170.ckpt'
 
 lightning_model = LightningRNN.load_from_checkpoint(path)
 ```
@@ -542,4 +603,6 @@ all_predicted_labels[:5]
 
 
 
-    tensor([3, 2, 1, 3, 1])
+    tensor([3, 1, 1, 3, 2])
+
+

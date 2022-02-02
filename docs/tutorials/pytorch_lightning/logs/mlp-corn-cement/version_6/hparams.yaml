@@ -1,5 +1,0 @@
-hidden_units: !!python/tuple
-- 24
-- 16
-input_size: 8
-num_classes: 5

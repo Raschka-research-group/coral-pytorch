@@ -1,3 +1,5 @@
+<a href="https://pytorch.org"><img src="https://raw.githubusercontent.com/pytorch/pytorch/master/docs/source/_static/img/pytorch-logo-dark.svg" width="90"/></a> &nbsp; &nbsp;&nbsp;&nbsp;<a href="https://www.pytorchlightning.ai"><img src="https://raw.githubusercontent.com/PyTorchLightning/pytorch-lightning/master/docs/source/_static/images/logo.svg" width="150"/></a>
+
 # A Convolutional Neural Net for Ordinal Regression using CORN -- MNIST Dataset
 
 In this tutorial, we implement a convolutional neural network for ordinal regression based on the CORN method. To learn more about CORN, please have a look at our preprint:
@@ -18,6 +20,57 @@ BATCH_SIZE = 256
 NUM_EPOCHS = 20
 LEARNING_RATE = 0.005
 NUM_WORKERS = 4
+```
+
+## Converting a regular classifier into a CORN ordinal regression model
+
+Changing a classifier to a CORN model for ordinal regression is actually really simple and only requires a few changes:
+
+**1)**
+
+Consider the following output layer used by a neural network classifier:
+
+```python
+output_layer = torch.nn.Linear(hidden_units[-1], num_classes)
+```
+
+In CORN we reduce the number of classes by 1:
+
+```python
+output_layer = torch.nn.Linear(hidden_units[-1], num_classes-1)
+```
+
+**2)** 
+
+We swap the cross entropy loss from PyTorch,
+
+```python
+torch.nn.functional.cross_entropy(logits, true_labels)
+```
+
+with the CORN loss (also provided via `coral_pytorch`):
+
+```python
+loss = corn_loss(logits, true_labels,
+                 num_classes=num_classes)
+```
+
+Note that we pass `num_classes` instead of `num_classes-1` 
+to the `corn_loss` as it takes care of the rest internally.
+
+
+**3)**
+
+In a regular classifier, we usually obtain the predicted class labels as follows:
+
+```python
+predicted_labels = torch.argmax(logits, dim=1)
+```
+
+In CORN, w replace this with the following code to convert the predicted probabilities into the predicted labels:
+
+```python
+predicted_labels = corn_label_from_logits(logits)
 ```
 
 ## Implementing a `ConvNet` using PyTorch Lightning's `LightningModule`
@@ -51,9 +104,12 @@ class ConvNet(torch.nn.Module):
             torch.nn.Flatten()
         ]
         
+        # CORN output layer --------------------------------------
         # Regular classifier would use num_classes instead of 
         # num_classes-1 below
         output_layer = torch.nn.Linear(294, num_classes-1)
+        # ---------------------------------------------------------
+        
         all_layers.append(output_layer)
         self.model = torch.nn.Sequential(*all_layers)
         
@@ -86,7 +142,7 @@ class LightningCNN(pl.LightningModule):
     def __init__(self, model):
         super().__init__()
 
-        # the inherited PyTorch module
+        # The inherited PyTorch module
         self.model = model
 
         # Save hyperparameters to the log directory
@@ -102,47 +158,49 @@ class LightningCNN(pl.LightningModule):
     def forward(self, x):
         return self.model(x)
         
-    # a common forward step to compute the loss and labels
+    # A common forward step to compute the loss and labels
     # this is used for training, validation, and testing below
-    def _shared_step(self, x, y):
-        logits = self(x)
+    def _shared_step(self, batch):
+        features, true_labels = batch
+        logits = self(features)
 
+        # Use CORN loss --------------------------------------
         # A regular classifier uses:
         # loss = torch.nn.functional.cross_entropy(logits, y)
-        loss = corn_loss(logits, y, num_classes=self.model.num_classes)
-
+        loss = corn_loss(logits, true_labels,
+                         num_classes=self.model.num_classes)
+        # ----------------------------------------------------
+        
+        # CORN logits to labels ------------------------------
         # A regular classifier uses:
         # predicted_labels = torch.argmax(logits, dim=1)
         predicted_labels = corn_label_from_logits(logits)
+        # ----------------------------------------------------
         
-        return loss, predicted_labels
+        return loss, true_labels, predicted_labels
 
     def training_step(self, batch, batch_idx):
-        x, y = batch
-        loss, predicted_labels = self._shared_step(x, y)
+        loss, true_labels, predicted_labels = self._shared_step(batch)
         self.log("train_loss", loss)
-        self.train_mae.update(predicted_labels, y)
+        self.train_mae.update(predicted_labels, true_labels)
         self.log("train_mae", self.train_mae, on_epoch=True, on_step=False)
         return loss
 
     def validation_step(self, batch, batch_idx):
-        x, y = batch
-        loss, predicted_labels = self._shared_step(x, y)
+        loss, true_labels, predicted_labels = self._shared_step(batch)
         self.log("valid_loss", loss)
-        self.valid_mae.update(predicted_labels, y)
+        self.valid_mae.update(predicted_labels, true_labels)
         self.log("valid_mae", self.valid_mae,
                  on_epoch=True, on_step=False, prog_bar=True)
 
     def test_step(self, batch, batch_idx):
-        x, y = batch
-        _, predicted_labels = self._shared_step(x, y)
-        self.test_mae.update(predicted_labels, y)
+        loss, true_labels, predicted_labels = self._shared_step(batch)
+        self.test_mae.update(predicted_labels, true_labels)
         self.log("test_mae", self.test_mae, on_epoch=True, on_step=False)
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.parameters(), lr=LEARNING_RATE)
         return optimizer
-    
 ```
 
 ## Setting up the dataset
@@ -205,7 +263,7 @@ print('Test label distribution:', torch.bincount(all_test_labels))
 ```
 
     Training labels: tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-    Training label distribution: tensor([5912, 6734, 5948, 6119, 5833, 5411, 5906, 6258, 5843, 5940])
+    Training label distribution: tensor([5914, 6725, 5953, 6121, 5830, 5412, 5913, 6256, 5839, 5941])
     
     Test labels: tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
     Test label distribution: tensor([ 980, 1135, 1032, 1010,  982,  892,  958, 1028,  974, 1009])
@@ -341,18 +399,17 @@ logger = CSVLogger(save_dir="logs/", name="cnn-corn-mnist")
 trainer = pl.Trainer(
     max_epochs=NUM_EPOCHS,
     callbacks=callbacks,
-    accelerator="gpu",
-    devices=1,
+    accelerator="auto",  # Uses GPUs or TPUs if available
+    devices="auto",  # Uses all available GPUs/TPUs if applicable
     logger=logger,
     log_every_n_steps=1)
 
 trainer.fit(model=lightning_model, datamodule=data_module)
 ```
 
-    GPU available: True, used: True
+    GPU available: False, used: False
     TPU available: False, using: 0 TPU cores
     IPU available: False, using: 0 IPUs
-    LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
     
       | Name      | Type              | Params
     ------------------------------------------------
@@ -366,6 +423,8 @@ trainer.fit(model=lightning_model, datamodule=data_module)
     2.9 K     Total params
     0.011     Total estimated model params size (MB)
 
+
+    Epoch 19: 100%|█| 234/234 [00:14<00:00, 16.05it/s, loss=2.22, v_num=4, valid_mae[A
 
 
 
@@ -390,7 +449,7 @@ for i, dfg in metrics.groupby(agg_col):
 df_metrics = pd.DataFrame(aggreg_metrics)
 df_metrics[["train_loss", "valid_loss"]].plot(
     grid=True, legend=True, xlabel='Epoch', ylabel='Loss')
-df_metrics[["valid_mae", "train_mae"]].plot(
+df_metrics[["train_mae", "valid_mae"]].plot(
     grid=True, legend=True, xlabel='Epoch', ylabel='MAE')
 ```
 
@@ -403,13 +462,13 @@ df_metrics[["valid_mae", "train_mae"]].plot(
 
 
     
-![png](ordinal-corn_mnist_files/ordinal-corn_mnist_34_1.png)
+![png](ordinal-corn_mnist_files/ordinal-corn_mnist_36_1.png)
     
 
 
 
     
-![png](ordinal-corn_mnist_files/ordinal-corn_mnist_34_2.png)
+![png](ordinal-corn_mnist_files/ordinal-corn_mnist_36_2.png)
     
 
 
@@ -421,25 +480,21 @@ df_metrics[["valid_mae", "train_mae"]].plot(
 trainer.test(model=lightning_model, datamodule=data_module, ckpt_path='best')
 ```
 
-    Restoring states from the checkpoint path at logs/cnn-corn-mnist/version_12/checkpoints/epoch=17-step=3851.ckpt
-    LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
-    Loaded model weights from checkpoint at logs/cnn-corn-mnist/version_12/checkpoints/epoch=17-step=3851.ckpt
+    Restoring states from the checkpoint path at logs/cnn-corn-mnist/version_4/checkpoints/epoch=17-step=3851.ckpt
+    Loaded model weights from checkpoint at logs/cnn-corn-mnist/version_4/checkpoints/epoch=17-step=3851.ckpt
 
 
-
-    Testing: 0it [00:00, ?it/s]
-
-
-    --------------------------------------------------------------------------------
+    Testing:  95%|████████████████████████████████▎ | 38/40 [00:01<00:00, 51.98it/s]--------------------------------------------------------------------------------
     DATALOADER:0 TEST RESULTS
-    {'test_mae': 0.11819999665021896}
+    {'test_mae': 0.1185000017285347}
     --------------------------------------------------------------------------------
+    Testing: 100%|██████████████████████████████████| 40/40 [00:01<00:00, 29.76it/s]
 
 
 
 
 
-    [{'test_mae': 0.11819999665021896}]
+    [{'test_mae': 0.1185000017285347}]
 
 
 
@@ -479,4 +534,5 @@ all_predicted_labels[:5]
 
 
     tensor([7, 2, 1, 0, 4])
+
 
