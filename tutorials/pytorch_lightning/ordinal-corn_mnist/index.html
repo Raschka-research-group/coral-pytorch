@@ -825,7 +825,6 @@
 </a>
 
 
-<p><a href="https://pytorch.org"><img src="https://raw.githubusercontent.com/pytorch/pytorch/master/docs/source/_static/img/pytorch-logo-dark.svg" width="90"/></a> &nbsp; &nbsp;&nbsp;&nbsp;<a href="https://www.pytorchlightning.ai"><img src="https://raw.githubusercontent.com/PyTorchLightning/pytorch-lightning/master/docs/source/_static/images/logo.svg" width="150"/></a></p>
 <h1 id="a-convolutional-neural-net-for-ordinal-regression-using-corn-mnist-dataset">A Convolutional Neural Net for Ordinal Regression using CORN -- MNIST Dataset</h1>
 <p>In this tutorial, we implement a convolutional neural network for ordinal regression based on the CORN method. To learn more about CORN, please have a look at our preprint:</p>
 <ul>
@@ -841,6 +840,8 @@
 <span class="n">NUM_EPOCHS</span> <span class="o">=</span> <span class="mi">20</span>
 <span class="n">LEARNING_RATE</span> <span class="o">=</span> <span class="mf">0.005</span>
 <span class="n">NUM_WORKERS</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="n">DATA_BASEPATH</span> <span class="o">=</span> <span class="s2">&quot;./data&quot;</span>
 </code></pre></div>
 <h2 id="converting-a-regular-classifier-into-a-corn-ordinal-regression-model">Converting a regular classifier into a CORN ordinal regression model</h2>
 <p>Changing a classifier to a CORN model for ordinal regression is actually really simple and only requires a few changes:</p>
@@ -932,14 +933,16 @@ to the <code>corn_loss</code> as it takes care of the rest internally.</p>
 
 <span class="c1"># LightningModule that receives a PyTorch model as input</span>
 <span class="k">class</span> <span class="nc">LightningCNN</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningModule</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span> <span class="o">=</span> <span class="n">learning_rate</span>
         <span class="c1"># The inherited PyTorch module</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
 
-        <span class="c1"># Save hyperparameters to the log directory</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">save_hyperparameters</span><span class="p">()</span>
+        <span class="c1"># Save settings and hyperparameters to the log directory</span>
+        <span class="c1"># but skip the model parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_hyperparameters</span><span class="p">(</span><span class="n">ignore</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">])</span>
 
         <span class="c1"># Set up attributes for computing the MAE</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">train_mae</span> <span class="o">=</span> <span class="n">torchmetrics</span><span class="o">.</span><span class="n">MeanAbsoluteError</span><span class="p">()</span>
@@ -975,24 +978,24 @@ to the <code>corn_loss</code> as it takes care of the rest internally.</p>
     <span class="k">def</span> <span class="nf">training_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
         <span class="n">loss</span><span class="p">,</span> <span class="n">true_labels</span><span class="p">,</span> <span class="n">predicted_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shared_step</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;train_loss&quot;</span><span class="p">,</span> <span class="n">loss</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">train_mae</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">predicted_labels</span><span class="p">,</span> <span class="n">true_labels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_mae</span><span class="p">(</span><span class="n">predicted_labels</span><span class="p">,</span> <span class="n">true_labels</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;train_mae&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_mae</span><span class="p">,</span> <span class="n">on_epoch</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">on_step</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">loss</span>
+        <span class="k">return</span> <span class="n">loss</span>  <span class="c1"># this is passed to the optimzer for training</span>
 
     <span class="k">def</span> <span class="nf">validation_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
         <span class="n">loss</span><span class="p">,</span> <span class="n">true_labels</span><span class="p">,</span> <span class="n">predicted_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shared_step</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;valid_loss&quot;</span><span class="p">,</span> <span class="n">loss</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">valid_mae</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">predicted_labels</span><span class="p">,</span> <span class="n">true_labels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">valid_mae</span><span class="p">(</span><span class="n">predicted_labels</span><span class="p">,</span> <span class="n">true_labels</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;valid_mae&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_mae</span><span class="p">,</span>
                  <span class="n">on_epoch</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">on_step</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">prog_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">test_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
         <span class="n">loss</span><span class="p">,</span> <span class="n">true_labels</span><span class="p">,</span> <span class="n">predicted_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shared_step</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_mae</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">predicted_labels</span><span class="p">,</span> <span class="n">true_labels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_mae</span><span class="p">(</span><span class="n">predicted_labels</span><span class="p">,</span> <span class="n">true_labels</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;test_mae&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_mae</span><span class="p">,</span> <span class="n">on_epoch</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">on_step</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">configure_optimizers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">LEARNING_RATE</span><span class="p">)</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">optimizer</span>
 </code></pre></div>
 <h2 id="setting-up-the-dataset">Setting up the dataset</h2>
@@ -1008,7 +1011,7 @@ to the <code>corn_loss</code> as it takes care of the rest internally.</p>
 <span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
 
 
-<span class="n">train_dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;../data&#39;</span><span class="p">,</span> 
+<span class="n">train_dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">DATA_BASEPATH</span><span class="p">,</span> 
                                <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
                                <span class="n">transform</span><span class="o">=</span><span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
                                <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1019,7 +1022,7 @@ to the <code>corn_loss</code> as it takes care of the rest internally.</p>
                           <span class="n">drop_last</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                           <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="n">test_dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;../data&#39;</span><span class="p">,</span> 
+<span class="n">test_dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">DATA_BASEPATH</span><span class="p">,</span> 
                               <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                               <span class="n">transform</span><span class="o">=</span><span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">())</span>
 
@@ -1048,7 +1051,7 @@ to the <code>corn_loss</code> as it takes care of the rest internally.</p>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Test label distribution:&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">all_test_labels</span><span class="p">))</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>Training labels: tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-Training label distribution: tensor([5914, 6725, 5953, 6121, 5830, 5412, 5913, 6256, 5839, 5941])
+Training label distribution: tensor([5914, 6731, 5946, 6121, 5834, 5413, 5910, 6254, 5840, 5941])
 
 Test labels: tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 Test label distribution: tensor([ 980, 1135, 1032, 1010,  982,  892,  958, 1028,  974, 1009])
@@ -1143,7 +1146,7 @@ Test label distribution: tensor([ 980, 1135, 1032, 1010,  982,  892,  958, 1028,
 <li>Next, lets initialize the <code>DataModule</code>; we use a random seed for reproducibility (so that the data set is shuffled the same way when we re-execute this code):</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> 
-<span class="n">data_module</span> <span class="o">=</span> <span class="n">DataModule</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s1">&#39;../data&#39;</span><span class="p">)</span>
+<span class="n">data_module</span> <span class="o">=</span> <span class="n">DataModule</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="n">DATA_BASEPATH</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="training-the-model-using-the-pytorch-lightning-trainer-class">Training the model using the PyTorch Lightning Trainer class</h2>
 <ul>
@@ -1159,7 +1162,8 @@ Test label distribution: tensor([ 980, 1135, 1032, 1010,  982,  892,  958, 1028,
     <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">num_classes</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">all_test_labels</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-<span class="n">lightning_model</span> <span class="o">=</span> <span class="n">LightningCNN</span><span class="p">(</span><span class="n">pytorch_model</span><span class="p">)</span>
+<span class="n">lightning_model</span> <span class="o">=</span> <span class="n">LightningCNN</span><span class="p">(</span>
+    <span class="n">pytorch_model</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="n">LEARNING_RATE</span><span class="p">)</span>
 
 <span class="n">callbacks</span> <span class="o">=</span> <span class="p">[</span><span class="n">ModelCheckpoint</span><span class="p">(</span>
     <span class="n">save_top_k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">monitor</span><span class="o">=</span><span class="s2">&quot;valid_mae&quot;</span><span class="p">)]</span>  <span class="c1"># save top 1 model </span>
@@ -1168,19 +1172,28 @@ Test label distribution: tensor([ 980, 1135, 1032, 1010,  982,  892,  958, 1028,
 <ul>
 <li>Now it's time to train our model:</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
+
+
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span>
     <span class="n">max_epochs</span><span class="o">=</span><span class="n">NUM_EPOCHS</span><span class="p">,</span>
     <span class="n">callbacks</span><span class="o">=</span><span class="n">callbacks</span><span class="p">,</span>
     <span class="n">accelerator</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>  <span class="c1"># Uses GPUs or TPUs if available</span>
     <span class="n">devices</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>  <span class="c1"># Uses all available GPUs/TPUs if applicable</span>
     <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
-    <span class="n">log_every_n_steps</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">deterministic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">log_every_n_steps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
+<span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 <span class="n">trainer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">lightning_model</span><span class="p">,</span> <span class="n">datamodule</span><span class="o">=</span><span class="n">data_module</span><span class="p">)</span>
+
+<span class="n">runtime</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span><span class="o">/</span><span class="mi">60</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training took </span><span class="si">{</span><span class="n">runtime</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> min in total.&quot;</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>GPU available: False, used: False
+<div class="highlight"><pre><span></span><code>GPU available: True, used: True
 TPU available: False, using: 0 TPU cores
 IPU available: False, using: 0 IPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
 
   | Name      | Type              | Params
 ------------------------------------------------
@@ -1195,7 +1208,7 @@ IPU available: False, using: 0 IPUs
 0.011     Total estimated model params size (MB)
 
 
-Epoch 19: 100%|█| 234/234 [00:14&lt;00:00, 16.05it/s, loss=2.22, v_num=4, valid_mae[A
+Training took 1.67 min in total.
 </code></pre></div>
 <h2 id="evaluating-the-model">Evaluating the model</h2>
 <ul>
@@ -1229,22 +1242,6 @@ Epoch 19: 100%|█| 234/234 [00:14&lt;00:00, 16.05it/s, loss=2.22, v_num=4, vali
 </ul>
 <div class="highlight"><pre><span></span><code><span class="n">trainer</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">lightning_model</span><span class="p">,</span> <span class="n">datamodule</span><span class="o">=</span><span class="n">data_module</span><span class="p">,</span> <span class="n">ckpt_path</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>Restoring states from the checkpoint path at logs/cnn-corn-mnist/version_4/checkpoints/epoch=17-step=3851.ckpt
-Loaded model weights from checkpoint at logs/cnn-corn-mnist/version_4/checkpoints/epoch=17-step=3851.ckpt
-
-
-Testing:  95%|████████████████████████████████▎ | 38/40 [00:01&lt;00:00, 51.98it/s]--------------------------------------------------------------------------------
-DATALOADER:0 TEST RESULTS
-{&#39;test_mae&#39;: 0.1185000017285347}
---------------------------------------------------------------------------------
-Testing: 100%|██████████████████████████████████| 40/40 [00:01&lt;00:00, 29.76it/s]
-
-
-
-
-
-[{&#39;test_mae&#39;: 0.1185000017285347}]
-</code></pre></div>
 <ul>
 <li>The MAE of our model is quite good, especially compared to the 2.52 MAE baseline earlier.</li>
 </ul>
@@ -1253,9 +1250,11 @@ Testing: 100%|██████████████████████
 <li>You can use the <code>trainer.predict</code> method on a new <code>DataLoader</code> or <code>DataModule</code> to apply the model to new data.</li>
 <li>Alternatively, you can also manually load the best model from a checkpoint as shown below:</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">trainer</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">log_dir</span><span class="si">}</span><span class="s1">/checkpoints/epoch=17-step=3851.ckpt&#39;</span>
-
-<span class="n">lightning_model</span> <span class="o">=</span> <span class="n">LightningCNN</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">path</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">checkpoint_callback</span><span class="o">.</span><span class="n">best_model_path</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">lightning_model</span> <span class="o">=</span> <span class="n">LightningCNN</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">pytorch_model</span><span class="p">)</span>
+<span class="n">lightning_model</span><span class="o">.</span><span class="n">eval</span><span class="p">();</span>
 </code></pre></div>
 <ul>
 <li>Note that our <code>ConvNet</code>, which is passed to <code>LightningCNN</code> requires input arguments. However, this is automatically being taken care of since we used <code>self.save_hyperparameters()</code> in <code>LightningCNN</code>'s <code>__init__</code> method.</li>
@@ -1266,14 +1265,12 @@ Testing: 100%|██████████████████████
 <span class="n">all_predicted_labels</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">test_dataloader</span><span class="p">:</span>
     <span class="n">features</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">batch</span>
-    <span class="n">logits</span> <span class="o">=</span> <span class="n">lightning_model</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+    <span class="n">logits</span> <span class="o">=</span> <span class="n">lightning_model</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
     <span class="n">predicted_labels</span> <span class="o">=</span> <span class="n">corn_label_from_logits</span><span class="p">(</span><span class="n">logits</span><span class="p">)</span>
     <span class="n">all_predicted_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">predicted_labels</span><span class="p">)</span>
 
 <span class="n">all_predicted_labels</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">all_predicted_labels</span><span class="p">)</span>
 <span class="n">all_predicted_labels</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>tensor([7, 2, 1, 0, 4])
 </code></pre></div>
 
               
