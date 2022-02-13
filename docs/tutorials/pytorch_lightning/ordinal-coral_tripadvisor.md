@@ -1,4 +1,5 @@
-
+#!python -m spacy download en_core_web_sm
+```
 
 <a href="https://pytorch.org"><img src="https://raw.githubusercontent.com/pytorch/pytorch/master/docs/source/_static/img/pytorch-logo-dark.svg" width="90"/></a> &nbsp; &nbsp;&nbsp;&nbsp;<a href="https://www.pytorchlightning.ai"><img src="https://raw.githubusercontent.com/PyTorchLightning/pytorch-lightning/master/docs/source/_static/images/logo.svg" width="150"/></a>
 
@@ -19,16 +20,21 @@ We will be using a balanced version of the [TripAdvisor Hotel Review](https://ww
 
 
 ```python
-BATCH_SIZE = 256
-NUM_EPOCHS = 20
-LEARNING_RATE = 0.005
+BATCH_SIZE = 16
+NUM_EPOCHS = 40
+LEARNING_RATE = 0.0005
 NUM_WORKERS = 4
 RANDOM_SEED = 123
 
-## Dataset specific:
+# Architecture:
+EMBEDDING_DIM = 128
+HIDDEN_DIM = 256
+
+# Dataset specific:
 
 NUM_CLASSES = 5
-VOCABULARY_SIZE = 5000
+VOCABULARY_SIZE = 20000
+DATA_BASEPATH = "./data"
 ```
 
 ## Converting a regular classifier into a CORAL ordinal regression model
@@ -97,11 +103,17 @@ from coral_pytorch.layers import CoralLayer
 
 
 # Regular PyTorch Module
-class RNN(torch.nn.Module):
+class PyTorchRNN(torch.nn.Module):
 
-    def __init__(self, input_dim, embedding_dim, hidden_dim, output_dim, num_classes):
+    def __init__(self, input_dim, embedding_dim,
+                 hidden_dim, num_classes):
         super().__init__()
-
+        
+        self.input_dim = input_dim
+        self.embedding_dim = embedding_dim
+        self.hidden_dim = hidden_dim
+        self.num_classes = num_classes
+        
         self.embedding = torch.nn.Embedding(input_dim, embedding_dim)
         # self.rnn = torch.nn.RNN(embedding_dim,
         #                         hidden_dim,
@@ -117,8 +129,6 @@ class RNN(torch.nn.Module):
         self.output_layer = CoralLayer(size_in=hidden_dim,
                                        num_classes=num_classes)
         # ----------------------------------------------------------------
-        
-        self.num_classes = num_classes
 
     def forward(self, text, text_length):
         # text dim: [sentence length, batch size]
@@ -129,7 +139,7 @@ class RNN(torch.nn.Module):
         packed = torch.nn.utils.rnn.pack_padded_sequence(
             embedded, text_length.to('cpu'))
 
-        packed_output, (hidden, cell) = self.rnn(embedded)
+        packed_output, (hidden, cell) = self.rnn(packed)
         # output dim: [sentence length, batch size, hidden dim]
         # hidden dim: [1, batch size, hidden dim]
 
@@ -139,8 +149,7 @@ class RNN(torch.nn.Module):
         output = self.output_layer(hidden)
         logits = output.view(-1, (self.num_classes-1))
 
-        #probas = torch.sigmoid(logits)
-        return logits  #, probas
+        return logits
 ```
 
 - In our `LightningModule` we use loggers to track mean absolute errors for both the training and validation set during training; this allows us to select the best model based on validation set performance later.
@@ -158,14 +167,21 @@ import torchmetrics
 
 # LightningModule that receives a PyTorch model as input
 class LightningRNN(pl.LightningModule):
-    def __init__(self, model):
+    def __init__(self, model, learning_rate):
         super().__init__()
 
+        self.input_dim = model.input_dim
+        self.embedding_dim = model.embedding_dim
+        self.hidden_dim = model.hidden_dim
+        self.num_classes = model.num_classes
+        
+        self.learning_rate = learning_rate
         # The inherited PyTorch module
         self.model = model
 
-        # Save hyperparameters to the log directory
-        self.save_hyperparameters()
+        # Save settings and hyperparameters to the log directory
+        # but skip the model parameters
+        self.save_hyperparameters(ignore=['model'])
 
         # Set up attributes for computing the MAE
         self.train_mae = torchmetrics.MeanAbsoluteError()
@@ -191,7 +207,7 @@ class LightningRNN(pl.LightningModule):
         
         # Convert class labels for CORAL ------------------------
         levels = levels_from_labelbatch(
-            true_labels, num_classes=self.model.num_classes)
+            true_labels, num_classes=self.model.num_classes).type_as(features)
         # -------------------------------------------------------
         
         logits = self(features, text_length)
@@ -214,27 +230,27 @@ class LightningRNN(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         loss, true_labels, predicted_labels = self._shared_step(batch)
         self.log("train_loss", loss, batch_size=true_labels.shape[0])
-        self.train_mae.update(predicted_labels, true_labels)
+        self.train_mae(predicted_labels, true_labels)
         self.log("train_mae", self.train_mae, on_epoch=True, on_step=False,
                  batch_size=true_labels.shape[0])
-        return loss
+        return loss  # this is passed to the optimzer for training
 
     def validation_step(self, batch, batch_idx):
         loss, true_labels, predicted_labels = self._shared_step(batch)
         self.log("valid_loss", loss, batch_size=true_labels.shape[0])
-        self.valid_mae.update(predicted_labels, true_labels)
+        self.valid_mae(predicted_labels, true_labels)
         self.log("valid_mae", self.valid_mae,
                  on_epoch=True, on_step=False, prog_bar=True,
                  batch_size=true_labels.shape[0])
 
     def test_step(self, batch, batch_idx):
         _, true_labels, predicted_labels = self._shared_step(batch)
-        self.test_mae.update(predicted_labels, true_labels)
+        self.test_mae(predicted_labels, true_labels)
         self.log("test_mae", self.test_mae, on_epoch=True, on_step=False,
                  batch_size=true_labels.shape[0])
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=LEARNING_RATE)
+        optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate)
         return optimizer
 ```
 
@@ -250,8 +266,10 @@ import pandas as pd
 import numpy as np
 
 
-data_df = pd.read_csv("https://raw.githubusercontent.com/Raschka-research-group/"
-                      "corn-ordinal-neuralnet/main/datasets/tripadvisor/tripadvisor_balanced.csv")
+data_df = pd.read_csv(
+    "https://raw.githubusercontent.com/Raschka-research-group/"
+    "corn-ordinal-neuralnet/main/datasets/"
+    "tripadvisor/tripadvisor_balanced.csv")
 
 data_df.tail()
 ```
@@ -315,7 +333,10 @@ data_df.tail()
 
 
 ```python
-CSV_PATH = '../data/tripadvisor_balanced.csv'
+import os
+
+
+CSV_PATH = os.path.join(DATA_BASEPATH, 'tripadvisor_balanced.csv')
 data_df.to_csv(CSV_PATH, index=None)
 ```
 
@@ -352,13 +373,18 @@ train_data, valid_data = train_data.split(
 TEXT.build_vocab(train_data, max_size=VOCABULARY_SIZE)
 LABEL.build_vocab(train_data)
 
-train_loader, valid_loader, test_loader=torchtext.legacy.data.BucketIterator.splits(
+train_loader, valid_loader, test_loader = \
+    torchtext.legacy.data.BucketIterator.splits(
         (train_data, valid_data, test_data), 
+        device=torch.device('cuda' if torch.cuda.is_available() else 'cpu'),
         batch_size=BATCH_SIZE,
         sort_within_batch=True,  # necessary for packed_padded_sequence
-             sort_key=lambda x: len(x.TEXT_COLUMN_NAME),
+        sort_key=lambda x: len(x.TEXT_COLUMN_NAME),
 )
 ```
+
+    39:1: E122 continuation line missing indentation or outdented
+
 
 
 ```python
@@ -381,11 +407,11 @@ print('\nTest labels:', torch.unique(all_test_labels))
 print('Test label distribution:', torch.bincount(all_test_labels))
 ```
 
-    Training labels: tensor([0, 1, 2, 3, 4])
-    Training label distribution: tensor([964, 963, 954, 953, 926])
+    Training labels: tensor([0, 1, 2, 3, 4], device='cuda:0')
+    Training label distribution: tensor([964, 963, 954, 953, 926], device='cuda:0')
     
-    Test labels: tensor([0, 1, 2, 3, 4])
-    Test label distribution: tensor([275, 267, 300, 274, 284])
+    Test labels: tensor([0, 1, 2, 3, 4], device='cuda:0')
+    Test label distribution: tensor([275, 267, 300, 274, 284], device='cuda:0')
 
 
 - Above, we can see that the dataset consists of 8 features, and there are 998 examples in total.
@@ -435,14 +461,14 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import CSVLogger
 
 
-pytorch_model = RNN(
+pytorch_model = PyTorchRNN(
     input_dim=len(TEXT.vocab),
-    embedding_dim=128,
-    hidden_dim=64,
-    output_dim=32,
+    embedding_dim=EMBEDDING_DIM,
+    hidden_dim=HIDDEN_DIM,
     num_classes=NUM_CLASSES)
 
-lightning_model = LightningRNN(pytorch_model)
+lightning_model = LightningRNN(
+    pytorch_model, learning_rate=LEARNING_RATE)
 
 callbacks = [ModelCheckpoint(
     save_top_k=1, mode='min', monitor="valid_mae")]  # save top 1 model 
@@ -463,52 +489,58 @@ print('Batch size (from text):', features[0].shape[1])
 print('Batch size (from labels):', labels.shape[0])
 ```
 
-    Text length: 84
-    Batch size (from text): 256
-    Batch size (from labels): 256
+    Text length: 469
+    Batch size (from text): 16
+    Batch size (from labels): 16
 
-
-
-```python
-import warnings
-warnings.filterwarnings('ignore')
-```
 
 - Now it's time to train our model:
 
 
 ```python
+import time
+
+
 trainer = pl.Trainer(
     max_epochs=NUM_EPOCHS,
     callbacks=callbacks,
-    accelerator="auto",  # uses CPU by default or a GPU/TPU if available
-    devices="auto",  # uses all available GPUs/TPUs if applicable
+    accelerator="auto",  # Uses GPUs or TPUs if available
+    devices="auto",  # Uses all available GPUs/TPUs if applicable
     logger=logger,
-    log_every_n_steps=1)
+    deterministic=True,
+    log_every_n_steps=10)
 
+start_time = time.time()
 trainer.fit(model=lightning_model,
             train_dataloaders=train_loader,
             val_dataloaders=valid_loader)
+
+runtime = (time.time() - start_time)/60
+print(f"Training took {runtime:.2f} min in total.")
 ```
 
-    GPU available: False, used: False
+    GPU available: True, used: True
     TPU available: False, using: 0 TPU cores
     IPU available: False, using: 0 IPUs
+    LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
     
       | Name      | Type              | Params
     ------------------------------------------------
-    0 | model     | RNN               | 689 K 
+    0 | model     | PyTorchRNN        | 3.0 M 
     1 | train_mae | MeanAbsoluteError | 0     
     2 | valid_mae | MeanAbsoluteError | 0     
     3 | test_mae  | MeanAbsoluteError | 0     
     ------------------------------------------------
-    689 K     Trainable params
+    3.0 M     Trainable params
     0         Non-trainable params
-    689 K     Total params
-    2.760     Total estimated model params size (MB)
+    3.0 M     Total params
+    11.823    Total estimated model params size (MB)
 
 
-    Epoch 19: 100%|█| 23/23 [01:26<00:00,  3.74s/it, loss=0.892, v_num=1, valid_mae=[A
+
+    Validation sanity check: 0it [00:00, ?it/s]
+
+    Training took 3.39 min in total.
 
 
 ## Evaluating the model
@@ -545,13 +577,13 @@ df_metrics[["train_mae", "valid_mae"]].plot(
 
 
     
-![png](ordinal-coral_tripadvisor_files/ordinal-coral_tripadvisor_39_1.png)
+![png](ordinal-coral_tripadvisor_files/ordinal-coral_tripadvisor_40_1.png)
     
 
 
 
     
-![png](ordinal-coral_tripadvisor_files/ordinal-coral_tripadvisor_39_2.png)
+![png](ordinal-coral_tripadvisor_files/ordinal-coral_tripadvisor_40_2.png)
     
 
 
@@ -563,21 +595,27 @@ df_metrics[["train_mae", "valid_mae"]].plot(
 trainer.test(model=lightning_model, dataloaders=test_loader, ckpt_path='best')
 ```
 
-    Restoring states from the checkpoint path at logs/rnn-coral-mnist/version_1/checkpoints/epoch=5-step=113.ckpt
-    Loaded model weights from checkpoint at logs/rnn-coral-mnist/version_1/checkpoints/epoch=5-step=113.ckpt
+    Restoring states from the checkpoint path at logs/rnn-coral-mnist/version_16/checkpoints/epoch=38-step=11621.ckpt
+    LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+    Loaded model weights from checkpoint at logs/rnn-coral-mnist/version_16/checkpoints/epoch=38-step=11621.ckpt
+    /home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/utilities/data.py:141: UserWarning: Your `IterableDataset` has `__len__` defined. In combination with multi-process data loading (when num_workers > 1), `__len__` could be inaccurate if each worker is not configured independently to avoid having duplicate data.
+      rank_zero_warn(
 
 
-    Testing: 100%|████████████████████████████████████| 6/6 [00:02<00:00,  1.95it/s]--------------------------------------------------------------------------------
-    DATALOADER:0 TEST RESULTS
-    {'test_mae': 1.1192857027053833}
+
+    Testing: 0it [00:00, ?it/s]
+
+
     --------------------------------------------------------------------------------
-    Testing: 100%|████████████████████████████████████| 6/6 [00:05<00:00,  1.03it/s]
+    DATALOADER:0 TEST RESULTS
+    {'test_mae': 1.0885714292526245}
+    --------------------------------------------------------------------------------
 
 
 
 
 
-    [{'test_mae': 1.1192857027053833}]
+    [{'test_mae': 1.0885714292526245}]
 
 
 
@@ -588,12 +626,24 @@ trainer.test(model=lightning_model, dataloaders=test_loader, ckpt_path='best')
 
 
 ```python
-path = f'{trainer.logger.log_dir}/checkpoints/epoch=5-step=113.ckpt'
-
-lightning_model = LightningRNN.load_from_checkpoint(path)
+path = trainer.checkpoint_callback.best_model_path
+print(path)
 ```
 
-- Note that our `RNN`, which is passed to `LightningRNN` requires input arguments. However, this is automatically being taken care of since we used `self.save_hyperparameters()` in `LightningRNN`'s `__init__` method.
+    logs/rnn-coral-mnist/version_16/checkpoints/epoch=38-step=11621.ckpt
+
+
+
+```python
+lightning_model = LightningRNN.load_from_checkpoint(
+    path, model=pytorch_model)
+
+lightning_model.to(torch.device(
+    'cuda' if torch.cuda.is_available() else 'cpu'))
+lightning_model.eval();
+```
+
+- Note that our `PyTorchRNN`, which is passed to `LightningRNN` requires input arguments. However, this is automatically being taken care of since we used `self.save_hyperparameters()` in `LightningRNN`'s `__init__` method.
 - Now, below is an example applying the model manually. Here, pretend that the `test_dataloader` is a new data loader.
 
 
@@ -601,7 +651,7 @@ lightning_model = LightningRNN.load_from_checkpoint(path)
 all_predicted_labels = []
 for batch in test_loader:
     features, text_length = batch.TEXT_COLUMN_NAME
-    logits = lightning_model.model(features, text_length)
+    logits = lightning_model(features, text_length)
     probas = torch.sigmoid(logits)
     predicted_labels = proba_to_label(probas)
     all_predicted_labels.append(predicted_labels)
@@ -613,6 +663,6 @@ all_predicted_labels[:5]
 
 
 
-    tensor([0, 0, 0, 4, 4])
+    tensor([2, 0, 3, 1, 1], device='cuda:0')
 
 

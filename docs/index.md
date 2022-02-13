@@ -1,7 +1,7 @@
 
 <img src="./img/corn-coral-logo-alpha.png" width=300>
 
-**CORAL implementation for ordinal regression with deep neural networks.**
+**CORAL & CORN implementations for ordinal regression with deep neural networks.**
 
 
 [![PyPI version](https://badge.fury.io/py/coral-pytorch.svg)](https://badge.fury.io/py/coral-pytorch)

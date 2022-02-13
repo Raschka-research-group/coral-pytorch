@@ -1,5 +1,3 @@
-<a href="https://pytorch.org"><img src="https://raw.githubusercontent.com/pytorch/pytorch/master/docs/source/_static/img/pytorch-logo-dark.svg" width="90"/></a> &nbsp; &nbsp;&nbsp;&nbsp;<a href="https://www.pytorchlightning.ai"><img src="https://raw.githubusercontent.com/PyTorchLightning/pytorch-lightning/master/docs/source/_static/images/logo.svg" width="150"/></a>
-
 # A Multilayer Perceptron for Ordinal Regression using CORAL -- Cement Dataset
 
 In this tutorial, we implement a multilayer perceptron for ordinal regression based on the CORAL method. To learn more about CORAL, please have a look at our paper:
@@ -19,6 +17,8 @@ BATCH_SIZE = 32
 NUM_EPOCHS = 200
 LEARNING_RATE = 0.01
 NUM_WORKERS = 0
+
+DATA_BASEPATH = "./data"
 ```
 
 ## Converting a regular classifier into a CORAL ordinal regression model
@@ -135,14 +135,16 @@ import torchmetrics
 
 # LightningModule that receives a PyTorch model as input
 class LightningMLP(pl.LightningModule):
-    def __init__(self, model):
+    def __init__(self, model, learning_rate):
         super().__init__()
 
-        # the inherited PyTorch module
+        self.learning_rate = learning_rate
+        # The inherited PyTorch module
         self.model = model
 
-        # Save hyperparameters to the log directory
-        self.save_hyperparameters()
+        # Save settings and hyperparameters to the log directory
+        # but skip the model parameters
+        self.save_hyperparameters(ignore=['model'])
 
         # Set up attributes for computing the MAE
         self.train_mae = torchmetrics.MeanAbsoluteError()
@@ -169,7 +171,7 @@ class LightningMLP(pl.LightningModule):
         # CORAL Loss --------------------------------------------
         # A regular classifier uses:
         # loss = torch.nn.functional.cross_entropy(logits, true_labels)
-        loss = coral_loss(logits, levels)
+        loss = coral_loss(logits, levels.type_as(logits))
         # -------------------------------------------------------
 
         # CORAL Prediction to label -----------------------------
@@ -183,24 +185,24 @@ class LightningMLP(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         loss, true_labels, predicted_labels = self._shared_step(batch)
         self.log("train_loss", loss)
-        self.train_mae.update(predicted_labels, true_labels)
+        self.train_mae(predicted_labels, true_labels)
         self.log("train_mae", self.train_mae, on_epoch=True, on_step=False)
-        return loss
+        return loss  # this is passed to the optimzer for training
 
     def validation_step(self, batch, batch_idx):
         loss, true_labels, predicted_labels = self._shared_step(batch)
         self.log("valid_loss", loss)
-        self.valid_mae.update(predicted_labels, true_labels)
+        self.valid_mae(predicted_labels, true_labels)
         self.log("valid_mae", self.valid_mae,
                  on_epoch=True, on_step=False, prog_bar=True)
 
     def test_step(self, batch, batch_idx):
         _, true_labels, predicted_labels = self._shared_step(batch)
-        self.test_mae.update(predicted_labels, true_labels)
+        self.test_mae(predicted_labels, true_labels)
         self.log("test_mae", self.test_mae, on_epoch=True, on_step=False)
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=LEARNING_RATE)
+        optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate)
         return optimizer
 ```
 
@@ -475,7 +477,7 @@ class DataModule(pl.LightningDataModule):
 
 ```python
 torch.manual_seed(1) 
-data_module = DataModule(data_path='../data')
+data_module = DataModule(data_path=DATA_BASEPATH)
 ```
 
 ## Training the model using the PyTorch Lightning Trainer class
@@ -496,7 +498,9 @@ pytorch_model = MultiLayerPerceptron(
     hidden_units=(24, 16),
     num_classes=np.bincount(data_labels).shape[0])
 
-lightning_model = LightningMLP(pytorch_model)
+lightning_model = LightningMLP(
+    model=pytorch_model,
+    learning_rate=LEARNING_RATE)
 
 
 callbacks = [ModelCheckpoint(
@@ -508,20 +512,29 @@ logger = CSVLogger(save_dir="logs/", name="mlp-coral-cement")
 
 
 ```python
+import time
+
+
 trainer = pl.Trainer(
     max_epochs=NUM_EPOCHS,
     callbacks=callbacks,
-    accelerator="auto",  # uses CPU by default or a GPU/TPU if avail
-    devices="auto",  # uses all available GPUs/TPUs if applicable
+    accelerator="auto",  # Uses GPUs or TPUs if available
+    devices="auto",  # Uses all available GPUs/TPUs if applicable
     logger=logger,
-    log_every_n_steps=1)
+    deterministic=True,
+    log_every_n_steps=10)
 
+start_time = time.time()
 trainer.fit(model=lightning_model, datamodule=data_module)
+
+runtime = (time.time() - start_time)/60
+print(f"Training took {runtime:.2f} min in total.")
 ```
 
-    GPU available: False, used: False
+    GPU available: True, used: True
     TPU available: False, using: 0 TPU cores
     IPU available: False, using: 0 IPUs
+    LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
     
       | Name      | Type                 | Params
     ---------------------------------------------------
@@ -535,6 +548,8 @@ trainer.fit(model=lightning_model, datamodule=data_module)
     636       Total params
     0.003     Total estimated model params size (MB)
 
+
+    Training took 0.94 min in total.
 
 
 ## Evaluating the model
@@ -586,9 +601,10 @@ df_metrics[["train_mae", "valid_mae"]].plot(
 trainer.test(model=lightning_model, datamodule=data_module, ckpt_path='best')
 ```
 
-    Restoring states from the checkpoint path at logs/mlp-coral-cement/version_2/checkpoints/epoch=114-step=2529.ckpt
-    Loaded model weights from checkpoint at logs/mlp-coral-cement/version_2/checkpoints/epoch=114-step=2529.ckpt
-    /Users/sebastian/miniconda3/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:132: UserWarning: The dataloader, test_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 8 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+    Restoring states from the checkpoint path at logs/mlp-coral-cement/version_3/checkpoints/epoch=114-step=2529.ckpt
+    LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+    Loaded model weights from checkpoint at logs/mlp-coral-cement/version_3/checkpoints/epoch=114-step=2529.ckpt
+    /home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:132: UserWarning: The dataloader, test_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 8 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
       rank_zero_warn(
 
 
@@ -618,9 +634,18 @@ trainer.test(model=lightning_model, datamodule=data_module, ckpt_path='best')
 
 
 ```python
-path = f'{trainer.logger.log_dir}/checkpoints/epoch=114-step=2529.ckpt'
+path = trainer.checkpoint_callback.best_model_path
+print(path)
+```
 
-lightning_model = LightningMLP.load_from_checkpoint(path)
+    logs/mlp-coral-cement/version_3/checkpoints/epoch=114-step=2529.ckpt
+
+
+
+```python
+lightning_model = LightningMLP.load_from_checkpoint(
+    path, model=pytorch_model)
+lightning_model.eval();
 ```
 
 - Note that our `MultilayerPerceptron`, which is passed to `LightningMLP` requires input arguments. However, this is automatically being taken care of since we used `self.save_hyperparameters()` in `LightningMLP`'s `__init__` method.
@@ -633,7 +658,7 @@ test_dataloader = data_module.test_dataloader()
 all_predicted_labels = []
 for batch in test_dataloader:
     features, _ = batch
-    logits = lightning_model.model(features)
+    logits = lightning_model(features)
     probas = torch.sigmoid(logits)
     predicted_labels = proba_to_label(probas)
     all_predicted_labels.append(predicted_labels)

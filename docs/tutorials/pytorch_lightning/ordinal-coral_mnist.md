@@ -1,5 +1,3 @@
-<a href="https://pytorch.org"><img src="https://raw.githubusercontent.com/pytorch/pytorch/master/docs/source/_static/img/pytorch-logo-dark.svg" width="90"/></a> &nbsp; &nbsp;&nbsp;&nbsp;<a href="https://www.pytorchlightning.ai"><img src="https://raw.githubusercontent.com/PyTorchLightning/pytorch-lightning/master/docs/source/_static/images/logo.svg" width="150"/></a>
-
 # A Convolutional Neural Net for Ordinal Regression using CORAL -- MNIST Dataset
 
 In this tutorial, we implement a convolutional neural network for ordinal regression based on the CORAL method. To learn more about CORAL, please have a look at our paper:
@@ -22,6 +20,8 @@ BATCH_SIZE = 256
 NUM_EPOCHS = 20
 LEARNING_RATE = 0.005
 NUM_WORKERS = 4
+
+DATA_BASEPATH = "./data"
 ```
 
 ## Converting a regular classifier into a CORAL ordinal regression model
@@ -143,14 +143,16 @@ import torchmetrics
 
 # LightningModule that receives a PyTorch model as input
 class LightningCNN(pl.LightningModule):
-    def __init__(self, model):
+    def __init__(self, model, learning_rate):
         super().__init__()
 
+        self.learning_rate = learning_rate
         # The inherited PyTorch module
         self.model = model
 
-        # Save hyperparameters to the log directory
-        self.save_hyperparameters()
+        # Save settings and hyperparameters to the log directory
+        # but skip the model parameters
+        self.save_hyperparameters(ignore=['model'])
 
         # Set up attributes for computing the MAE
         self.train_mae = torchmetrics.MeanAbsoluteError()
@@ -170,7 +172,7 @@ class LightningCNN(pl.LightningModule):
 
         # Convert class labels for CORAL ------------------------
         levels = levels_from_labelbatch(
-            true_labels, num_classes=self.model.num_classes)
+            true_labels, num_classes=self.model.num_classes).type_as(logits)
         # -------------------------------------------------------
 
         logits = self(features)
@@ -192,24 +194,24 @@ class LightningCNN(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         loss, true_labels, predicted_labels = self._shared_step(batch)
         self.log("train_loss", loss)
-        self.train_mae.update(predicted_labels, true_labels)
+        self.train_mae(predicted_labels, true_labels)
         self.log("train_mae", self.train_mae, on_epoch=True, on_step=False)
-        return loss
+        return loss  # this is passed to the optimzer for training
 
     def validation_step(self, batch, batch_idx):
         loss, true_labels, predicted_labels = self._shared_step(batch)
         self.log("valid_loss", loss)
-        self.valid_mae.update(predicted_labels, true_labels)
+        self.valid_mae(predicted_labels, true_labels)
         self.log("valid_mae", self.valid_mae,
                  on_epoch=True, on_step=False, prog_bar=True)
 
     def test_step(self, batch, batch_idx):
         loss, true_labels, predicted_labels = self._shared_step(batch)
-        self.test_mae.update(predicted_labels, true_labels)
+        self.test_mae(predicted_labels, true_labels)
         self.log("test_mae", self.test_mae, on_epoch=True, on_step=False)
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=LEARNING_RATE)
+        optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate)
         return optimizer
 ```
 
@@ -229,7 +231,7 @@ from torchvision import transforms
 from torch.utils.data import DataLoader
 
 
-train_dataset = datasets.MNIST(root='../data', 
+train_dataset = datasets.MNIST(root=DATA_BASEPATH, 
                                train=True, 
                                transform=transforms.ToTensor(),
                                download=True)
@@ -240,7 +242,7 @@ train_loader = DataLoader(dataset=train_dataset,
                           drop_last=True,
                           shuffle=True)
 
-test_dataset = datasets.MNIST(root='../data', 
+test_dataset = datasets.MNIST(root=DATA_BASEPATH, 
                               train=False,
                               transform=transforms.ToTensor())
 
@@ -273,7 +275,7 @@ print('Test label distribution:', torch.bincount(all_test_labels))
 ```
 
     Training labels: tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-    Training label distribution: tensor([5915, 6731, 5945, 6123, 5829, 5415, 5910, 6257, 5840, 5939])
+    Training label distribution: tensor([5917, 6727, 5949, 6121, 5833, 5411, 5908, 6256, 5840, 5942])
     
     Test labels: tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
     Test label distribution: tensor([ 980, 1135, 1032, 1010,  982,  892,  958, 1028,  974, 1009])
@@ -376,7 +378,7 @@ class DataModule(pl.LightningDataModule):
 
 ```python
 torch.manual_seed(1) 
-data_module = DataModule(data_path='../data')
+data_module = DataModule(data_path=DATA_BASEPATH)
 ```
 
 ## Training the model using the PyTorch Lightning Trainer class
@@ -395,7 +397,9 @@ pytorch_model = ConvNet(
     in_channels=1,
     num_classes=torch.unique(all_test_labels).shape[0])
 
-lightning_model = LightningCNN(pytorch_model)
+lightning_model = LightningCNN(
+    model=pytorch_model,
+    learning_rate=LEARNING_RATE)
 
 callbacks = [ModelCheckpoint(
     save_top_k=1, mode='min', monitor="valid_mae")]  # save top 1 model 
@@ -406,20 +410,29 @@ logger = CSVLogger(save_dir="logs/", name="cnn-coral-mnist")
 
 
 ```python
+import time
+
+
 trainer = pl.Trainer(
     max_epochs=NUM_EPOCHS,
     callbacks=callbacks,
     accelerator="auto",  # Uses GPUs or TPUs if available
     devices="auto",  # Uses all available GPUs/TPUs if applicable
     logger=logger,
-    log_every_n_steps=1)
+    deterministic=True,
+    log_every_n_steps=10)
 
+start_time = time.time()
 trainer.fit(model=lightning_model, datamodule=data_module)
+
+runtime = (time.time() - start_time)/60
+print(f"Training took {runtime:.2f} min in total.")
 ```
 
-    GPU available: False, used: False
+    GPU available: True, used: True
     TPU available: False, using: 0 TPU cores
     IPU available: False, using: 0 IPUs
+    LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
     
       | Name      | Type              | Params
     ------------------------------------------------
@@ -433,10 +446,7 @@ trainer.fit(model=lightning_model, datamodule=data_module)
     501       Total params
     0.002     Total estimated model params size (MB)
 
-
-    Epoch 19: 100%|█| 234/234 [00:12<00:00, 19.06it/s, loss=1.96, v_num=0, valid_mae[A
-
-
+    Training took 2.43 min in total.
 
 
 ## Evaluating the model
@@ -490,21 +500,25 @@ df_metrics[["train_mae", "valid_mae"]].plot(
 trainer.test(model=lightning_model, datamodule=data_module, ckpt_path='best')
 ```
 
-    Restoring states from the checkpoint path at logs/cnn-coral-mnist/version_0/checkpoints/epoch=19-step=4279.ckpt
-    Loaded model weights from checkpoint at logs/cnn-coral-mnist/version_0/checkpoints/epoch=19-step=4279.ckpt
+    Restoring states from the checkpoint path at logs/cnn-coral-mnist/version_1/checkpoints/epoch=19-step=4279.ckpt
+    LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+    Loaded model weights from checkpoint at logs/cnn-coral-mnist/version_1/checkpoints/epoch=19-step=4279.ckpt
 
 
-    Testing:  82%|████████████████████████████      | 33/40 [00:01<00:00, 51.14it/s]--------------------------------------------------------------------------------
-    DATALOADER:0 TEST RESULTS
-    {'test_mae': 0.792900025844574}
+
+    Testing: 0it [00:00, ?it/s]
+
+
     --------------------------------------------------------------------------------
-    Testing: 100%|██████████████████████████████████| 40/40 [00:01<00:00, 31.35it/s]
+    DATALOADER:0 TEST RESULTS
+    {'test_mae': 0.7922999858856201}
+    --------------------------------------------------------------------------------
 
 
 
 
 
-    [{'test_mae': 0.792900025844574}]
+    [{'test_mae': 0.7922999858856201}]
 
 
 
@@ -517,9 +531,18 @@ trainer.test(model=lightning_model, datamodule=data_module, ckpt_path='best')
 
 
 ```python
-path = f'{trainer.logger.log_dir}/checkpoints/epoch=19-step=4279.ckpt'
+path = trainer.checkpoint_callback.best_model_path
+print(path)
+```
 
-lightning_model = LightningCNN.load_from_checkpoint(path)
+    logs/cnn-coral-mnist/version_1/checkpoints/epoch=19-step=4279.ckpt
+
+
+
+```python
+lightning_model = LightningCNN.load_from_checkpoint(
+    path, model=pytorch_model)
+lightning_model.eval();
 ```
 
 - Note that our `ConvNet`, which is passed to `LightningCNN` requires input arguments. However, this is automatically being taken care of since we used `self.save_hyperparameters()` in `LightningCNN`'s `__init__` method.
@@ -532,7 +555,7 @@ test_dataloader = data_module.test_dataloader()
 all_predicted_labels = []
 for batch in test_dataloader:
     features, _ = batch
-    logits = lightning_model.model(features)
+    logits = lightning_model(features)
     probas = torch.sigmoid(logits)
     predicted_labels = proba_to_label(probas)
     all_predicted_labels.append(predicted_labels)
@@ -544,6 +567,6 @@ all_predicted_labels[:5]
 
 
 
-    tensor([6, 1, 1, 0, 5])
+    tensor([6, 1, 1, 1, 5])
 
 
