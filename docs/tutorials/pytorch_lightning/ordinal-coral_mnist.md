@@ -416,6 +416,7 @@ import time
 trainer = pl.Trainer(
     max_epochs=NUM_EPOCHS,
     callbacks=callbacks,
+    progress_bar_refresh_rate=50,  # recommended for notebooks
     accelerator="auto",  # Uses GPUs or TPUs if available
     devices="auto",  # Uses all available GPUs/TPUs if applicable
     logger=logger,
