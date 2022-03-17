@@ -4,7 +4,7 @@
 
 
 [![PyPI version](https://badge.fury.io/py/coral-pytorch.svg)](https://badge.fury.io/py/coral-pytorch)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/rasbt/coral_pytorch/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Raschka-research-group/coral-pytorch/blob/main/LICENSE.txt)
 ![Python 3](https://img.shields.io/badge/python-3-blue.svg)
 
 <br>
