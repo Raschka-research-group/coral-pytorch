@@ -563,7 +563,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.dataset.md" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.dataset/" class="md-nav__link">
         coral_pytorch.dataset
       </a>
     </li>
@@ -577,7 +577,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.layers.md" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.layers/" class="md-nav__link">
         coral_pytorch.layers
       </a>
     </li>
@@ -591,7 +591,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.losses.md" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.losses/" class="md-nav__link">
         coral_pytorch.losses
       </a>
     </li>
@@ -851,7 +851,7 @@ Image label dimensions: torch.Size([128])
     <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">class_labels</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_loader</span><span class="p">):</span>
 
-
+        <span class="n">class_labels</span> <span class="o">=</span> <span class="n">class_labels</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">DEVICE</span><span class="p">)</span>
         <span class="n">features</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">DEVICE</span><span class="p">)</span>
         <span class="n">logits</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
 
