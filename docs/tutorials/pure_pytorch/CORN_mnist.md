@@ -123,7 +123,7 @@ for epoch in range(num_epochs):
     model = model.train()
     for batch_idx, (features, class_labels) in enumerate(train_loader):
 
-
+        class_labels = class_labels.to(DEVICE)
         features = features.to(DEVICE)
         logits = model(features)
         
