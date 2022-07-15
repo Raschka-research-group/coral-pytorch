@@ -148,4 +148,4 @@ def corn_loss(logits, y_train, num_classes):
                           + (F.logsigmoid(pred) - pred)*(1-train_labels))
         losses += loss
 
-    return losses/num_classes
+    return losses/num_examples
