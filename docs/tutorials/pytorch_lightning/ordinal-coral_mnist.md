@@ -215,6 +215,75 @@ class LightningCNN(pl.LightningModule):
         return optimizer
 ```
 
+
+    ---------------------------------------------------------------------------
+
+    ModuleNotFoundError                       Traceback (most recent call last)
+
+    Input In [4], in <cell line: 5>()
+          2 from coral_pytorch.dataset import levels_from_labelbatch
+          3 from coral_pytorch.dataset import proba_to_label
+    ----> 5 import pytorch_lightning as pl
+          6 import torchmetrics
+          9 # LightningModule that receives a PyTorch model as input
+
+
+    File ~/conda/lib/python3.8/site-packages/pytorch_lightning/__init__.py:20, in <module>
+         17 _PACKAGE_ROOT = os.path.dirname(__file__)
+         18 _PROJECT_ROOT = os.path.dirname(_PACKAGE_ROOT)
+    ---> 20 from pytorch_lightning.callbacks import Callback  # noqa: E402
+         21 from pytorch_lightning.core import LightningDataModule, LightningModule  # noqa: E402
+         22 from pytorch_lightning.trainer import Trainer  # noqa: E402
+
+
+    File ~/conda/lib/python3.8/site-packages/pytorch_lightning/callbacks/__init__.py:14, in <module>
+          1 # Copyright The PyTorch Lightning team.
+          2 #
+          3 # Licensed under the Apache License, Version 2.0 (the "License");
+       (...)
+         12 # See the License for the specific language governing permissions and
+         13 # limitations under the License.
+    ---> 14 from pytorch_lightning.callbacks.base import Callback
+         15 from pytorch_lightning.callbacks.device_stats_monitor import DeviceStatsMonitor
+         16 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
+
+
+    File ~/conda/lib/python3.8/site-packages/pytorch_lightning/callbacks/base.py:26, in <module>
+         23 from torch.optim import Optimizer
+         25 import pytorch_lightning as pl
+    ---> 26 from pytorch_lightning.utilities.types import STEP_OUTPUT
+         29 class Callback(abc.ABC):
+         30     r"""
+         31     Abstract base class used to build new callbacks.
+         32 
+         33     Subclass this class and override any of the relevant hooks
+         34     """
+
+
+    File ~/conda/lib/python3.8/site-packages/pytorch_lightning/utilities/__init__.py:18, in <module>
+         14 """General utilities."""
+         16 import numpy
+    ---> 18 from pytorch_lightning.utilities.apply_func import move_data_to_device  # noqa: F401
+         19 from pytorch_lightning.utilities.distributed import AllGatherGrad, rank_zero_info, rank_zero_only  # noqa: F401
+         20 from pytorch_lightning.utilities.enums import (  # noqa: F401
+         21     AMPType,
+         22     DeviceType,
+       (...)
+         26     ModelSummaryMode,
+         27 )
+
+
+    File ~/conda/lib/python3.8/site-packages/pytorch_lightning/utilities/apply_func.py:30, in <module>
+         28 if _TORCHTEXT_AVAILABLE:
+         29     if _compare_version("torchtext", operator.ge, "0.9.0"):
+    ---> 30         from torchtext.legacy.data import Batch
+         31     else:
+         32         from torchtext.data import Batch
+
+
+    ModuleNotFoundError: No module named 'torchtext.legacy'
+
+
 ## Setting up the dataset
 
 - In this section, we are going to set up our dataset.
@@ -274,13 +343,6 @@ print('\nTest labels:', torch.unique(all_test_labels))
 print('Test label distribution:', torch.bincount(all_test_labels))
 ```
 
-    Training labels: tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-    Training label distribution: tensor([5917, 6727, 5949, 6121, 5833, 5411, 5908, 6256, 5840, 5942])
-    
-    Test labels: tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-    Test label distribution: tensor([ 980, 1135, 1032, 1010,  982,  892,  958, 1028,  974, 1009])
-
-
 - Above, we can see that the dataset consists of 8 features, and there are 998 examples in total.
 - The labels are in range from 1 (weakest) to 5 (strongest), and we normalize them to start at zero (hence, the normalized labels are in the range 0 to 4). 
 - Notice also that the dataset is quite imbalanced.
@@ -299,9 +361,6 @@ avg_prediction = torch.median(all_test_labels)  # median minimizes MAE
 baseline_mae = torch.mean(torch.abs(all_test_labels - avg_prediction))
 print(f'Baseline MAE: {baseline_mae:.2f}')
 ```
-
-    Baseline MAE: 2.52
-
 
 - In other words, a model that would always predict the dataset median would achieve a MAE of 2.52. A model that has an MAE of > 2.52 is certainly a bad model.
 
@@ -430,26 +489,6 @@ runtime = (time.time() - start_time)/60
 print(f"Training took {runtime:.2f} min in total.")
 ```
 
-    GPU available: True, used: True
-    TPU available: False, using: 0 TPU cores
-    IPU available: False, using: 0 IPUs
-    LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-    
-      | Name      | Type              | Params
-    ------------------------------------------------
-    0 | model     | ConvNet           | 501   
-    1 | train_mae | MeanAbsoluteError | 0     
-    2 | valid_mae | MeanAbsoluteError | 0     
-    3 | test_mae  | MeanAbsoluteError | 0     
-    ------------------------------------------------
-    501       Trainable params
-    0         Non-trainable params
-    501       Total params
-    0.002     Total estimated model params size (MB)
-
-    Training took 2.43 min in total.
-
-
 ## Evaluating the model
 
 - After training, let's plot our training MAE and validation MAE using pandas, which, in turn, uses matplotlib for plotting (you may want to consider a [more advanced logger](https://pytorch-lightning.readthedocs.io/en/latest/extensions/logging.html) that does that for you):
@@ -475,53 +514,12 @@ df_metrics[["train_mae", "valid_mae"]].plot(
     grid=True, legend=True, xlabel='Epoch', ylabel='MAE')
 ```
 
-
-
-
-    <AxesSubplot:xlabel='Epoch', ylabel='MAE'>
-
-
-
-
-    
-![png](ordinal-coral_mnist_files/ordinal-coral_mnist_36_1.png)
-    
-
-
-
-    
-![png](ordinal-coral_mnist_files/ordinal-coral_mnist_36_2.png)
-    
-
-
 - It's hard to tell what the best model (based on the lowest validation set MAE) is in this case, but no worries, the `trainer` saved this model automatically for us, we which we can load from the checkpoint via the `ckpt_path='best'` argument; below we use the `trainer` instance to evaluate the best model on the test set:
 
 
 ```python
 trainer.test(model=lightning_model, datamodule=data_module, ckpt_path='best')
 ```
-
-    Restoring states from the checkpoint path at logs/cnn-coral-mnist/version_1/checkpoints/epoch=19-step=4279.ckpt
-    LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-    Loaded model weights from checkpoint at logs/cnn-coral-mnist/version_1/checkpoints/epoch=19-step=4279.ckpt
-
-
-
-    Testing: 0it [00:00, ?it/s]
-
-
-    --------------------------------------------------------------------------------
-    DATALOADER:0 TEST RESULTS
-    {'test_mae': 0.7922999858856201}
-    --------------------------------------------------------------------------------
-
-
-
-
-
-    [{'test_mae': 0.7922999858856201}]
-
-
 
 - The MAE of our model is quite good, especially compared to the 2.52 MAE baseline earlier.
 
@@ -535,9 +533,6 @@ trainer.test(model=lightning_model, datamodule=data_module, ckpt_path='best')
 path = trainer.checkpoint_callback.best_model_path
 print(path)
 ```
-
-    logs/cnn-coral-mnist/version_1/checkpoints/epoch=19-step=4279.ckpt
-
 
 
 ```python
@@ -564,10 +559,3 @@ for batch in test_dataloader:
 all_predicted_labels = torch.cat(all_predicted_labels)
 all_predicted_labels[:5]
 ```
-
-
-
-
-    tensor([6, 1, 1, 1, 5])
-
-

@@ -1,8 +1,3 @@
-#!python -m spacy download en_core_web_sm
-```
-
-<a href="https://pytorch.org"><img src="https://raw.githubusercontent.com/pytorch/pytorch/master/docs/source/_static/img/pytorch-logo-dark.svg" width="90"/></a> &nbsp; &nbsp;&nbsp;&nbsp;<a href="https://www.pytorchlightning.ai"><img src="https://raw.githubusercontent.com/PyTorchLightning/pytorch-lightning/master/docs/source/_static/images/logo.svg" width="150"/></a>
-
 # A Recurrent Neural Net for Ordinal Regression using CORAL -- TripAdvisor Dataset
 
 In this tutorial, we implement a recurrent neural network for ordinal regression based on the CORAL method. To learn more about CORAL, please have a look at our paper:
@@ -541,6 +536,177 @@ print(f"Training took {runtime:.2f} min in total.")
 
     Validation sanity check: 0it [00:00, ?it/s]
 
+
+    /home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/utilities/data.py:141: UserWarning: Your `IterableDataset` has `__len__` defined. In combination with multi-process data loading (when num_workers > 1), `__len__` could be inaccurate if each worker is not configured independently to avoid having duplicate data.
+      rank_zero_warn(
+    /home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/utilities/data.py:92: UserWarning: Your `IterableDataset` has `__len__` defined. In combination with multi-process data loading (when num_workers > 1), `__len__` could be inaccurate if each worker is not configured independently to avoid having duplicate data.
+      rank_zero_warn(
+
+
+
+    Training: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
     Training took 3.39 min in total.
 
 
@@ -578,13 +744,13 @@ df_metrics[["train_mae", "valid_mae"]].plot(
 
 
     
-![png](ordinal-coral_tripadvisor_files/ordinal-coral_tripadvisor_40_1.png)
+![png](ordinal-coral_tripadvisor_files/ordinal-coral_tripadvisor_39_1.png)
     
 
 
 
     
-![png](ordinal-coral_tripadvisor_files/ordinal-coral_tripadvisor_40_2.png)
+![png](ordinal-coral_tripadvisor_files/ordinal-coral_tripadvisor_39_2.png)
     
 
 

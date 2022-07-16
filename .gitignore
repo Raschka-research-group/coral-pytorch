@@ -8,6 +8,12 @@ docs/tutorials/data/MNIST
 # Temporary documentation files
 docs/api_modules
 docs/api_subpackages
+docs/tutorials/pytorch_lightning/ordinal-corn_tripadvisor_files/*.png
+docs/tutorials/pytorch_lightning/ordinal-coral_cement_files/*.png
+docs/tutorials/pytorch_lightning/ordinal-coral_mnist_files/*.png
+docs/tutorials/pytorch_lightning/ordinal-coral_tripadvisor_files/*.png
+docs/tutorials/pytorch_lightning/ordinal-corn_cement_files/*.png
+docs/tutorials/pytorch_lightning/ordinal-corn_mnist_files/*.png
 
 # Temp files
 .DS_Store

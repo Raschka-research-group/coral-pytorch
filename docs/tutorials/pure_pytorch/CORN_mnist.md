@@ -64,7 +64,47 @@ for images, labels in train_loader:
     break
 ```
 
-    Training on cpu
+    Training on cuda:0
+    Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz
+    Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz to ../data/MNIST/raw/train-images-idx3-ubyte.gz
+
+
+
+      0%|          | 0/9912422 [00:00<?, ?it/s]
+
+
+    Extracting ../data/MNIST/raw/train-images-idx3-ubyte.gz to ../data/MNIST/raw
+    
+    Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz
+    Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz to ../data/MNIST/raw/train-labels-idx1-ubyte.gz
+
+
+
+      0%|          | 0/28881 [00:00<?, ?it/s]
+
+
+    Extracting ../data/MNIST/raw/train-labels-idx1-ubyte.gz to ../data/MNIST/raw
+    
+    Downloading http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz
+    Downloading http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz to ../data/MNIST/raw/t10k-images-idx3-ubyte.gz
+
+
+
+      0%|          | 0/1648877 [00:00<?, ?it/s]
+
+
+    Extracting ../data/MNIST/raw/t10k-images-idx3-ubyte.gz to ../data/MNIST/raw
+    
+    Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
+    Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz to ../data/MNIST/raw/t10k-labels-idx1-ubyte.gz
+
+
+
+      0%|          | 0/4542 [00:00<?, ?it/s]
+
+
+    Extracting ../data/MNIST/raw/t10k-labels-idx1-ubyte.gz to ../data/MNIST/raw
+    
     Image batch dimensions: torch.Size([128, 1, 28, 28])
     Image label dimensions: torch.Size([128])
 
@@ -142,36 +182,36 @@ for epoch in range(num_epochs):
                      len(train_loader), loss))
 ```
 
-    Epoch: 001/010 | Batch 000/468 | Cost: 50.5479
-    Epoch: 001/010 | Batch 200/468 | Cost: 9.7984
-    Epoch: 001/010 | Batch 400/468 | Cost: 5.6653
-    Epoch: 002/010 | Batch 000/468 | Cost: 6.6018
-    Epoch: 002/010 | Batch 200/468 | Cost: 4.7959
-    Epoch: 002/010 | Batch 400/468 | Cost: 4.7984
-    Epoch: 003/010 | Batch 000/468 | Cost: 3.9449
-    Epoch: 003/010 | Batch 200/468 | Cost: 3.6384
-    Epoch: 003/010 | Batch 400/468 | Cost: 2.8829
-    Epoch: 004/010 | Batch 000/468 | Cost: 2.0914
-    Epoch: 004/010 | Batch 200/468 | Cost: 2.8083
-    Epoch: 004/010 | Batch 400/468 | Cost: 2.6030
-    Epoch: 005/010 | Batch 000/468 | Cost: 3.0182
-    Epoch: 005/010 | Batch 200/468 | Cost: 2.5725
-    Epoch: 005/010 | Batch 400/468 | Cost: 1.0548
-    Epoch: 006/010 | Batch 000/468 | Cost: 1.8849
-    Epoch: 006/010 | Batch 200/468 | Cost: 1.8384
-    Epoch: 006/010 | Batch 400/468 | Cost: 2.7395
-    Epoch: 007/010 | Batch 000/468 | Cost: 4.4031
-    Epoch: 007/010 | Batch 200/468 | Cost: 1.7030
-    Epoch: 007/010 | Batch 400/468 | Cost: 1.4367
-    Epoch: 008/010 | Batch 000/468 | Cost: 2.5420
-    Epoch: 008/010 | Batch 200/468 | Cost: 2.0751
-    Epoch: 008/010 | Batch 400/468 | Cost: 2.3024
-    Epoch: 009/010 | Batch 000/468 | Cost: 1.7822
-    Epoch: 009/010 | Batch 200/468 | Cost: 3.4230
-    Epoch: 009/010 | Batch 400/468 | Cost: 1.8978
-    Epoch: 010/010 | Batch 000/468 | Cost: 1.4562
-    Epoch: 010/010 | Batch 200/468 | Cost: 2.1408
-    Epoch: 010/010 | Batch 400/468 | Cost: 2.0846
+    Epoch: 001/010 | Batch 000/468 | Cost: 0.6896
+    Epoch: 001/010 | Batch 200/468 | Cost: 0.1449
+    Epoch: 001/010 | Batch 400/468 | Cost: 0.0761
+    Epoch: 002/010 | Batch 000/468 | Cost: 0.0927
+    Epoch: 002/010 | Batch 200/468 | Cost: 0.0679
+    Epoch: 002/010 | Batch 400/468 | Cost: 0.0714
+    Epoch: 003/010 | Batch 000/468 | Cost: 0.0593
+    Epoch: 003/010 | Batch 200/468 | Cost: 0.0516
+    Epoch: 003/010 | Batch 400/468 | Cost: 0.0470
+    Epoch: 004/010 | Batch 000/468 | Cost: 0.0301
+    Epoch: 004/010 | Batch 200/468 | Cost: 0.0417
+    Epoch: 004/010 | Batch 400/468 | Cost: 0.0366
+    Epoch: 005/010 | Batch 000/468 | Cost: 0.0449
+    Epoch: 005/010 | Batch 200/468 | Cost: 0.0380
+    Epoch: 005/010 | Batch 400/468 | Cost: 0.0141
+    Epoch: 006/010 | Batch 000/468 | Cost: 0.0272
+    Epoch: 006/010 | Batch 200/468 | Cost: 0.0267
+    Epoch: 006/010 | Batch 400/468 | Cost: 0.0405
+    Epoch: 007/010 | Batch 000/468 | Cost: 0.0649
+    Epoch: 007/010 | Batch 200/468 | Cost: 0.0253
+    Epoch: 007/010 | Batch 400/468 | Cost: 0.0215
+    Epoch: 008/010 | Batch 000/468 | Cost: 0.0389
+    Epoch: 008/010 | Batch 200/468 | Cost: 0.0297
+    Epoch: 008/010 | Batch 400/468 | Cost: 0.0343
+    Epoch: 009/010 | Batch 000/468 | Cost: 0.0249
+    Epoch: 009/010 | Batch 200/468 | Cost: 0.0498
+    Epoch: 009/010 | Batch 400/468 | Cost: 0.0300
+    Epoch: 010/010 | Batch 000/468 | Cost: 0.0201
+    Epoch: 010/010 | Batch 200/468 | Cost: 0.0290
+    Epoch: 010/010 | Batch 400/468 | Cost: 0.0303
 
 
 ## 4 -- Evaluate model
@@ -222,7 +262,7 @@ print(f'Mean squared error (train/test): {train_mse:.2f} | {test_mse:.2f}')
 ```
 
     Mean absolute error (train/test): 0.15 | 0.15
-    Mean squared error (train/test): 0.69 | 0.75
+    Mean squared error (train/test): 0.69 | 0.74
 
 
 Note that MNIST is not an ordinal dataset (there is no order between the image categories), so computing the MAE or MSE doesn't really make sense but we use it anyways for demonstration purposes.
@@ -241,17 +281,17 @@ with torch.no_grad():
     print(probas)
 ```
 
-    tensor([[1.0000e+00, 1.0000e+00, 1.0000e+00,  ..., 9.9987e-01, 9.9947e-01,
-             2.6255e-08],
-            [1.0000e+00, 1.0000e+00, 9.9285e-01,  ..., 9.8465e-01, 9.8465e-01,
-             9.2990e-08],
-            [9.1265e-01, 9.1265e-01, 9.1265e-01,  ..., 8.5624e-01, 8.5483e-01,
-             1.7284e-03],
+    tensor([[1.0000e+00, 1.0000e+00, 1.0000e+00,  ..., 9.9986e-01, 9.9941e-01,
+             2.5950e-08],
+            [1.0000e+00, 1.0000e+00, 9.9315e-01,  ..., 9.8477e-01, 9.8476e-01,
+             9.7987e-08],
+            [9.1224e-01, 9.1223e-01, 9.1223e-01,  ..., 8.5374e-01, 8.5216e-01,
+             1.6753e-03],
             ...,
-            [9.9800e-01, 9.9800e-01, 9.9800e-01,  ..., 9.8951e-01, 9.8930e-01,
-             4.1664e-03],
-            [9.9977e-01, 9.9977e-01, 9.9977e-01,  ..., 1.5524e-02, 1.5519e-02,
-             2.7840e-04],
-            [7.3623e-07, 7.3623e-07, 7.1796e-07,  ..., 7.4244e-08, 7.4224e-08,
-             5.7044e-13]])
+            [9.9812e-01, 9.9811e-01, 9.9811e-01,  ..., 9.8991e-01, 9.8968e-01,
+             4.1033e-03],
+            [9.9979e-01, 9.9979e-01, 9.9979e-01,  ..., 1.5020e-02, 1.5015e-02,
+             2.7997e-04],
+            [7.7070e-07, 7.7070e-07, 7.5224e-07,  ..., 7.6964e-08, 7.6941e-08,
+             6.1278e-13]], device='cuda:0')
 

@@ -6,7 +6,7 @@ The changelog for the current development version is available at
 
 
 
-### 1.2.0 (07-16-2022)
+### 1.3.0 (07-16-2022)
 
 ##### Downloads
 
