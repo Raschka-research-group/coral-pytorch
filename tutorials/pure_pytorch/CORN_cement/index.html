@@ -590,7 +590,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.dataset/" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.dataset.md" class="md-nav__link">
         coral_pytorch.dataset
       </a>
     </li>
@@ -604,7 +604,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.layers/" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.layers.md" class="md-nav__link">
         coral_pytorch.layers
       </a>
     </li>
@@ -618,7 +618,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.losses/" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.losses.md" class="md-nav__link">
         coral_pytorch.losses
       </a>
     </li>
@@ -863,7 +863,7 @@ Labels: [0 1 2 3 4]
 <span class="n">DEVICE</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda:0&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Training on&#39;</span><span class="p">,</span> <span class="n">DEVICE</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>Training on cpu
+<div class="highlight"><pre><span></span><code>Training on cuda:0
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">Dataset</span>
 
@@ -978,26 +978,26 @@ Input label dimensions: torch.Size([128])
                    <span class="o">%</span><span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">,</span> 
                      <span class="nb">len</span><span class="p">(</span><span class="n">train_loader</span><span class="p">),</span> <span class="n">loss</span><span class="p">))</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>Epoch: 001/020 | Batch 000/007 | Cost: 42.3084
-Epoch: 002/020 | Batch 000/007 | Cost: 33.4198
-Epoch: 003/020 | Batch 000/007 | Cost: 34.3413
-Epoch: 004/020 | Batch 000/007 | Cost: 27.4008
-Epoch: 005/020 | Batch 000/007 | Cost: 29.5580
-Epoch: 006/020 | Batch 000/007 | Cost: 28.3949
-Epoch: 007/020 | Batch 000/007 | Cost: 26.0713
-Epoch: 008/020 | Batch 000/007 | Cost: 24.0429
-Epoch: 009/020 | Batch 000/007 | Cost: 22.1783
-Epoch: 010/020 | Batch 000/007 | Cost: 25.2757
-Epoch: 011/020 | Batch 000/007 | Cost: 22.2279
-Epoch: 012/020 | Batch 000/007 | Cost: 23.1534
-Epoch: 013/020 | Batch 000/007 | Cost: 18.5136
-Epoch: 014/020 | Batch 000/007 | Cost: 23.8390
-Epoch: 015/020 | Batch 000/007 | Cost: 18.9016
-Epoch: 016/020 | Batch 000/007 | Cost: 18.0890
-Epoch: 017/020 | Batch 000/007 | Cost: 13.8526
-Epoch: 018/020 | Batch 000/007 | Cost: 17.3017
-Epoch: 019/020 | Batch 000/007 | Cost: 15.3039
-Epoch: 020/020 | Batch 000/007 | Cost: 16.0646
+<div class="highlight"><pre><span></span><code>Epoch: 001/020 | Batch 000/007 | Cost: 0.7095
+Epoch: 002/020 | Batch 000/007 | Cost: 0.5793
+Epoch: 003/020 | Batch 000/007 | Cost: 0.5107
+Epoch: 004/020 | Batch 000/007 | Cost: 0.4893
+Epoch: 005/020 | Batch 000/007 | Cost: 0.4294
+Epoch: 006/020 | Batch 000/007 | Cost: 0.3942
+Epoch: 007/020 | Batch 000/007 | Cost: 0.3905
+Epoch: 008/020 | Batch 000/007 | Cost: 0.3877
+Epoch: 009/020 | Batch 000/007 | Cost: 0.3327
+Epoch: 010/020 | Batch 000/007 | Cost: 0.3442
+Epoch: 011/020 | Batch 000/007 | Cost: 0.3513
+Epoch: 012/020 | Batch 000/007 | Cost: 0.3395
+Epoch: 013/020 | Batch 000/007 | Cost: 0.3272
+Epoch: 014/020 | Batch 000/007 | Cost: 0.3372
+Epoch: 015/020 | Batch 000/007 | Cost: 0.2994
+Epoch: 016/020 | Batch 000/007 | Cost: 0.3409
+Epoch: 017/020 | Batch 000/007 | Cost: 0.3158
+Epoch: 018/020 | Batch 000/007 | Cost: 0.2988
+Epoch: 019/020 | Batch 000/007 | Cost: 0.2793
+Epoch: 020/020 | Batch 000/007 | Cost: 0.2516
 </code></pre></div>
 <h2 id="4-evaluate-model">4 -- Evaluate model</h2>
 <p>Finally, after model training, we can evaluate the performance of the model. For example, via the mean absolute error and mean squared error measures.</p>
@@ -1033,8 +1033,8 @@ Epoch: 020/020 | Batch 000/007 | Cost: 16.0646
 <div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Mean absolute error (train/test): </span><span class="si">{</span><span class="n">train_mae</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> | </span><span class="si">{</span><span class="n">test_mae</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Mean squared error (train/test): </span><span class="si">{</span><span class="n">train_mse</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> | </span><span class="si">{</span><span class="n">test_mse</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>Mean absolute error (train/test): 0.27 | 0.38
-Mean squared error (train/test): 0.30 | 0.43
+<div class="highlight"><pre><span></span><code>Mean absolute error (train/test): 0.29 | 0.36
+Mean squared error (train/test): 0.34 | 0.39
 </code></pre></div>
 <p>Note that MNIST is not an ordinal dataset (there is no order between the image categories), so computing the MAE or MSE doesn't really make sense but we use it anyways for demonstration purposes.</p>
 <h2 id="5-rank-probabilities-from-logits">5 -- Rank probabilities from logits</h2>
@@ -1046,36 +1046,36 @@ Mean squared error (train/test): 0.30 | 0.43
     <span class="n">probas</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cumprod</span><span class="p">(</span><span class="n">probas</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">probas</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>tensor([[9.7585e-01, 9.7536e-01, 9.6610e-01, 2.2675e-01],
-        [9.4921e-01, 1.7135e-01, 9.7073e-03, 3.4552e-04],
-        [2.4214e-02, 4.6617e-04, 3.3125e-05, 2.7729e-05],
-        [9.8303e-01, 5.6925e-01, 3.2523e-01, 5.3245e-02],
-        [9.5153e-01, 5.7437e-01, 1.4063e-01, 1.6096e-02],
-        [1.8260e-02, 7.7530e-06, 5.1410e-06, 5.1152e-06],
-        [9.7835e-01, 9.5596e-01, 3.6877e-01, 1.9158e-02],
-        [9.8692e-01, 9.4746e-01, 3.2161e-01, 4.4179e-02],
-        [3.5250e-01, 6.7358e-03, 2.6506e-03, 2.0687e-03],
-        [9.2053e-01, 3.5487e-01, 1.0667e-01, 5.3238e-02],
-        [1.2923e-01, 2.7282e-03, 3.3910e-04, 2.3258e-04],
-        [9.7515e-01, 8.6582e-01, 2.0421e-01, 4.9532e-02],
-        [9.9591e-01, 4.9053e-01, 3.7695e-02, 1.0938e-02],
-        [1.8391e-01, 5.2724e-03, 5.6778e-04, 3.7333e-04],
-        [8.8100e-01, 7.3442e-01, 5.6249e-01, 1.2397e-01],
-        [6.7335e-01, 5.0340e-02, 8.1046e-03, 5.6927e-03],
-        [9.0837e-01, 2.8030e-01, 3.3884e-02, 7.7040e-03],
-        [8.9811e-01, 2.3693e-01, 2.2545e-02, 3.1750e-03],
-        [9.5224e-01, 7.0664e-01, 1.0633e-01, 5.8928e-02],
-        [7.1353e-01, 1.1418e-02, 4.1087e-04, 2.9408e-04],
-        [4.8610e-04, 3.1541e-05, 2.3382e-05, 2.1088e-05],
-        [9.6261e-01, 7.2110e-01, 7.1777e-01, 1.7590e-01],
-        [9.7763e-01, 2.6866e-01, 4.9495e-02, 2.0072e-02],
-        [9.7093e-01, 9.4531e-01, 9.1623e-02, 4.7309e-02],
-        [8.3720e-01, 7.3658e-02, 1.1421e-02, 7.7481e-03],
-        [9.2363e-01, 9.0403e-01, 5.8055e-01, 7.3952e-03],
-        [9.7614e-01, 9.7225e-01, 6.8393e-01, 2.5626e-02],
-        [9.7249e-01, 4.3916e-01, 2.6588e-01, 1.7958e-01],
-        [9.7547e-01, 9.5796e-01, 8.4703e-01, 7.7577e-01],
-        [9.5975e-01, 9.5148e-01, 4.9699e-01, 6.1305e-02]])
+<div class="highlight"><pre><span></span><code>tensor([[8.4400e-01, 1.1552e-01, 2.4885e-02, 2.1235e-02],
+        [9.6955e-01, 9.6440e-01, 7.9017e-01, 4.0131e-01],
+        [9.6926e-01, 9.6164e-01, 2.8837e-01, 1.1151e-01],
+        [2.7557e-01, 1.7854e-03, 1.3533e-04, 6.4534e-05],
+        [4.4200e-04, 2.9050e-05, 1.8071e-05, 8.5216e-06],
+        [4.1626e-02, 6.8911e-06, 1.1300e-06, 1.1232e-06],
+        [9.5031e-01, 3.2661e-01, 7.6083e-03, 3.6258e-03],
+        [9.8467e-01, 9.0953e-01, 4.3580e-01, 3.9399e-01],
+        [8.0870e-01, 1.9610e-01, 1.9341e-02, 1.6238e-03],
+        [9.6289e-01, 7.2809e-01, 2.1034e-01, 1.4426e-01],
+        [9.8087e-01, 3.4986e-01, 7.5893e-03, 2.1336e-04],
+        [8.3218e-02, 2.9795e-04, 8.8117e-05, 7.7257e-05],
+        [6.4886e-01, 3.3336e-01, 1.7751e-01, 1.1291e-01],
+        [8.0380e-01, 5.5894e-03, 3.1419e-04, 2.4602e-04],
+        [9.3716e-01, 9.3670e-01, 9.3338e-01, 8.3394e-01],
+        [9.0723e-01, 9.0255e-01, 8.7473e-01, 4.9182e-01],
+        [9.8959e-01, 3.3517e-01, 5.4329e-02, 1.7331e-03],
+        [9.6824e-01, 8.0327e-01, 2.5958e-01, 8.4942e-03],
+        [9.6470e-01, 9.1665e-01, 6.9238e-01, 3.8931e-01],
+        [9.6623e-01, 9.6491e-01, 9.4429e-01, 4.3117e-01],
+        [8.0910e-02, 1.5353e-04, 2.7122e-05, 2.1541e-05],
+        [9.9247e-01, 8.6671e-01, 6.3087e-01, 6.6279e-02],
+        [8.8915e-01, 2.5603e-02, 1.8793e-03, 1.5186e-03],
+        [6.2060e-01, 1.8354e-01, 4.0813e-02, 2.1553e-02],
+        [9.5856e-01, 9.5805e-01, 9.2657e-01, 1.6030e-01],
+        [9.9292e-01, 6.5836e-01, 1.8671e-01, 6.0837e-02],
+        [1.0555e-01, 4.6840e-03, 1.1164e-03, 1.7749e-04],
+        [9.6029e-01, 4.0485e-01, 3.0195e-02, 2.0155e-03],
+        [9.8264e-01, 9.1183e-01, 4.3322e-01, 2.3925e-03],
+        [8.9595e-01, 3.6590e-01, 3.0114e-02, 1.9936e-03]], device=&#39;cuda:0&#39;)
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>
 </code></pre></div>
@@ -1108,13 +1108,13 @@ Mean squared error (train/test): 0.30 | 0.43
       
       
         
-        <a href="../../../api_subpackages/coral_pytorch.dataset/" class="md-footer__link md-footer__link--next" aria-label="Next: coral_pytorch.dataset" rel="next">
+        <a href="../../../installation/" class="md-footer__link md-footer__link--next" aria-label="Next: Installation" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              coral_pytorch.dataset
+              Installation
             </div>
           </div>
           <div class="md-footer__button md-icon">

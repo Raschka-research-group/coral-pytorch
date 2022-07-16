@@ -604,7 +604,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.dataset/" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.dataset.md" class="md-nav__link">
         coral_pytorch.dataset
       </a>
     </li>
@@ -618,7 +618,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.layers/" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.layers.md" class="md-nav__link">
         coral_pytorch.layers
       </a>
     </li>
@@ -632,7 +632,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.losses/" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.losses.md" class="md-nav__link">
         coral_pytorch.losses
       </a>
     </li>
@@ -1005,6 +1005,73 @@ We replace the output layer  </p>
         <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">optimizer</span>
 </code></pre></div>
+<div class="highlight"><pre><span></span><code>---------------------------------------------------------------------------
+
+ModuleNotFoundError                       Traceback (most recent call last)
+
+Input In [4], in &lt;cell line: 5&gt;()
+      2 from coral_pytorch.dataset import levels_from_labelbatch
+      3 from coral_pytorch.dataset import proba_to_label
+----&gt; 5 import pytorch_lightning as pl
+      6 import torchmetrics
+      9 # LightningModule that receives a PyTorch model as input
+
+
+File ~/conda/lib/python3.8/site-packages/pytorch_lightning/__init__.py:20, in &lt;module&gt;
+     17 _PACKAGE_ROOT = os.path.dirname(__file__)
+     18 _PROJECT_ROOT = os.path.dirname(_PACKAGE_ROOT)
+---&gt; 20 from pytorch_lightning.callbacks import Callback  # noqa: E402
+     21 from pytorch_lightning.core import LightningDataModule, LightningModule  # noqa: E402
+     22 from pytorch_lightning.trainer import Trainer  # noqa: E402
+
+
+File ~/conda/lib/python3.8/site-packages/pytorch_lightning/callbacks/__init__.py:14, in &lt;module&gt;
+      1 # Copyright The PyTorch Lightning team.
+      2 #
+      3 # Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+   (...)
+     12 # See the License for the specific language governing permissions and
+     13 # limitations under the License.
+---&gt; 14 from pytorch_lightning.callbacks.base import Callback
+     15 from pytorch_lightning.callbacks.device_stats_monitor import DeviceStatsMonitor
+     16 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
+
+
+File ~/conda/lib/python3.8/site-packages/pytorch_lightning/callbacks/base.py:26, in &lt;module&gt;
+     23 from torch.optim import Optimizer
+     25 import pytorch_lightning as pl
+---&gt; 26 from pytorch_lightning.utilities.types import STEP_OUTPUT
+     29 class Callback(abc.ABC):
+     30     r&quot;&quot;&quot;
+     31     Abstract base class used to build new callbacks.
+     32 
+     33     Subclass this class and override any of the relevant hooks
+     34     &quot;&quot;&quot;
+
+
+File ~/conda/lib/python3.8/site-packages/pytorch_lightning/utilities/__init__.py:18, in &lt;module&gt;
+     14 &quot;&quot;&quot;General utilities.&quot;&quot;&quot;
+     16 import numpy
+---&gt; 18 from pytorch_lightning.utilities.apply_func import move_data_to_device  # noqa: F401
+     19 from pytorch_lightning.utilities.distributed import AllGatherGrad, rank_zero_info, rank_zero_only  # noqa: F401
+     20 from pytorch_lightning.utilities.enums import (  # noqa: F401
+     21     AMPType,
+     22     DeviceType,
+   (...)
+     26     ModelSummaryMode,
+     27 )
+
+
+File ~/conda/lib/python3.8/site-packages/pytorch_lightning/utilities/apply_func.py:30, in &lt;module&gt;
+     28 if _TORCHTEXT_AVAILABLE:
+     29     if _compare_version(&quot;torchtext&quot;, operator.ge, &quot;0.9.0&quot;):
+---&gt; 30         from torchtext.legacy.data import Batch
+     31     else:
+     32         from torchtext.data import Batch
+
+
+ModuleNotFoundError: No module named &#39;torchtext.legacy&#39;
+</code></pre></div>
 <h2 id="setting-up-the-dataset">Setting up the dataset</h2>
 <ul>
 <li>In this section, we are going to set up our dataset.</li>
@@ -1057,12 +1124,6 @@ We replace the output layer  </p>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Test labels:&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">all_test_labels</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Test label distribution:&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">all_test_labels</span><span class="p">))</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>Training labels: tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-Training label distribution: tensor([5917, 6727, 5949, 6121, 5833, 5411, 5908, 6256, 5840, 5942])
-
-Test labels: tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-Test label distribution: tensor([ 980, 1135, 1032, 1010,  982,  892,  958, 1028,  974, 1009])
-</code></pre></div>
 <ul>
 <li>Above, we can see that the dataset consists of 8 features, and there are 998 examples in total.</li>
 <li>The labels are in range from 1 (weakest) to 5 (strongest), and we normalize them to start at zero (hence, the normalized labels are in the range 0 to 4). </li>
@@ -1079,8 +1140,6 @@ Test label distribution: tensor([ 980, 1135, 1032, 1010,  982,  892,  958, 1028,
 <span class="n">avg_prediction</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">all_test_labels</span><span class="p">)</span>  <span class="c1"># median minimizes MAE</span>
 <span class="n">baseline_mae</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">all_test_labels</span> <span class="o">-</span> <span class="n">avg_prediction</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Baseline MAE: </span><span class="si">{</span><span class="n">baseline_mae</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>Baseline MAE: 2.52
 </code></pre></div>
 <ul>
 <li>In other words, a model that would always predict the dataset median would achieve a MAE of 2.52. A model that has an MAE of &gt; 2.52 is certainly a bad model.</li>
@@ -1199,25 +1258,6 @@ Test label distribution: tensor([ 980, 1135, 1032, 1010,  982,  892,  958, 1028,
 <span class="n">runtime</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span><span class="o">/</span><span class="mi">60</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training took </span><span class="si">{</span><span class="n">runtime</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> min in total.&quot;</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>GPU available: True, used: True
-TPU available: False, using: 0 TPU cores
-IPU available: False, using: 0 IPUs
-LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-
-  | Name      | Type              | Params
-------------------------------------------------
-0 | model     | ConvNet           | 501   
-1 | train_mae | MeanAbsoluteError | 0     
-2 | valid_mae | MeanAbsoluteError | 0     
-3 | test_mae  | MeanAbsoluteError | 0     
-------------------------------------------------
-501       Trainable params
-0         Non-trainable params
-501       Total params
-0.002     Total estimated model params size (MB)
-
-Training took 2.43 min in total.
-</code></pre></div>
 <h2 id="evaluating-the-model">Evaluating the model</h2>
 <ul>
 <li>After training, let's plot our training MAE and validation MAE using pandas, which, in turn, uses matplotlib for plotting (you may want to consider a <a href="https://pytorch-lightning.readthedocs.io/en/latest/extensions/logging.html">more advanced logger</a> that does that for you):</li>
@@ -1240,34 +1280,10 @@ Training took 2.43 min in total.
 <span class="n">df_metrics</span><span class="p">[[</span><span class="s2">&quot;train_mae&quot;</span><span class="p">,</span> <span class="s2">&quot;valid_mae&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
     <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Epoch&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;MAE&#39;</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>&lt;AxesSubplot:xlabel=&#39;Epoch&#39;, ylabel=&#39;MAE&#39;&gt;
-</code></pre></div>
-<p><img alt="png" src="../ordinal-coral_mnist_files/ordinal-coral_mnist_36_1.png" /></p>
-<p><img alt="png" src="../ordinal-coral_mnist_files/ordinal-coral_mnist_36_2.png" /></p>
 <ul>
 <li>It's hard to tell what the best model (based on the lowest validation set MAE) is in this case, but no worries, the <code>trainer</code> saved this model automatically for us, we which we can load from the checkpoint via the <code>ckpt_path='best'</code> argument; below we use the <code>trainer</code> instance to evaluate the best model on the test set:</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="n">trainer</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">lightning_model</span><span class="p">,</span> <span class="n">datamodule</span><span class="o">=</span><span class="n">data_module</span><span class="p">,</span> <span class="n">ckpt_path</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>Restoring states from the checkpoint path at logs/cnn-coral-mnist/version_1/checkpoints/epoch=19-step=4279.ckpt
-LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-Loaded model weights from checkpoint at logs/cnn-coral-mnist/version_1/checkpoints/epoch=19-step=4279.ckpt
-
-
-
-Testing: 0it [00:00, ?it/s]
-
-
---------------------------------------------------------------------------------
-DATALOADER:0 TEST RESULTS
-{&#39;test_mae&#39;: 0.7922999858856201}
---------------------------------------------------------------------------------
-
-
-
-
-
-[{&#39;test_mae&#39;: 0.7922999858856201}]
 </code></pre></div>
 <ul>
 <li>The MAE of our model is quite good, especially compared to the 2.52 MAE baseline earlier.</li>
@@ -1279,8 +1295,6 @@ DATALOADER:0 TEST RESULTS
 </ul>
 <div class="highlight"><pre><span></span><code><span class="n">path</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">checkpoint_callback</span><span class="o">.</span><span class="n">best_model_path</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>logs/cnn-coral-mnist/version_1/checkpoints/epoch=19-step=4279.ckpt
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="n">lightning_model</span> <span class="o">=</span> <span class="n">LightningCNN</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span>
     <span class="n">path</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">pytorch_model</span><span class="p">)</span>
@@ -1302,8 +1316,6 @@ DATALOADER:0 TEST RESULTS
 
 <span class="n">all_predicted_labels</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">all_predicted_labels</span><span class="p">)</span>
 <span class="n">all_predicted_labels</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>tensor([6, 1, 1, 1, 5])
 </code></pre></div>
 
               

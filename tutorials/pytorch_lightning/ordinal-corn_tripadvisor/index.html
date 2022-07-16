@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#python-m-spacy-download-en_core_web_sm" class="md-skip">
+        <a href="#a-recurrent-neural-net-for-ordinal-regression-using-corn-tripadvisor-dataset" class="md-skip">
           Skip to content
         </a>
       
@@ -384,6 +384,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#general-settings-and-hyperparameters" class="md-nav__link">
+    General settings and hyperparameters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#converting-a-regular-classifier-into-a-corn-ordinal-regression-model" class="md-nav__link">
     Converting a regular classifier into a CORN ordinal regression model
   </a>
@@ -597,7 +604,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.dataset/" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.dataset.md" class="md-nav__link">
         coral_pytorch.dataset
       </a>
     </li>
@@ -611,7 +618,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.layers/" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.layers.md" class="md-nav__link">
         coral_pytorch.layers
       </a>
     </li>
@@ -625,7 +632,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.losses/" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.losses.md" class="md-nav__link">
         coral_pytorch.losses
       </a>
     </li>
@@ -726,6 +733,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#general-settings-and-hyperparameters" class="md-nav__link">
+    General settings and hyperparameters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#converting-a-regular-classifier-into-a-corn-ordinal-regression-model" class="md-nav__link">
     Converting a regular classifier into a CORN ordinal regression model
   </a>
@@ -811,40 +825,35 @@
 </a>
 
 
-<h1 id="python-m-spacy-download-en_core_web_sm">!python -m spacy download en_core_web_sm</h1>
-<div class="highlight"><pre><span></span><code>&lt;a href=&quot;https://pytorch.org&quot;&gt;&lt;img src=&quot;https://raw.githubusercontent.com/pytorch/pytorch/master/docs/source/_static/img/pytorch-logo-dark.svg&quot; width=&quot;90&quot;/&gt;&lt;/a&gt; &amp;nbsp; &amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;https://www.pytorchlightning.ai&quot;&gt;&lt;img src=&quot;https://raw.githubusercontent.com/PyTorchLightning/pytorch-lightning/master/docs/source/_static/images/logo.svg&quot; width=&quot;150&quot;/&gt;&lt;/a&gt;
+<h1 id="a-recurrent-neural-net-for-ordinal-regression-using-corn-tripadvisor-dataset">A Recurrent Neural Net for Ordinal Regression using CORN -- TripAdvisor Dataset</h1>
+<p>In this tutorial, we implement a recurrent neural network for ordinal regression based on the CORN method. To learn more about CORN, please have a look at our preprint:</p>
+<ul>
+<li>Xintong Shi, Wenzhi Cao, and Sebastian Raschka (2021). Deep Neural Networks for Rank-Consistent Ordinal Regression Based On Conditional Probabilities. Arxiv preprint;  <a href="https://arxiv.org/abs/2111.08851">https://arxiv.org/abs/2111.08851</a></li>
+</ul>
+<p>We will be using a balanced version of the <a href="https://www.kaggle.com/andrewmvd/trip-advisor-hotel-reviews">TripAdvisor Hotel Review</a> dataset that <a href="https://github.com/Raschka-research-group/corn-ordinal-neuralnet/blob/main/datasets/tripadvisor/tripadvisor_balanced.csv">we used</a> in the CORN manuscript.</p>
+<h2 id="general-settings-and-hyperparameters">General settings and hyperparameters</h2>
+<ul>
+<li>Here, we specify some general hyperparameter values and general settings</li>
+<li>Note that for small datatsets, it is not necessary and better not to use multiple workers as it can sometimes cause issues with too many open files in PyTorch. So, if you have problems with the data loader later, try setting <code>NUM_WORKERS = 0</code> instead.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">NUM_EPOCHS</span> <span class="o">=</span> <span class="mi">40</span>
+<span class="n">LEARNING_RATE</span> <span class="o">=</span> <span class="mf">0.005</span>
+<span class="n">NUM_WORKERS</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">123</span>
 
-# A Recurrent Neural Net for Ordinal Regression using CORN -- TripAdvisor Dataset
+<span class="c1"># Architecture:</span>
+<span class="n">EMBEDDING_DIM</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">HIDDEN_DIM</span> <span class="o">=</span> <span class="mi">256</span>
 
-In this tutorial, we implement a recurrent neural network for ordinal regression based on the CORN method. To learn more about CORN, please have a look at our preprint:
+<span class="c1"># Dataset specific:</span>
 
-- Xintong Shi, Wenzhi Cao, and Sebastian Raschka (2021). Deep Neural Networks for Rank-Consistent Ordinal Regression Based On Conditional Probabilities. Arxiv preprint;  [https://arxiv.org/abs/2111.08851](https://arxiv.org/abs/2111.08851)
-
-
-We will be using a balanced version of the [TripAdvisor Hotel Review](https://www.kaggle.com/andrewmvd/trip-advisor-hotel-reviews) dataset that [we used](https://github.com/Raschka-research-group/corn-ordinal-neuralnet/blob/main/datasets/tripadvisor/tripadvisor_balanced.csv) in the CORN manuscript.
-
-## General settings and hyperparameters
-
-- Here, we specify some general hyperparameter values and general settings
-- Note that for small datatsets, it is not necessary and better not to use multiple workers as it can sometimes cause issues with too many open files in PyTorch. So, if you have problems with the data loader later, try setting `NUM_WORKERS = 0` instead.
-
-
-```python
-BATCH_SIZE = 16
-NUM_EPOCHS = 40
-LEARNING_RATE = 0.005
-NUM_WORKERS = 4
-RANDOM_SEED = 123
-
-# Architecture:
-EMBEDDING_DIM = 128
-HIDDEN_DIM = 256
-
-# Dataset specific:
-
-NUM_CLASSES = 5
-VOCABULARY_SIZE = 20000
-DATA_BASEPATH = &quot;./data&quot;
+<span class="n">NUM_CLASSES</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">VOCABULARY_SIZE</span> <span class="o">=</span> <span class="mi">20000</span>
+<span class="n">DATA_BASEPATH</span> <span class="o">=</span> <span class="s2">&quot;./data&quot;</span>
+</code></pre></div>
+<p>This tutorial also requires the spacy English vocabulary, which can be downloaded as shown below:</p>
+<div class="highlight"><pre><span></span><code><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">spacy</span> <span class="n">download</span> <span class="n">en_core_web_sm</span>
 </code></pre></div>
 <h2 id="converting-a-regular-classifier-into-a-corn-ordinal-regression-model">Converting a regular classifier into a CORN ordinal regression model</h2>
 <p>Changing a classifier to a CORN model for ordinal regression is actually really simple and only requires a few changes:</p>
@@ -1031,6 +1040,73 @@ to the <code>corn_loss</code> as it takes care of the rest internally.</p>
         <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">optimizer</span>
 </code></pre></div>
+<div class="highlight"><pre><span></span><code>---------------------------------------------------------------------------
+
+ModuleNotFoundError                       Traceback (most recent call last)
+
+Input In [5], in &lt;cell line: 4&gt;()
+      1 from coral_pytorch.losses import corn_loss
+      2 from coral_pytorch.dataset import corn_label_from_logits
+----&gt; 4 import pytorch_lightning as pl
+      5 import torchmetrics
+      8 # LightningModule that receives a PyTorch model as input
+
+
+File ~/conda/lib/python3.8/site-packages/pytorch_lightning/__init__.py:20, in &lt;module&gt;
+     17 _PACKAGE_ROOT = os.path.dirname(__file__)
+     18 _PROJECT_ROOT = os.path.dirname(_PACKAGE_ROOT)
+---&gt; 20 from pytorch_lightning.callbacks import Callback  # noqa: E402
+     21 from pytorch_lightning.core import LightningDataModule, LightningModule  # noqa: E402
+     22 from pytorch_lightning.trainer import Trainer  # noqa: E402
+
+
+File ~/conda/lib/python3.8/site-packages/pytorch_lightning/callbacks/__init__.py:14, in &lt;module&gt;
+      1 # Copyright The PyTorch Lightning team.
+      2 #
+      3 # Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+   (...)
+     12 # See the License for the specific language governing permissions and
+     13 # limitations under the License.
+---&gt; 14 from pytorch_lightning.callbacks.base import Callback
+     15 from pytorch_lightning.callbacks.device_stats_monitor import DeviceStatsMonitor
+     16 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
+
+
+File ~/conda/lib/python3.8/site-packages/pytorch_lightning/callbacks/base.py:26, in &lt;module&gt;
+     23 from torch.optim import Optimizer
+     25 import pytorch_lightning as pl
+---&gt; 26 from pytorch_lightning.utilities.types import STEP_OUTPUT
+     29 class Callback(abc.ABC):
+     30     r&quot;&quot;&quot;
+     31     Abstract base class used to build new callbacks.
+     32 
+     33     Subclass this class and override any of the relevant hooks
+     34     &quot;&quot;&quot;
+
+
+File ~/conda/lib/python3.8/site-packages/pytorch_lightning/utilities/__init__.py:18, in &lt;module&gt;
+     14 &quot;&quot;&quot;General utilities.&quot;&quot;&quot;
+     16 import numpy
+---&gt; 18 from pytorch_lightning.utilities.apply_func import move_data_to_device  # noqa: F401
+     19 from pytorch_lightning.utilities.distributed import AllGatherGrad, rank_zero_info, rank_zero_only  # noqa: F401
+     20 from pytorch_lightning.utilities.enums import (  # noqa: F401
+     21     AMPType,
+     22     DeviceType,
+   (...)
+     26     ModelSummaryMode,
+     27 )
+
+
+File ~/conda/lib/python3.8/site-packages/pytorch_lightning/utilities/apply_func.py:30, in &lt;module&gt;
+     28 if _TORCHTEXT_AVAILABLE:
+     29     if _compare_version(&quot;torchtext&quot;, operator.ge, &quot;0.9.0&quot;):
+---&gt; 30         from torchtext.legacy.data import Batch
+     31     else:
+     32         from torchtext.data import Batch
+
+
+ModuleNotFoundError: No module named &#39;torchtext.legacy&#39;
+</code></pre></div>
 <h2 id="setting-up-the-dataset">Setting up the dataset</h2>
 <ul>
 <li>In this section, we are going to set up our dataset.</li>
@@ -1047,58 +1123,6 @@ to the <code>corn_loss</code> as it takes care of the rest internally.</p>
 
 <span class="n">data_df</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
 </code></pre></div>
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>TEXT_COLUMN_NAME</th>
-      <th>LABEL_COLUMN_NAME</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>6995</th>
-      <td>beautiful hotel, stay punta cana majestic colo...</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>6996</th>
-      <td>stay, n't stay, stayed week april, weather ama...</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>6997</th>
-      <td>stay hotel fantastic, great location, looked n...</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>6998</th>
-      <td>birthday meal havnt stayed hotel staying barce...</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>6999</th>
-      <td>great hotel great location stayed royal magda ...</td>
-      <td>5</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
 
 
@@ -1145,10 +1169,6 @@ to the <code>corn_loss</code> as it takes care of the rest internally.</p>
              <span class="n">sort_key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">TEXT_COLUMN_NAME</span><span class="p">),</span>
 <span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>32:40: E225 missing whitespace around operator
-32:80: E501 line too long (84 &gt; 79 characters)
-37:14: E131 continuation line unaligned for hanging indent
-</code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="c1"># Checking the dataset</span>
 <span class="n">all_train_labels</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">all_test_labels</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1167,12 +1187,6 @@ to the <code>corn_loss</code> as it takes care of the rest internally.</p>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Test labels:&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">all_test_labels</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Test label distribution:&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">all_test_labels</span><span class="p">))</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>Training labels: tensor([0, 1, 2, 3, 4], device=&#39;cuda:0&#39;)
-Training label distribution: tensor([964, 963, 954, 953, 926], device=&#39;cuda:0&#39;)
-
-Test labels: tensor([0, 1, 2, 3, 4], device=&#39;cuda:0&#39;)
-Test label distribution: tensor([275, 267, 300, 274, 284], device=&#39;cuda:0&#39;)
-</code></pre></div>
 <ul>
 <li>Above, we can see that the dataset consists of 8 features, and there are 998 examples in total.</li>
 <li>The labels are in range from 1 (weakest) to 5 (strongest), and we normalize them to start at zero (hence, the normalized labels are in the range 0 to 4). </li>
@@ -1189,8 +1203,6 @@ Test label distribution: tensor([275, 267, 300, 274, 284], device=&#39;cuda:0&#3
 <span class="n">avg_prediction</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">all_test_labels</span><span class="p">)</span>  <span class="c1"># median minimizes MAE</span>
 <span class="n">baseline_mae</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">all_test_labels</span> <span class="o">-</span> <span class="n">avg_prediction</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Baseline MAE: </span><span class="si">{</span><span class="n">baseline_mae</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>Baseline MAE: 1.18
 </code></pre></div>
 <ul>
 <li>In other words, a model that would always predict the dataset median would achieve a MAE of 1.18. A model that has an MAE of &gt; 1.18 is certainly a bad model.</li>
@@ -1241,10 +1253,6 @@ Test label distribution: tensor([275, 267, 300, 274, 284], device=&#39;cuda:0&#3
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Batch size (from text):&#39;</span><span class="p">,</span> <span class="n">features</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Batch size (from labels):&#39;</span><span class="p">,</span> <span class="n">labels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>Text length: 469
-Batch size (from text): 16
-Batch size (from labels): 16
-</code></pre></div>
 <ul>
 <li>Now it's time to train our model:</li>
 </ul>
@@ -1269,25 +1277,6 @@ Batch size (from labels): 16
 <span class="n">runtime</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span><span class="o">/</span><span class="mi">60</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training took </span><span class="si">{</span><span class="n">runtime</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> min in total.&quot;</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>GPU available: True, used: True
-TPU available: False, using: 0 TPU cores
-IPU available: False, using: 0 IPUs
-LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-
-  | Name      | Type              | Params
-------------------------------------------------
-0 | model     | PyTorchRNN        | 3.0 M 
-1 | train_mae | MeanAbsoluteError | 0     
-2 | valid_mae | MeanAbsoluteError | 0     
-3 | test_mae  | MeanAbsoluteError | 0     
-------------------------------------------------
-3.0 M     Trainable params
-0         Non-trainable params
-3.0 M     Total params
-11.826    Total estimated model params size (MB)
-
-Training took 3.90 min in total.
-</code></pre></div>
 <h2 id="evaluating-the-model">Evaluating the model</h2>
 <ul>
 <li>After training, let's plot our training MAE and validation MAE using pandas, which, in turn, uses matplotlib for plotting (you may want to consider a <a href="https://pytorch-lightning.readthedocs.io/en/latest/extensions/logging.html">more advanced logger</a> that does that for you):</li>
@@ -1310,37 +1299,11 @@ Training took 3.90 min in total.
 <span class="n">df_metrics</span><span class="p">[[</span><span class="s2">&quot;train_mae&quot;</span><span class="p">,</span> <span class="s2">&quot;valid_mae&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
     <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Epoch&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;MAE&#39;</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>&lt;AxesSubplot:xlabel=&#39;Epoch&#39;, ylabel=&#39;MAE&#39;&gt;
-</code></pre></div>
-<p><img alt="png" src="../ordinal-corn_tripadvisor_files/ordinal-corn_tripadvisor_39_1.png" /></p>
-<p><img alt="png" src="../ordinal-corn_tripadvisor_files/ordinal-corn_tripadvisor_39_2.png" /></p>
 <ul>
 <li>As we can see from the loss plot above, the model starts overfitting pretty quickly. Based on the MAE plot, we can see that the best model, based on the validation set MAE, may be around epoch 8.</li>
 <li>The <code>trainer</code> saved this model automatically for us, we which we can load from the checkpoint via the <code>ckpt_path='best'</code> argument; below we use the <code>trainer</code> instance to evaluate the best model on the test set:</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="n">trainer</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">lightning_model</span><span class="p">,</span> <span class="n">dataloaders</span><span class="o">=</span><span class="n">test_loader</span><span class="p">,</span> <span class="n">ckpt_path</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>Restoring states from the checkpoint path at logs/rnn-corn-mnist/version_22/checkpoints/epoch=1-step=595.ckpt
-LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-Loaded model weights from checkpoint at logs/rnn-corn-mnist/version_22/checkpoints/epoch=1-step=595.ckpt
-/home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/utilities/data.py:141: UserWarning: Your `IterableDataset` has `__len__` defined. In combination with multi-process data loading (when num_workers &gt; 1), `__len__` could be inaccurate if each worker is not configured independently to avoid having duplicate data.
-  rank_zero_warn(
-
-
-
-Testing: 0it [00:00, ?it/s]
-
-
---------------------------------------------------------------------------------
-DATALOADER:0 TEST RESULTS
-{&#39;test_mae&#39;: 0.9407142996788025}
---------------------------------------------------------------------------------
-
-
-
-
-
-[{&#39;test_mae&#39;: 0.9407142996788025}]
 </code></pre></div>
 <h2 id="predicting-labels-of-new-data">Predicting labels of new data</h2>
 <ul>
@@ -1349,8 +1312,6 @@ DATALOADER:0 TEST RESULTS
 </ul>
 <div class="highlight"><pre><span></span><code><span class="n">path</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">checkpoint_callback</span><span class="o">.</span><span class="n">best_model_path</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>logs/rnn-corn-mnist/version_22/checkpoints/epoch=1-step=595.ckpt
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="n">lightning_model</span> <span class="o">=</span> <span class="n">LightningRNN</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span>
     <span class="n">path</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">pytorch_model</span><span class="p">)</span>
@@ -1373,8 +1334,6 @@ DATALOADER:0 TEST RESULTS
 
 <span class="n">all_predicted_labels</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">all_predicted_labels</span><span class="p">)</span>
 <span class="n">all_predicted_labels</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>tensor([1, 1, 2, 1, 1], device=&#39;cuda:0&#39;)
 </code></pre></div>
 
               

@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#python-m-spacy-download-en_core_web_sm" class="md-skip">
+        <a href="#a-recurrent-neural-net-for-ordinal-regression-using-coral-tripadvisor-dataset" class="md-skip">
           Skip to content
         </a>
       
@@ -342,6 +342,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#general-settings-and-hyperparameters" class="md-nav__link">
+    General settings and hyperparameters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#converting-a-regular-classifier-into-a-coral-ordinal-regression-model" class="md-nav__link">
     Converting a regular classifier into a CORAL ordinal regression model
   </a>
@@ -597,7 +604,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.dataset/" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.dataset.md" class="md-nav__link">
         coral_pytorch.dataset
       </a>
     </li>
@@ -611,7 +618,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.layers/" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.layers.md" class="md-nav__link">
         coral_pytorch.layers
       </a>
     </li>
@@ -625,7 +632,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.losses/" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.losses.md" class="md-nav__link">
         coral_pytorch.losses
       </a>
     </li>
@@ -726,6 +733,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#general-settings-and-hyperparameters" class="md-nav__link">
+    General settings and hyperparameters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#converting-a-regular-classifier-into-a-coral-ordinal-regression-model" class="md-nav__link">
     Converting a regular classifier into a CORAL ordinal regression model
   </a>
@@ -811,41 +825,34 @@
 </a>
 
 
-<h1 id="python-m-spacy-download-en_core_web_sm">!python -m spacy download en_core_web_sm</h1>
-<div class="highlight"><pre><span></span><code>&lt;a href=&quot;https://pytorch.org&quot;&gt;&lt;img src=&quot;https://raw.githubusercontent.com/pytorch/pytorch/master/docs/source/_static/img/pytorch-logo-dark.svg&quot; width=&quot;90&quot;/&gt;&lt;/a&gt; &amp;nbsp; &amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;https://www.pytorchlightning.ai&quot;&gt;&lt;img src=&quot;https://raw.githubusercontent.com/PyTorchLightning/pytorch-lightning/master/docs/source/_static/images/logo.svg&quot; width=&quot;150&quot;/&gt;&lt;/a&gt;
+<h1 id="a-recurrent-neural-net-for-ordinal-regression-using-coral-tripadvisor-dataset">A Recurrent Neural Net for Ordinal Regression using CORAL -- TripAdvisor Dataset</h1>
+<p>In this tutorial, we implement a recurrent neural network for ordinal regression based on the CORAL method. To learn more about CORAL, please have a look at our paper:</p>
+<ul>
+<li>Wenzhi Cao, Vahid Mirjalili, and Sebastian Raschka (2020): 
+<a href="https://www.sciencedirect.com/science/article/pii/S016786552030413X">Rank Consistent Ordinal Regression for Neural Networks with Application to Age Estimation</a>. 
+Pattern Recognition Letters. 140, 325-331</li>
+</ul>
+<p>We will be using a balanced version of the <a href="https://www.kaggle.com/andrewmvd/trip-advisor-hotel-reviews">TripAdvisor Hotel Review</a> dataset that <a href="https://github.com/Raschka-research-group/corn-ordinal-neuralnet/blob/main/datasets/tripadvisor/tripadvisor_balanced.csv">we used</a> in the CORN manuscript.</p>
+<h2 id="general-settings-and-hyperparameters">General settings and hyperparameters</h2>
+<ul>
+<li>Here, we specify some general hyperparameter values and general settings</li>
+<li>Note that for small datatsets, it is not necessary and better not to use multiple workers as it can sometimes cause issues with too many open files in PyTorch. So, if you have problems with the data loader later, try setting <code>NUM_WORKERS = 0</code> instead.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">NUM_EPOCHS</span> <span class="o">=</span> <span class="mi">40</span>
+<span class="n">LEARNING_RATE</span> <span class="o">=</span> <span class="mf">0.0005</span>
+<span class="n">NUM_WORKERS</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">123</span>
 
-# A Recurrent Neural Net for Ordinal Regression using CORAL -- TripAdvisor Dataset
+<span class="c1"># Architecture:</span>
+<span class="n">EMBEDDING_DIM</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">HIDDEN_DIM</span> <span class="o">=</span> <span class="mi">256</span>
 
-In this tutorial, we implement a recurrent neural network for ordinal regression based on the CORAL method. To learn more about CORAL, please have a look at our paper:
+<span class="c1"># Dataset specific:</span>
 
-- Wenzhi Cao, Vahid Mirjalili, and Sebastian Raschka (2020): 
-[Rank Consistent Ordinal Regression for Neural Networks with Application to Age Estimation](https://www.sciencedirect.com/science/article/pii/S016786552030413X). 
-Pattern Recognition Letters. 140, 325-331
-
-We will be using a balanced version of the [TripAdvisor Hotel Review](https://www.kaggle.com/andrewmvd/trip-advisor-hotel-reviews) dataset that [we used](https://github.com/Raschka-research-group/corn-ordinal-neuralnet/blob/main/datasets/tripadvisor/tripadvisor_balanced.csv) in the CORN manuscript.
-
-## General settings and hyperparameters
-
-- Here, we specify some general hyperparameter values and general settings
-- Note that for small datatsets, it is not necessary and better not to use multiple workers as it can sometimes cause issues with too many open files in PyTorch. So, if you have problems with the data loader later, try setting `NUM_WORKERS = 0` instead.
-
-
-```python
-BATCH_SIZE = 16
-NUM_EPOCHS = 40
-LEARNING_RATE = 0.0005
-NUM_WORKERS = 4
-RANDOM_SEED = 123
-
-# Architecture:
-EMBEDDING_DIM = 128
-HIDDEN_DIM = 256
-
-# Dataset specific:
-
-NUM_CLASSES = 5
-VOCABULARY_SIZE = 20000
-DATA_BASEPATH = &quot;./data&quot;
+<span class="n">NUM_CLASSES</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">VOCABULARY_SIZE</span> <span class="o">=</span> <span class="mi">20000</span>
+<span class="n">DATA_BASEPATH</span> <span class="o">=</span> <span class="s2">&quot;./data&quot;</span>
 </code></pre></div>
 <h2 id="converting-a-regular-classifier-into-a-coral-ordinal-regression-model">Converting a regular classifier into a CORAL ordinal regression model</h2>
 <p>Changing a classifier to a CORAL model for ordinal regression is actually really simple and only requires a few changes:</p>
@@ -1296,6 +1303,177 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
 
 Validation sanity check: 0it [00:00, ?it/s]
 
+
+/home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/utilities/data.py:141: UserWarning: Your `IterableDataset` has `__len__` defined. In combination with multi-process data loading (when num_workers &gt; 1), `__len__` could be inaccurate if each worker is not configured independently to avoid having duplicate data.
+  rank_zero_warn(
+/home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/utilities/data.py:92: UserWarning: Your `IterableDataset` has `__len__` defined. In combination with multi-process data loading (when num_workers &gt; 1), `__len__` could be inaccurate if each worker is not configured independently to avoid having duplicate data.
+  rank_zero_warn(
+
+
+
+Training: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
 Training took 3.39 min in total.
 </code></pre></div>
 <h2 id="evaluating-the-model">Evaluating the model</h2>
@@ -1322,8 +1500,8 @@ Training took 3.39 min in total.
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>&lt;AxesSubplot:xlabel=&#39;Epoch&#39;, ylabel=&#39;MAE&#39;&gt;
 </code></pre></div>
-<p><img alt="png" src="../ordinal-coral_tripadvisor_files/ordinal-coral_tripadvisor_40_1.png" /></p>
-<p><img alt="png" src="../ordinal-coral_tripadvisor_files/ordinal-coral_tripadvisor_40_2.png" /></p>
+<p><img alt="png" src="ordinal-coral_tripadvisor_files/ordinal-coral_tripadvisor_39_1.png" /></p>
+<p><img alt="png" src="ordinal-coral_tripadvisor_files/ordinal-coral_tripadvisor_39_2.png" /></p>
 <ul>
 <li>As we can see from the loss plot above, the model starts overfitting pretty quickly. Based on the MAE plot, we can see that the best model, based on the validation set MAE, may be around epoch 5.</li>
 <li>The <code>trainer</code> saved this model automatically for us, we which we can load from the checkpoint via the <code>ckpt_path='best'</code> argument; below we use the <code>trainer</code> instance to evaluate the best model on the test set:</li>

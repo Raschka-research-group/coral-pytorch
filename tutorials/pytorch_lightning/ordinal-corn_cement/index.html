@@ -611,7 +611,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.dataset/" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.dataset.md" class="md-nav__link">
         coral_pytorch.dataset
       </a>
     </li>
@@ -625,7 +625,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.layers/" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.layers.md" class="md-nav__link">
         coral_pytorch.layers
       </a>
     </li>
@@ -639,7 +639,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.losses/" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.losses.md" class="md-nav__link">
         coral_pytorch.losses
       </a>
     </li>
@@ -850,11 +850,11 @@
 <li>Note that for small datatsets, it is not necessary and better not to use multiple workers as it can sometimes cause issues with too many open files in PyTorch</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">128</span>
-<span class="n">NUM_EPOCHS</span> <span class="o">=</span> <span class="mi">200</span>
-<span class="n">LEARNING_RATE</span> <span class="o">=</span> <span class="mf">0.005</span>
+<span class="n">NUM_EPOCHS</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">LEARNING_RATE</span> <span class="o">=</span> <span class="mf">0.1</span>
 <span class="n">NUM_WORKERS</span> <span class="o">=</span> <span class="mi">0</span>
 
-<span class="n">DATA_BASEPATH</span> <span class="o">=</span> <span class="s2">&quot;./data&quot;</span>
+<span class="n">DATA_BASEPATH</span> <span class="o">=</span> <span class="s2">&quot;./&quot;</span>
 </code></pre></div>
 <h2 id="converting-a-regular-classifier-into-a-corn-ordinal-regression-model">Converting a regular classifier into a CORN ordinal regression model</h2>
 <p>Changing a classifier to a CORN model for ordinal regression is actually really simple and only requires a few changes:</p>
@@ -1303,7 +1303,9 @@ Label distribution: [196 310 244 152  96]
 <span class="n">runtime</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span><span class="o">/</span><span class="mi">60</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training took </span><span class="si">{</span><span class="n">runtime</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> min in total.&quot;</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>GPU available: True, used: True
+<div class="highlight"><pre><span></span><code>/home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/callback_connector.py:90: LightningDeprecationWarning: Setting `Trainer(progress_bar_refresh_rate=50)` is deprecated in v1.5 and will be removed in v1.7. Please pass `pytorch_lightning.callbacks.progress.TQDMProgressBar` with `refresh_rate` directly to the Trainer&#39;s `callbacks` argument instead. Or, to disable the progress bar pass `enable_progress_bar = False` to the Trainer.
+  rank_zero_deprecation(
+GPU available: True, used: True
 TPU available: False, using: 0 TPU cores
 IPU available: False, using: 0 IPUs
 LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
@@ -1322,7 +1324,102 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
 
 
 
-Training took 0.47 min in total.
+Validation sanity check: 0it [00:00, ?it/s]
+
+
+/home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:110: UserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 4 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+/home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:110: UserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 4 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+/home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:394: UserWarning: The number of training samples (5) is smaller than the logging interval Trainer(log_every_n_steps=10). Set a lower value for log_every_n_steps if you want to see logs for the training epoch.
+  rank_zero_warn(
+
+
+
+Training: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+
+Validating: 0it [00:00, ?it/s]
+
+
+Training took 0.08 min in total.
 </code></pre></div>
 <h2 id="evaluating-the-model">Evaluating the model</h2>
 <ul>
@@ -1345,18 +1442,18 @@ Training took 0.47 min in total.
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>&lt;AxesSubplot:xlabel=&#39;Epoch&#39;, ylabel=&#39;MAE&#39;&gt;
 </code></pre></div>
-<p><img alt="png" src="../ordinal-corn_cement_files/ordinal-corn_cement_39_1.png" /></p>
-<p><img alt="png" src="../ordinal-corn_cement_files/ordinal-corn_cement_39_2.png" /></p>
+<p><img alt="png" src="ordinal-corn_cement_files/ordinal-corn_cement_38_1.png" /></p>
+<p><img alt="png" src="ordinal-corn_cement_files/ordinal-corn_cement_38_2.png" /></p>
 <ul>
 <li>As we can see from the loss plot above, the model starts overfitting pretty quickly; however the validation set MAE keeps improving. Based on the MAE plot, we can see that the best model, based on the validation set MAE, may be around epoch 175.</li>
 <li>The <code>trainer</code> saved this model automatically for us, we which we can load from the checkpoint via the <code>ckpt_path='best'</code> argument; below we use the <code>trainer</code> instance to evaluate the best model on the test set:</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="n">trainer</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">lightning_model</span><span class="p">,</span> <span class="n">datamodule</span><span class="o">=</span><span class="n">data_module</span><span class="p">,</span> <span class="n">ckpt_path</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>Restoring states from the checkpoint path at logs/mlp-corn-cement/version_0/checkpoints/epoch=194-step=974.ckpt
+<div class="highlight"><pre><span></span><code>Restoring states from the checkpoint path at logs/mlp-corn-cement/version_6/checkpoints/epoch=17-step=89.ckpt
 LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-Loaded model weights from checkpoint at logs/mlp-corn-cement/version_0/checkpoints/epoch=194-step=974.ckpt
-/home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:132: UserWarning: The dataloader, test_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 8 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+Loaded model weights from checkpoint at logs/mlp-corn-cement/version_6/checkpoints/epoch=17-step=89.ckpt
+/home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:110: UserWarning: The dataloader, test_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 4 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
   rank_zero_warn(
 
 
@@ -1366,14 +1463,14 @@ Testing: 0it [00:00, ?it/s]
 
 --------------------------------------------------------------------------------
 DATALOADER:0 TEST RESULTS
-{&#39;test_mae&#39;: 0.25}
+{&#39;test_mae&#39;: 0.30000001192092896}
 --------------------------------------------------------------------------------
 
 
 
 
 
-[{&#39;test_mae&#39;: 0.25}]
+[{&#39;test_mae&#39;: 0.30000001192092896}]
 </code></pre></div>
 <ul>
 <li>The MAE of our model is quite good, especially compared to the 1.03 MAE baseline earlier.</li>
@@ -1386,7 +1483,7 @@ DATALOADER:0 TEST RESULTS
 <div class="highlight"><pre><span></span><code><span class="n">path</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">checkpoint_callback</span><span class="o">.</span><span class="n">best_model_path</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>logs/mlp-corn-cement/version_0/checkpoints/epoch=194-step=974.ckpt
+<div class="highlight"><pre><span></span><code>logs/mlp-corn-cement/version_6/checkpoints/epoch=17-step=89.ckpt
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="n">lightning_model</span> <span class="o">=</span> <span class="n">LightningMLP</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span>
     <span class="n">path</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">pytorch_model</span><span class="p">)</span>
@@ -1408,7 +1505,7 @@ DATALOADER:0 TEST RESULTS
 <span class="n">all_predicted_labels</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">all_predicted_labels</span><span class="p">)</span>
 <span class="n">all_predicted_labels</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>tensor([0, 3, 1, 2, 1])
+<div class="highlight"><pre><span></span><code>tensor([0, 3, 1, 2, 0])
 </code></pre></div>
 
               

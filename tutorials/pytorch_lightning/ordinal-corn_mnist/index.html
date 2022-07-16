@@ -604,7 +604,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.dataset/" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.dataset.md" class="md-nav__link">
         coral_pytorch.dataset
       </a>
     </li>
@@ -618,7 +618,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.layers/" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.layers.md" class="md-nav__link">
         coral_pytorch.layers
       </a>
     </li>
@@ -632,7 +632,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api_subpackages/coral_pytorch.losses/" class="md-nav__link">
+      <a href="../../../api_subpackages/coral_pytorch.losses.md" class="md-nav__link">
         coral_pytorch.losses
       </a>
     </li>
@@ -841,7 +841,7 @@
 <span class="n">LEARNING_RATE</span> <span class="o">=</span> <span class="mf">0.005</span>
 <span class="n">NUM_WORKERS</span> <span class="o">=</span> <span class="mi">4</span>
 
-<span class="n">DATA_BASEPATH</span> <span class="o">=</span> <span class="s2">&quot;./data&quot;</span>
+<span class="n">DATA_BASEPATH</span> <span class="o">=</span> <span class="s2">&quot;./&quot;</span>
 </code></pre></div>
 <h2 id="converting-a-regular-classifier-into-a-corn-ordinal-regression-model">Converting a regular classifier into a CORN ordinal regression model</h2>
 <p>Changing a classifier to a CORN model for ordinal regression is actually really simple and only requires a few changes:</p>
@@ -1044,6 +1044,46 @@ to the <code>corn_loss</code> as it takes care of the rest internally.</p>
     <span class="n">all_test_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
 <span class="n">all_test_labels</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">all_test_labels</span><span class="p">)</span>
 </code></pre></div>
+<div class="highlight"><pre><span></span><code>Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz
+Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz to ./MNIST/raw/train-images-idx3-ubyte.gz
+
+
+
+  0%|          | 0/9912422 [00:00&lt;?, ?it/s]
+
+
+Extracting ./MNIST/raw/train-images-idx3-ubyte.gz to ./MNIST/raw
+
+Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz
+Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz to ./MNIST/raw/train-labels-idx1-ubyte.gz
+
+
+
+  0%|          | 0/28881 [00:00&lt;?, ?it/s]
+
+
+Extracting ./MNIST/raw/train-labels-idx1-ubyte.gz to ./MNIST/raw
+
+Downloading http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz
+Downloading http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz to ./MNIST/raw/t10k-images-idx3-ubyte.gz
+
+
+
+  0%|          | 0/1648877 [00:00&lt;?, ?it/s]
+
+
+Extracting ./MNIST/raw/t10k-images-idx3-ubyte.gz to ./MNIST/raw
+
+Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
+Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz to ./MNIST/raw/t10k-labels-idx1-ubyte.gz
+
+
+
+  0%|          | 0/4542 [00:00&lt;?, ?it/s]
+
+
+Extracting ./MNIST/raw/t10k-labels-idx1-ubyte.gz to ./MNIST/raw
+</code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Training labels:&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">all_train_labels</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Training label distribution:&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">all_train_labels</span><span class="p">))</span>
 
@@ -1051,7 +1091,7 @@ to the <code>corn_loss</code> as it takes care of the rest internally.</p>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Test label distribution:&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">all_test_labels</span><span class="p">))</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>Training labels: tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-Training label distribution: tensor([5914, 6731, 5946, 6121, 5834, 5413, 5910, 6254, 5840, 5941])
+Training label distribution: tensor([5911, 6730, 5949, 6125, 5832, 5410, 5911, 6254, 5841, 5941])
 
 Test labels: tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 Test label distribution: tensor([ 980, 1135, 1032, 1010,  982,  892,  958, 1028,  974, 1009])
@@ -1191,9 +1231,13 @@ Test label distribution: tensor([ 980, 1135, 1032, 1010,  982,  892,  958, 1028,
 <span class="n">runtime</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span><span class="o">/</span><span class="mi">60</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training took </span><span class="si">{</span><span class="n">runtime</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> min in total.&quot;</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>GPU available: True, used: True
+<div class="highlight"><pre><span></span><code>/home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/callback_connector.py:96: LightningDeprecationWarning: Setting `Trainer(progress_bar_refresh_rate=50)` is deprecated in v1.5 and will be removed in v1.7. Please pass `pytorch_lightning.callbacks.progress.TQDMProgressBar` with `refresh_rate` directly to the Trainer&#39;s `callbacks` argument instead. Or, to disable the progress bar pass `enable_progress_bar = False` to the Trainer.
+  rank_zero_deprecation(
+GPU available: True, used: True
 TPU available: False, using: 0 TPU cores
 IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+Missing logger folder: logs/cnn-corn-mnist
 LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
 
   | Name      | Type              | Params
@@ -1209,7 +1253,95 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
 0.011     Total estimated model params size (MB)
 
 
-Training took 1.67 min in total.
+
+Sanity Checking: 0it [00:00, ?it/s]
+
+
+
+Training: 0it [00:00, ?it/s]
+
+
+
+Validation: 0it [00:00, ?it/s]
+
+
+
+Validation: 0it [00:00, ?it/s]
+
+
+
+Validation: 0it [00:00, ?it/s]
+
+
+
+Validation: 0it [00:00, ?it/s]
+
+
+
+Validation: 0it [00:00, ?it/s]
+
+
+
+Validation: 0it [00:00, ?it/s]
+
+
+
+Validation: 0it [00:00, ?it/s]
+
+
+
+Validation: 0it [00:00, ?it/s]
+
+
+
+Validation: 0it [00:00, ?it/s]
+
+
+
+Validation: 0it [00:00, ?it/s]
+
+
+
+Validation: 0it [00:00, ?it/s]
+
+
+
+Validation: 0it [00:00, ?it/s]
+
+
+
+Validation: 0it [00:00, ?it/s]
+
+
+
+Validation: 0it [00:00, ?it/s]
+
+
+
+Validation: 0it [00:00, ?it/s]
+
+
+
+Validation: 0it [00:00, ?it/s]
+
+
+
+Validation: 0it [00:00, ?it/s]
+
+
+
+Validation: 0it [00:00, ?it/s]
+
+
+
+Validation: 0it [00:00, ?it/s]
+
+
+
+Validation: 0it [00:00, ?it/s]
+
+
+Training took 1.38 min in total.
 </code></pre></div>
 <h2 id="evaluating-the-model">Evaluating the model</h2>
 <ul>
@@ -1235,13 +1367,30 @@ Training took 1.67 min in total.
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>&lt;AxesSubplot:xlabel=&#39;Epoch&#39;, ylabel=&#39;MAE&#39;&gt;
 </code></pre></div>
-<p><img alt="png" src="../ordinal-corn_mnist_files/ordinal-corn_mnist_36_1.png" /></p>
-<p><img alt="png" src="../ordinal-corn_mnist_files/ordinal-corn_mnist_36_2.png" /></p>
+<p><img alt="png" src="ordinal-corn_mnist_files/ordinal-corn_mnist_35_1.png" /></p>
+<p><img alt="png" src="ordinal-corn_mnist_files/ordinal-corn_mnist_35_2.png" /></p>
 <ul>
 <li>As we can see from the loss plot above, the model starts overfitting pretty quickly; however the validation set MAE keeps improving. Based on the MAE plot, we can see that the best model, based on the validation set MAE, may be around epoch 16.</li>
 <li>The <code>trainer</code> saved this model automatically for us, we which we can load from the checkpoint via the <code>ckpt_path='best'</code> argument; below we use the <code>trainer</code> instance to evaluate the best model on the test set:</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="n">trainer</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">lightning_model</span><span class="p">,</span> <span class="n">datamodule</span><span class="o">=</span><span class="n">data_module</span><span class="p">,</span> <span class="n">ckpt_path</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Restoring states from the checkpoint path at logs/cnn-corn-mnist/version_0/checkpoints/epoch=17-step=3852.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from checkpoint at logs/cnn-corn-mnist/version_0/checkpoints/epoch=17-step=3852.ckpt
+
+
+
+Testing: 0it [00:00, ?it/s]
+</code></pre></div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold">        Test metric        </span>┃<span style="font-weight: bold">       DataLoader 0        </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│<span style="color: #008080; text-decoration-color: #008080">         test_mae          </span>│<span style="color: #800080; text-decoration-color: #800080">    0.11959999799728394    </span>│
+└───────────────────────────┴───────────────────────────┘
+</pre>
+
+<div class="highlight"><pre><span></span><code>[{&#39;test_mae&#39;: 0.11959999799728394}]
 </code></pre></div>
 <ul>
 <li>The MAE of our model is quite good, especially compared to the 2.52 MAE baseline earlier.</li>
@@ -1253,6 +1402,8 @@ Training took 1.67 min in total.
 </ul>
 <div class="highlight"><pre><span></span><code><span class="n">path</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">checkpoint_callback</span><span class="o">.</span><span class="n">best_model_path</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>logs/cnn-corn-mnist/version_0/checkpoints/epoch=17-step=3852.ckpt
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="n">lightning_model</span> <span class="o">=</span> <span class="n">LightningCNN</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">pytorch_model</span><span class="p">)</span>
 <span class="n">lightning_model</span><span class="o">.</span><span class="n">eval</span><span class="p">();</span>
@@ -1272,6 +1423,8 @@ Training took 1.67 min in total.
 
 <span class="n">all_predicted_labels</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">all_predicted_labels</span><span class="p">)</span>
 <span class="n">all_predicted_labels</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>tensor([7, 2, 1, 0, 4])
 </code></pre></div>
 
               
