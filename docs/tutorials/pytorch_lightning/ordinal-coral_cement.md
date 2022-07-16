@@ -550,6 +550,820 @@ print(f"Training took {runtime:.2f} min in total.")
     0.003     Total estimated model params size (MB)
 
 
+
+    Validation sanity check: 0it [00:00, ?it/s]
+
+
+    /home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:132: UserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 8 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+      rank_zero_warn(
+    /home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:132: UserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 8 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+      rank_zero_warn(
+
+
+
+    Training: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
     Training took 0.94 min in total.
 
 
@@ -584,13 +1398,13 @@ df_metrics[["train_mae", "valid_mae"]].plot(
 
 
     
-![png](ordinal-coral_cement_files/ordinal-coral_cement_39_1.png)
+![png](ordinal-coral_cement_files/ordinal-coral_cement_38_1.png)
     
 
 
 
     
-![png](ordinal-coral_cement_files/ordinal-coral_cement_39_2.png)
+![png](ordinal-coral_cement_files/ordinal-coral_cement_38_2.png)
     
 
 

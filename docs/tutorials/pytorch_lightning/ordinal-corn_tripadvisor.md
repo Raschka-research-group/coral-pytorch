@@ -1,8 +1,3 @@
-#!python -m spacy download en_core_web_sm
-```
-
-<a href="https://pytorch.org"><img src="https://raw.githubusercontent.com/pytorch/pytorch/master/docs/source/_static/img/pytorch-logo-dark.svg" width="90"/></a> &nbsp; &nbsp;&nbsp;&nbsp;<a href="https://www.pytorchlightning.ai"><img src="https://raw.githubusercontent.com/PyTorchLightning/pytorch-lightning/master/docs/source/_static/images/logo.svg" width="150"/></a>
-
 # A Recurrent Neural Net for Ordinal Regression using CORN -- TripAdvisor Dataset
 
 In this tutorial, we implement a recurrent neural network for ordinal regression based on the CORN method. To learn more about CORN, please have a look at our preprint:
@@ -34,6 +29,12 @@ HIDDEN_DIM = 256
 NUM_CLASSES = 5
 VOCABULARY_SIZE = 20000
 DATA_BASEPATH = "./data"
+```
+
+This tutorial also requires the spacy English vocabulary, which can be downloaded as shown below:
+
+```python
+python -m spacy download en_core_web_sm
 ```
 
 ## Converting a regular classifier into a CORN ordinal regression model
@@ -249,6 +250,75 @@ class LightningRNN(pl.LightningModule):
         return optimizer
 ```
 
+
+    ---------------------------------------------------------------------------
+
+    ModuleNotFoundError                       Traceback (most recent call last)
+
+    Input In [5], in <cell line: 4>()
+          1 from coral_pytorch.losses import corn_loss
+          2 from coral_pytorch.dataset import corn_label_from_logits
+    ----> 4 import pytorch_lightning as pl
+          5 import torchmetrics
+          8 # LightningModule that receives a PyTorch model as input
+
+
+    File ~/conda/lib/python3.8/site-packages/pytorch_lightning/__init__.py:20, in <module>
+         17 _PACKAGE_ROOT = os.path.dirname(__file__)
+         18 _PROJECT_ROOT = os.path.dirname(_PACKAGE_ROOT)
+    ---> 20 from pytorch_lightning.callbacks import Callback  # noqa: E402
+         21 from pytorch_lightning.core import LightningDataModule, LightningModule  # noqa: E402
+         22 from pytorch_lightning.trainer import Trainer  # noqa: E402
+
+
+    File ~/conda/lib/python3.8/site-packages/pytorch_lightning/callbacks/__init__.py:14, in <module>
+          1 # Copyright The PyTorch Lightning team.
+          2 #
+          3 # Licensed under the Apache License, Version 2.0 (the "License");
+       (...)
+         12 # See the License for the specific language governing permissions and
+         13 # limitations under the License.
+    ---> 14 from pytorch_lightning.callbacks.base import Callback
+         15 from pytorch_lightning.callbacks.device_stats_monitor import DeviceStatsMonitor
+         16 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
+
+
+    File ~/conda/lib/python3.8/site-packages/pytorch_lightning/callbacks/base.py:26, in <module>
+         23 from torch.optim import Optimizer
+         25 import pytorch_lightning as pl
+    ---> 26 from pytorch_lightning.utilities.types import STEP_OUTPUT
+         29 class Callback(abc.ABC):
+         30     r"""
+         31     Abstract base class used to build new callbacks.
+         32 
+         33     Subclass this class and override any of the relevant hooks
+         34     """
+
+
+    File ~/conda/lib/python3.8/site-packages/pytorch_lightning/utilities/__init__.py:18, in <module>
+         14 """General utilities."""
+         16 import numpy
+    ---> 18 from pytorch_lightning.utilities.apply_func import move_data_to_device  # noqa: F401
+         19 from pytorch_lightning.utilities.distributed import AllGatherGrad, rank_zero_info, rank_zero_only  # noqa: F401
+         20 from pytorch_lightning.utilities.enums import (  # noqa: F401
+         21     AMPType,
+         22     DeviceType,
+       (...)
+         26     ModelSummaryMode,
+         27 )
+
+
+    File ~/conda/lib/python3.8/site-packages/pytorch_lightning/utilities/apply_func.py:30, in <module>
+         28 if _TORCHTEXT_AVAILABLE:
+         29     if _compare_version("torchtext", operator.ge, "0.9.0"):
+    ---> 30         from torchtext.legacy.data import Batch
+         31     else:
+         32         from torchtext.data import Batch
+
+
+    ModuleNotFoundError: No module named 'torchtext.legacy'
+
+
 ## Setting up the dataset
 
 - In this section, we are going to set up our dataset.
@@ -268,63 +338,6 @@ data_df = pd.read_csv(
 
 data_df.tail()
 ```
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>TEXT_COLUMN_NAME</th>
-      <th>LABEL_COLUMN_NAME</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>6995</th>
-      <td>beautiful hotel, stay punta cana majestic colo...</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>6996</th>
-      <td>stay, n't stay, stayed week april, weather ama...</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>6997</th>
-      <td>stay hotel fantastic, great location, looked n...</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>6998</th>
-      <td>birthday meal havnt stayed hotel staying barce...</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>6999</th>
-      <td>great hotel great location stayed royal magda ...</td>
-      <td>5</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
 
 
 ```python
@@ -378,11 +391,6 @@ train_loader, valid_loader, test_loader= \
 )
 ```
 
-    32:40: E225 missing whitespace around operator
-    32:80: E501 line too long (84 > 79 characters)
-    37:14: E131 continuation line unaligned for hanging indent
-
-
 
 ```python
 # Checking the dataset
@@ -404,13 +412,6 @@ print('\nTest labels:', torch.unique(all_test_labels))
 print('Test label distribution:', torch.bincount(all_test_labels))
 ```
 
-    Training labels: tensor([0, 1, 2, 3, 4], device='cuda:0')
-    Training label distribution: tensor([964, 963, 954, 953, 926], device='cuda:0')
-    
-    Test labels: tensor([0, 1, 2, 3, 4], device='cuda:0')
-    Test label distribution: tensor([275, 267, 300, 274, 284], device='cuda:0')
-
-
 - Above, we can see that the dataset consists of 8 features, and there are 998 examples in total.
 - The labels are in range from 1 (weakest) to 5 (strongest), and we normalize them to start at zero (hence, the normalized labels are in the range 0 to 4). 
 - Notice also that the dataset is quite balanced.
@@ -429,9 +430,6 @@ avg_prediction = torch.median(all_test_labels)  # median minimizes MAE
 baseline_mae = torch.mean(torch.abs(all_test_labels - avg_prediction))
 print(f'Baseline MAE: {baseline_mae:.2f}')
 ```
-
-    Baseline MAE: 1.18
-
 
 - In other words, a model that would always predict the dataset median would achieve a MAE of 1.18. A model that has an MAE of > 1.18 is certainly a bad model.
 
@@ -483,11 +481,6 @@ print('Batch size (from text):', features[0].shape[1])
 print('Batch size (from labels):', labels.shape[0])
 ```
 
-    Text length: 469
-    Batch size (from text): 16
-    Batch size (from labels): 16
-
-
 - Now it's time to train our model:
 
 
@@ -514,26 +507,6 @@ runtime = (time.time() - start_time)/60
 print(f"Training took {runtime:.2f} min in total.")
 ```
 
-    GPU available: True, used: True
-    TPU available: False, using: 0 TPU cores
-    IPU available: False, using: 0 IPUs
-    LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-    
-      | Name      | Type              | Params
-    ------------------------------------------------
-    0 | model     | PyTorchRNN        | 3.0 M 
-    1 | train_mae | MeanAbsoluteError | 0     
-    2 | valid_mae | MeanAbsoluteError | 0     
-    3 | test_mae  | MeanAbsoluteError | 0     
-    ------------------------------------------------
-    3.0 M     Trainable params
-    0         Non-trainable params
-    3.0 M     Total params
-    11.826    Total estimated model params size (MB)
-
-    Training took 3.90 min in total.
-
-
 ## Evaluating the model
 
 - After training, let's plot our training MAE and validation MAE using pandas, which, in turn, uses matplotlib for plotting (you may want to consider a [more advanced logger](https://pytorch-lightning.readthedocs.io/en/latest/extensions/logging.html) that does that for you):
@@ -559,25 +532,6 @@ df_metrics[["train_mae", "valid_mae"]].plot(
     grid=True, legend=True, xlabel='Epoch', ylabel='MAE')
 ```
 
-
-
-
-    <AxesSubplot:xlabel='Epoch', ylabel='MAE'>
-
-
-
-
-    
-![png](ordinal-corn_tripadvisor_files/ordinal-corn_tripadvisor_39_1.png)
-    
-
-
-
-    
-![png](ordinal-corn_tripadvisor_files/ordinal-corn_tripadvisor_39_2.png)
-    
-
-
 - As we can see from the loss plot above, the model starts overfitting pretty quickly. Based on the MAE plot, we can see that the best model, based on the validation set MAE, may be around epoch 8.
 - The `trainer` saved this model automatically for us, we which we can load from the checkpoint via the `ckpt_path='best'` argument; below we use the `trainer` instance to evaluate the best model on the test set:
 
@@ -585,30 +539,6 @@ df_metrics[["train_mae", "valid_mae"]].plot(
 ```python
 trainer.test(model=lightning_model, dataloaders=test_loader, ckpt_path='best')
 ```
-
-    Restoring states from the checkpoint path at logs/rnn-corn-mnist/version_22/checkpoints/epoch=1-step=595.ckpt
-    LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-    Loaded model weights from checkpoint at logs/rnn-corn-mnist/version_22/checkpoints/epoch=1-step=595.ckpt
-    /home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/utilities/data.py:141: UserWarning: Your `IterableDataset` has `__len__` defined. In combination with multi-process data loading (when num_workers > 1), `__len__` could be inaccurate if each worker is not configured independently to avoid having duplicate data.
-      rank_zero_warn(
-
-
-
-    Testing: 0it [00:00, ?it/s]
-
-
-    --------------------------------------------------------------------------------
-    DATALOADER:0 TEST RESULTS
-    {'test_mae': 0.9407142996788025}
-    --------------------------------------------------------------------------------
-
-
-
-
-
-    [{'test_mae': 0.9407142996788025}]
-
-
 
 ## Predicting labels of new data
 
@@ -620,9 +550,6 @@ trainer.test(model=lightning_model, dataloaders=test_loader, ckpt_path='best')
 path = trainer.checkpoint_callback.best_model_path
 print(path)
 ```
-
-    logs/rnn-corn-mnist/version_22/checkpoints/epoch=1-step=595.ckpt
-
 
 
 ```python
@@ -650,10 +577,3 @@ for batch in test_loader:
 all_predicted_labels = torch.cat(all_predicted_labels)
 all_predicted_labels[:5]
 ```
-
-
-
-
-    tensor([1, 1, 2, 1, 1], device='cuda:0')
-
-

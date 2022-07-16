@@ -5,6 +5,27 @@ The changelog for the current development version is available at
 
 
 
+
+### 1.3.0 (07-16-2022)
+
+##### Downloads
+
+- [Source code (zip)](https://github.com/raschka-research-group/coral_pytorch/archive/v1.3.0.zip)
+- [Source code (tar.gz)](https://github.com/raschka-research-group/coral_pytorch/archive/v1.3.0.tar.gz)
+
+##### New Features
+
+- -
+
+##### Changes
+
+- Fixes a bug where the normalization of the `corn_loss` different from the one proposed in the original paper. ([#22](https://github.com/Raschka-research-group/coral-pytorch/pull/22/files)) 
+
+##### Bug Fixes
+
+- -
+
+
 ### 1.2.0 (11-17-2021)
 
 ##### Downloads

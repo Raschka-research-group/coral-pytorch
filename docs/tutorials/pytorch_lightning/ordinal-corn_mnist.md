@@ -19,7 +19,7 @@ NUM_EPOCHS = 20
 LEARNING_RATE = 0.005
 NUM_WORKERS = 4
 
-DATA_BASEPATH = "./data"
+DATA_BASEPATH = "./"
 ```
 
 ## Converting a regular classifier into a CORN ordinal regression model
@@ -255,6 +255,48 @@ for images, labels in test_loader:
 all_test_labels = torch.cat(all_test_labels)
 ```
 
+    Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz
+    Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz to ./MNIST/raw/train-images-idx3-ubyte.gz
+
+
+
+      0%|          | 0/9912422 [00:00<?, ?it/s]
+
+
+    Extracting ./MNIST/raw/train-images-idx3-ubyte.gz to ./MNIST/raw
+    
+    Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz
+    Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz to ./MNIST/raw/train-labels-idx1-ubyte.gz
+
+
+
+      0%|          | 0/28881 [00:00<?, ?it/s]
+
+
+    Extracting ./MNIST/raw/train-labels-idx1-ubyte.gz to ./MNIST/raw
+    
+    Downloading http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz
+    Downloading http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz to ./MNIST/raw/t10k-images-idx3-ubyte.gz
+
+
+
+      0%|          | 0/1648877 [00:00<?, ?it/s]
+
+
+    Extracting ./MNIST/raw/t10k-images-idx3-ubyte.gz to ./MNIST/raw
+    
+    Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
+    Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz to ./MNIST/raw/t10k-labels-idx1-ubyte.gz
+
+
+
+      0%|          | 0/4542 [00:00<?, ?it/s]
+
+
+    Extracting ./MNIST/raw/t10k-labels-idx1-ubyte.gz to ./MNIST/raw
+    
+
+
 
 ```python
 print('Training labels:', torch.unique(all_train_labels))
@@ -265,7 +307,7 @@ print('Test label distribution:', torch.bincount(all_test_labels))
 ```
 
     Training labels: tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-    Training label distribution: tensor([5914, 6731, 5946, 6121, 5834, 5413, 5910, 6254, 5840, 5941])
+    Training label distribution: tensor([5911, 6730, 5949, 6125, 5832, 5410, 5911, 6254, 5841, 5941])
     
     Test labels: tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
     Test label distribution: tensor([ 980, 1135, 1032, 1010,  982,  892,  958, 1028,  974, 1009])
@@ -419,9 +461,13 @@ runtime = (time.time() - start_time)/60
 print(f"Training took {runtime:.2f} min in total.")
 ```
 
+    /home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/callback_connector.py:96: LightningDeprecationWarning: Setting `Trainer(progress_bar_refresh_rate=50)` is deprecated in v1.5 and will be removed in v1.7. Please pass `pytorch_lightning.callbacks.progress.TQDMProgressBar` with `refresh_rate` directly to the Trainer's `callbacks` argument instead. Or, to disable the progress bar pass `enable_progress_bar = False` to the Trainer.
+      rank_zero_deprecation(
     GPU available: True, used: True
     TPU available: False, using: 0 TPU cores
     IPU available: False, using: 0 IPUs
+    HPU available: False, using: 0 HPUs
+    Missing logger folder: logs/cnn-corn-mnist
     LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
     
       | Name      | Type              | Params
@@ -437,7 +483,95 @@ print(f"Training took {runtime:.2f} min in total.")
     0.011     Total estimated model params size (MB)
 
 
-    Training took 1.67 min in total.
+
+    Sanity Checking: 0it [00:00, ?it/s]
+
+
+
+    Training: 0it [00:00, ?it/s]
+
+
+
+    Validation: 0it [00:00, ?it/s]
+
+
+
+    Validation: 0it [00:00, ?it/s]
+
+
+
+    Validation: 0it [00:00, ?it/s]
+
+
+
+    Validation: 0it [00:00, ?it/s]
+
+
+
+    Validation: 0it [00:00, ?it/s]
+
+
+
+    Validation: 0it [00:00, ?it/s]
+
+
+
+    Validation: 0it [00:00, ?it/s]
+
+
+
+    Validation: 0it [00:00, ?it/s]
+
+
+
+    Validation: 0it [00:00, ?it/s]
+
+
+
+    Validation: 0it [00:00, ?it/s]
+
+
+
+    Validation: 0it [00:00, ?it/s]
+
+
+
+    Validation: 0it [00:00, ?it/s]
+
+
+
+    Validation: 0it [00:00, ?it/s]
+
+
+
+    Validation: 0it [00:00, ?it/s]
+
+
+
+    Validation: 0it [00:00, ?it/s]
+
+
+
+    Validation: 0it [00:00, ?it/s]
+
+
+
+    Validation: 0it [00:00, ?it/s]
+
+
+
+    Validation: 0it [00:00, ?it/s]
+
+
+
+    Validation: 0it [00:00, ?it/s]
+
+
+
+    Validation: 0it [00:00, ?it/s]
+
+
+    Training took 1.38 min in total.
 
 
 ## Evaluating the model
@@ -474,13 +608,13 @@ df_metrics[["train_mae", "valid_mae"]].plot(
 
 
     
-![png](ordinal-corn_mnist_files/ordinal-corn_mnist_36_1.png)
+![png](ordinal-corn_mnist_files/ordinal-corn_mnist_35_1.png)
     
 
 
 
     
-![png](ordinal-corn_mnist_files/ordinal-corn_mnist_36_2.png)
+![png](ordinal-corn_mnist_files/ordinal-corn_mnist_35_2.png)
     
 
 
@@ -491,6 +625,32 @@ df_metrics[["train_mae", "valid_mae"]].plot(
 ```python
 trainer.test(model=lightning_model, datamodule=data_module, ckpt_path='best')
 ```
+
+    Restoring states from the checkpoint path at logs/cnn-corn-mnist/version_0/checkpoints/epoch=17-step=3852.ckpt
+    LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+    Loaded model weights from checkpoint at logs/cnn-corn-mnist/version_0/checkpoints/epoch=17-step=3852.ckpt
+
+
+
+    Testing: 0it [00:00, ?it/s]
+
+
+
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold">        Test metric        </span>┃<span style="font-weight: bold">       DataLoader 0        </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│<span style="color: #008080; text-decoration-color: #008080">         test_mae          </span>│<span style="color: #800080; text-decoration-color: #800080">    0.11959999799728394    </span>│
+└───────────────────────────┴───────────────────────────┘
+</pre>
+
+
+
+
+
+
+    [{'test_mae': 0.11959999799728394}]
+
+
 
 - The MAE of our model is quite good, especially compared to the 2.52 MAE baseline earlier.
 
@@ -504,6 +664,9 @@ trainer.test(model=lightning_model, datamodule=data_module, ckpt_path='best')
 path = trainer.checkpoint_callback.best_model_path
 print(path)
 ```
+
+    logs/cnn-corn-mnist/version_0/checkpoints/epoch=17-step=3852.ckpt
+
 
 
 ```python
@@ -528,3 +691,10 @@ for batch in test_dataloader:
 all_predicted_labels = torch.cat(all_predicted_labels)
 all_predicted_labels[:5]
 ```
+
+
+
+
+    tensor([7, 2, 1, 0, 4])
+
+

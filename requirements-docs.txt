@@ -1,0 +1,10 @@
+matplotlib>=3.3.4
+numpy>=1.23.1
+pandas>=1.2.5
+pytorch_lightning>=1.6.5
+scikit-learn>=1.1.1
+scipy>=1.8.1
+spacy>=3.4.0
+torch>=1.10
+torchtext>=0.10
+watermark>=2.3.1

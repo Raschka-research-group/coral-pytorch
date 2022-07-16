@@ -12,11 +12,11 @@ In this tutorial, we implement a multilayer perceptron for ordinal regression ba
 
 ```python
 BATCH_SIZE = 128
-NUM_EPOCHS = 200
-LEARNING_RATE = 0.005
+NUM_EPOCHS = 20
+LEARNING_RATE = 0.1
 NUM_WORKERS = 0
 
-DATA_BASEPATH = "./data"
+DATA_BASEPATH = "./"
 ```
 
 ## Converting a regular classifier into a CORN ordinal regression model
@@ -523,6 +523,8 @@ runtime = (time.time() - start_time)/60
 print(f"Training took {runtime:.2f} min in total.")
 ```
 
+    /home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/callback_connector.py:90: LightningDeprecationWarning: Setting `Trainer(progress_bar_refresh_rate=50)` is deprecated in v1.5 and will be removed in v1.7. Please pass `pytorch_lightning.callbacks.progress.TQDMProgressBar` with `refresh_rate` directly to the Trainer's `callbacks` argument instead. Or, to disable the progress bar pass `enable_progress_bar = False` to the Trainer.
+      rank_zero_deprecation(
     GPU available: True, used: True
     TPU available: False, using: 0 TPU cores
     IPU available: False, using: 0 IPUs
@@ -542,7 +544,102 @@ print(f"Training took {runtime:.2f} min in total.")
 
 
 
-    Training took 0.47 min in total.
+    Validation sanity check: 0it [00:00, ?it/s]
+
+
+    /home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:110: UserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 4 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+      rank_zero_warn(
+    /home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:110: UserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 4 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+      rank_zero_warn(
+    /home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:394: UserWarning: The number of training samples (5) is smaller than the logging interval Trainer(log_every_n_steps=10). Set a lower value for log_every_n_steps if you want to see logs for the training epoch.
+      rank_zero_warn(
+
+
+
+    Training: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+
+    Validating: 0it [00:00, ?it/s]
+
+
+    Training took 0.08 min in total.
 
 
 ## Evaluating the model
@@ -576,13 +673,13 @@ df_metrics[["train_mae", "valid_mae"]].plot(
 
 
     
-![png](ordinal-corn_cement_files/ordinal-corn_cement_39_1.png)
+![png](ordinal-corn_cement_files/ordinal-corn_cement_38_1.png)
     
 
 
 
     
-![png](ordinal-corn_cement_files/ordinal-corn_cement_39_2.png)
+![png](ordinal-corn_cement_files/ordinal-corn_cement_38_2.png)
     
 
 
@@ -594,10 +691,10 @@ df_metrics[["train_mae", "valid_mae"]].plot(
 trainer.test(model=lightning_model, datamodule=data_module, ckpt_path='best')
 ```
 
-    Restoring states from the checkpoint path at logs/mlp-corn-cement/version_0/checkpoints/epoch=194-step=974.ckpt
+    Restoring states from the checkpoint path at logs/mlp-corn-cement/version_6/checkpoints/epoch=17-step=89.ckpt
     LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-    Loaded model weights from checkpoint at logs/mlp-corn-cement/version_0/checkpoints/epoch=194-step=974.ckpt
-    /home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:132: UserWarning: The dataloader, test_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 8 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+    Loaded model weights from checkpoint at logs/mlp-corn-cement/version_6/checkpoints/epoch=17-step=89.ckpt
+    /home/jovyan/conda/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:110: UserWarning: The dataloader, test_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 4 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
       rank_zero_warn(
 
 
@@ -607,14 +704,14 @@ trainer.test(model=lightning_model, datamodule=data_module, ckpt_path='best')
 
     --------------------------------------------------------------------------------
     DATALOADER:0 TEST RESULTS
-    {'test_mae': 0.25}
+    {'test_mae': 0.30000001192092896}
     --------------------------------------------------------------------------------
 
 
 
 
 
-    [{'test_mae': 0.25}]
+    [{'test_mae': 0.30000001192092896}]
 
 
 
@@ -631,7 +728,7 @@ path = trainer.checkpoint_callback.best_model_path
 print(path)
 ```
 
-    logs/mlp-corn-cement/version_0/checkpoints/epoch=194-step=974.ckpt
+    logs/mlp-corn-cement/version_6/checkpoints/epoch=17-step=89.ckpt
 
 
 
@@ -662,6 +759,6 @@ all_predicted_labels[:5]
 
 
 
-    tensor([0, 3, 1, 2, 1])
+    tensor([0, 3, 1, 2, 0])
 
 
