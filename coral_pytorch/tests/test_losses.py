@@ -5,6 +5,7 @@
 # License: MIT
 
 from coral_pytorch.losses import coral_loss, corn_loss
+from coral_pytorch.losses import CoralLoss, CornLoss
 import torch
 import pytest
 
@@ -31,6 +32,11 @@ def test_coral_basic():
 
     got_val = coral_loss(logits, levels)
     expect_val = torch.tensor(0.6920)
+    assert torch.allclose(got_val, expect_val, rtol=1e-03, atol=1e-05)
+
+    # Object-oriented version
+    loss = CoralLoss()
+    got_val = loss(logits, levels)
     assert torch.allclose(got_val, expect_val, rtol=1e-03, atol=1e-05)
 
 
@@ -83,5 +89,10 @@ def test_corn_basic():
     y_train = torch.tensor([0, 1, 2])
 
     got_val = corn_loss(logits, y_train, num_classes=5)
-    expect_val = torch.tensor([0.9657])
+    expect_val = torch.tensor([0.8047])
+    assert torch.allclose(got_val, expect_val, rtol=1e-03, atol=1e-05)
+
+    # Object-oriented version
+    loss = CornLoss(num_classes=5)
+    got_val = loss(logits, y_train)
     assert torch.allclose(got_val, expect_val, rtol=1e-03, atol=1e-05)

@@ -5,6 +5,25 @@ The changelog for the current development version is available at
 
 
 
+### 1.4.0 (07-17-2022)
+
+##### Downloads
+
+- [Source code (zip)](https://github.com/raschka-research-group/coral_pytorch/archive/v1.4.0.zip)
+- [Source code (tar.gz)](https://github.com/raschka-research-group/coral_pytorch/archive/v1.4.0.tar.gz)
+
+##### New Features
+
+- Adds object-oriented versions of the losses: `coral_pytorch.losses.CoralLoss` and `coral_pytorch.losses.CornLoss`.
+
+##### Changes
+
+- - 
+
+##### Bug Fixes
+
+- -
+
 
 ### 1.3.0 (07-16-2022)
 
@@ -19,11 +38,11 @@ The changelog for the current development version is available at
 
 ##### Changes
 
-- Fixes a bug where the normalization of the `corn_loss` different from the one proposed in the original paper. ([#22](https://github.com/Raschka-research-group/coral-pytorch/pull/22/files)) 
+- -
 
 ##### Bug Fixes
 
-- -
+- Fixes a bug where the normalization of the `corn_loss` different from the one proposed in the original paper. ([#22](https://github.com/Raschka-research-group/coral-pytorch/pull/22/files)) 
 
 
 ### 1.2.0 (11-17-2021)
