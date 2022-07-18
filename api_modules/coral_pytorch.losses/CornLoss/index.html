@@ -1,0 +1,1570 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="coral_pytorch is a package implementing the CORAL PyTorch utilities.">
+      
+      
+        <meta name="author" content="Sebastian Raschka">
+      
+      
+        <link rel="canonical" href="http://raschka-research-group.github.io/coral_pytorch/api_modules/coral_pytorch.losses/CornLoss/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.9">
+    
+    
+      
+        <title>CornLoss - coral_pytorch</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.2b4465f4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.e6a45f82.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cornloss" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="coral_pytorch" class="md-header__button md-logo" aria-label="coral_pytorch" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            coral_pytorch
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CornLoss
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/raschka-research-group/coral_pytorch/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="coral_pytorch" class="md-nav__button md-logo" aria-label="coral_pytorch" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    coral_pytorch
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/raschka-research-group/coral_pytorch/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Tutorials
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorials
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_1" type="checkbox" id="__nav_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_1">
+          PyTorch Lightning Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="PyTorch Lightning Examples" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          PyTorch Lightning Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/pytorch_lightning/ordinal-coral_cement/" class="md-nav__link">
+        CORAL multilayer perceptron for tabular data (Cement dataset)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/pytorch_lightning/ordinal-coral_mnist/" class="md-nav__link">
+        CORAL convolutional neural net for image data (MNIST dataset)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/pytorch_lightning/ordinal-coral_tripadvisor/" class="md-nav__link">
+        CORAL recurrent neural net for text data (TripAdvisor dataset)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/pytorch_lightning/ordinal-corn_cement/" class="md-nav__link">
+        CORN multilayer perceptron for tabular data (Cement dataset)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/pytorch_lightning/ordinal-corn_mnist/" class="md-nav__link">
+        CORN convolutional neural net for image data (MNIST dataset)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/pytorch_lightning/ordinal-corn_tripadvisor/" class="md-nav__link">
+        CORN recurrent neural net for text data (TripAdvisor dataset)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2">
+          Pure PyTorch Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Pure PyTorch Examples" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Pure PyTorch Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/pure_pytorch/CORAL_mnist/" class="md-nav__link">
+        CORAL CNN model for image data (MNIST dataset)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/pure_pytorch/CORAL_cement/" class="md-nav__link">
+        CORAL MLP model for tabular data (Cement dataset)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/pure_pytorch/CORN_mnist/" class="md-nav__link">
+        CORN CNN model for image data (MNIST dataset)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/pure_pytorch/CORN_cement/" class="md-nav__link">
+        CORN MLP model for tabular data (Cement dataset)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          API
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          API
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api_subpackages/coral_pytorch.dataset/" class="md-nav__link">
+        coral_pytorch.dataset
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api_subpackages/coral_pytorch.layers/" class="md-nav__link">
+        coral_pytorch.layers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api_subpackages/coral_pytorch.losses/" class="md-nav__link">
+        coral_pytorch.losses
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../installation/" class="md-nav__link">
+        Installation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CHANGELOG/" class="md-nav__link">
+        Changelog
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../citing/" class="md-nav__link">
+        Citing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../license/" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cornloss" class="md-nav__link">
+    CornLoss
+  </a>
+  
+    <nav class="md-nav" aria-label="CornLoss">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    Methods
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+<a href="https://github.com/raschka-research-group/coral_pytorch/edit/master/docs/api_modules/coral_pytorch.losses/CornLoss.md" title="Edit this page" class="md-content__button md-icon">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+</a>
+
+
+  <h1>CornLoss</h1>
+
+<h2 id="cornloss">CornLoss</h2>
+<p><em>CornLoss(num_classes)</em></p>
+<p>Computes the CORN loss described in our forthcoming
+    'Deep Neural Networks for Rank Consistent Ordinal
+    Regression based on Conditional Probabilities'
+    manuscript.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li>
+<p><code>num_classes</code> : int</p>
+<p>Number of unique class labels (class labels should start at 0).</p>
+</li>
+</ul>
+<p><strong>Examples</strong></p>
+<div class="highlight"><pre><span></span><code>    &gt;&gt;&gt; import torch
+    &gt;&gt;&gt; from coral_pytorch.losses import corn_loss
+    &gt;&gt;&gt; # Consider 8 training examples
+    &gt;&gt;&gt; _  = torch.manual_seed(123)
+    &gt;&gt;&gt; X_train = torch.rand(8, 99)
+    &gt;&gt;&gt; y_train = torch.tensor([0, 1, 2, 2, 2, 3, 4, 4])
+    &gt;&gt;&gt; NUM_CLASSES = 5
+    &gt;&gt;&gt; #
+    &gt;&gt;&gt; #
+    &gt;&gt;&gt; # def __init__(self):
+    &gt;&gt;&gt; corn_net = torch.nn.Linear(99, NUM_CLASSES-1)
+    &gt;&gt;&gt; #
+    &gt;&gt;&gt; #
+    &gt;&gt;&gt; # def forward(self, X_train):
+    &gt;&gt;&gt; logits = corn_net(X_train)
+    &gt;&gt;&gt; logits.shape
+    torch.Size([8, 4])
+    &gt;&gt;&gt; corn_loss(logits, y_train, NUM_CLASSES)
+    tensor(0.7127, grad_fn=&lt;DivBackward0&gt;)
+</code></pre></div>
+<h3 id="methods">Methods</h3>
+<hr>
+
+<p><em>add_module(name: str, module: Optional[ForwardRef('Module')]) -&gt; None</em></p>
+<p>Adds a child module to the current module.</p>
+<div class="highlight"><pre><span></span><code>The module can be accessed as an attribute using the given name.
+
+Args:
+name (string): name of the child module. The child module can be
+accessed from this module using the given name
+module (Module): child module to be added to the module.
+</code></pre></div>
+<hr>
+
+<p><em>apply(self: ~T, fn: Callable[[ForwardRef('Module')], NoneType]) -&gt; ~T</em></p>
+<p>Applies <code>fn</code> recursively to every submodule (as returned by <code>.children()</code>)
+    as well as self. Typical use includes initializing the parameters of a model
+    (see also :ref:<code>nn-init-doc</code>).</p>
+<div class="highlight"><pre><span></span><code>Args:
+fn (:class:`Module` -&gt; None): function to be applied to each submodule
+
+Returns:
+Module: self
+
+Example::
+
+```
+&gt;&gt;&gt; @torch.no_grad()
+&gt;&gt;&gt; def init_weights(m):
+&gt;&gt;&gt;     print(m)
+&gt;&gt;&gt;     if type(m) == nn.Linear:
+&gt;&gt;&gt;         m.weight.fill_(1.0)
+&gt;&gt;&gt;         print(m.weight)
+&gt;&gt;&gt; net = nn.Sequential(nn.Linear(2, 2), nn.Linear(2, 2))
+&gt;&gt;&gt; net.apply(init_weights)
+Linear(in_features=2, out_features=2, bias=True)
+Parameter containing:
+tensor([[ 1.,  1.],
+[ 1.,  1.]])
+Linear(in_features=2, out_features=2, bias=True)
+Parameter containing:
+tensor([[ 1.,  1.],
+[ 1.,  1.]])
+Sequential(
+(0): Linear(in_features=2, out_features=2, bias=True)
+(1): Linear(in_features=2, out_features=2, bias=True)
+)
+Sequential(
+(0): Linear(in_features=2, out_features=2, bias=True)
+(1): Linear(in_features=2, out_features=2, bias=True)
+)
+</code></pre></div>
+<p>```</p>
+<hr>
+
+<p><em>bfloat16(self: ~T) -&gt; ~T</em></p>
+<p>Casts all floating point parameters and buffers to <code>bfloat16</code> datatype.</p>
+<div class="highlight"><pre><span></span><code>.. note::
+This method modifies the module in-place.
+
+Returns:
+Module: self
+</code></pre></div>
+<hr>
+
+<p><em>buffers(recurse: bool = True) -&gt; Iterator[torch.Tensor]</em></p>
+<p>Returns an iterator over module buffers.</p>
+<div class="highlight"><pre><span></span><code>Args:
+recurse (bool): if True, then yields buffers of this module
+and all submodules. Otherwise, yields only buffers that
+are direct members of this module.
+
+Yields:
+torch.Tensor: module buffer
+
+Example::
+
+```
+&gt;&gt;&gt; for buf in model.buffers():
+&gt;&gt;&gt;     print(type(buf), buf.size())
+&lt;class &#39;torch.Tensor&#39;&gt; (20L,)
+&lt;class &#39;torch.Tensor&#39;&gt; (20L, 1L, 5L, 5L)
+</code></pre></div>
+<p>```</p>
+<hr>
+
+<p><em>children() -&gt; Iterator[ForwardRef('Module')]</em></p>
+<p>Returns an iterator over immediate children modules.</p>
+<div class="highlight"><pre><span></span><code>Yields:
+Module: a child module
+</code></pre></div>
+<hr>
+
+<p><em>cpu(self: ~T) -&gt; ~T</em></p>
+<p>Moves all model parameters and buffers to the CPU.</p>
+<div class="highlight"><pre><span></span><code>.. note::
+This method modifies the module in-place.
+
+Returns:
+Module: self
+</code></pre></div>
+<hr>
+
+<p><em>cuda(self: ~T, device: Union[int, torch.device, NoneType] = None) -&gt; ~T</em></p>
+<p>Moves all model parameters and buffers to the GPU.</p>
+<div class="highlight"><pre><span></span><code>This also makes associated parameters and buffers different objects. So
+it should be called before constructing optimizer if the module will
+live on GPU while being optimized.
+
+.. note::
+This method modifies the module in-place.
+
+Args:
+device (int, optional): if specified, all parameters will be
+copied to that device
+
+Returns:
+Module: self
+</code></pre></div>
+<hr>
+
+<p><em>double(self: ~T) -&gt; ~T</em></p>
+<p>Casts all floating point parameters and buffers to <code>double</code> datatype.</p>
+<div class="highlight"><pre><span></span><code>.. note::
+This method modifies the module in-place.
+
+Returns:
+Module: self
+</code></pre></div>
+<hr>
+
+<p><em>eval(self: ~T) -&gt; ~T</em></p>
+<p>Sets the module in evaluation mode.</p>
+<div class="highlight"><pre><span></span><code>This has any effect only on certain modules. See documentations of
+particular modules for details of their behaviors in training/evaluation
+mode, if they are affected, e.g. :class:`Dropout`, :class:`BatchNorm`,
+etc.
+
+This is equivalent with :meth:`self.train(False) &lt;torch.nn.Module.train&gt;`.
+
+See :ref:`locally-disable-grad-doc` for a comparison between
+`.eval()` and several similar mechanisms that may be confused with it.
+
+Returns:
+Module: self
+</code></pre></div>
+<hr>
+
+<p><em>extra_repr() -&gt; str</em></p>
+<p>Set the extra representation of the module</p>
+<div class="highlight"><pre><span></span><code>To print customized extra information, you should re-implement
+this method in your own modules. Both single-line and multi-line
+strings are acceptable.
+</code></pre></div>
+<hr>
+
+<p><em>float(self: ~T) -&gt; ~T</em></p>
+<p>Casts all floating point parameters and buffers to <code>float</code> datatype.</p>
+<div class="highlight"><pre><span></span><code>.. note::
+This method modifies the module in-place.
+
+Returns:
+Module: self
+</code></pre></div>
+<hr>
+
+<p><em>forward(logits, y_train)</em></p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li>
+<p><code>logits</code> : torch.tensor, shape=(num_examples, num_classes-1)</p>
+<p>Outputs of the CORN layer.</p>
+</li>
+<li>
+<p><code>y_train</code> : torch.tensor, shape=(num_examples)</p>
+<p>Torch tensor containing the class labels.</p>
+</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>
+<p><code>loss</code> : torch.tensor</p>
+<p>A torch.tensor containing a single loss value.</p>
+</li>
+</ul>
+<p><strong>Examples</strong></p>
+<div class="highlight"><pre><span></span><code>    &gt;&gt;&gt; import torch
+    &gt;&gt;&gt; from coral_pytorch.losses import corn_loss
+    &gt;&gt;&gt; # Consider 8 training examples
+    &gt;&gt;&gt; _  = torch.manual_seed(123)
+    &gt;&gt;&gt; X_train = torch.rand(8, 99)
+    &gt;&gt;&gt; y_train = torch.tensor([0, 1, 2, 2, 2, 3, 4, 4])
+    &gt;&gt;&gt; NUM_CLASSES = 5
+    &gt;&gt;&gt; #
+    &gt;&gt;&gt; #
+    &gt;&gt;&gt; # def __init__(self):
+    &gt;&gt;&gt; corn_net = torch.nn.Linear(99, NUM_CLASSES-1)
+    &gt;&gt;&gt; #
+    &gt;&gt;&gt; #
+    &gt;&gt;&gt; # def forward(self, X_train):
+    &gt;&gt;&gt; logits = corn_net(X_train)
+    &gt;&gt;&gt; logits.shape
+    torch.Size([8, 4])
+    &gt;&gt;&gt; loss = CornLoss(num_classes=NUM_CLASSES)
+    &gt;&gt;&gt; loss(logits, y_train)
+    tensor(0.7127, grad_fn=&lt;DivBackward0&gt;)
+</code></pre></div>
+<hr>
+
+<p><em>get_buffer(target: str) -&gt; 'Tensor'</em></p>
+<p>Returns the buffer given by <code>target</code> if it exists,
+    otherwise throws an error.</p>
+<div class="highlight"><pre><span></span><code>See the docstring for ``get_submodule`` for a more detailed
+explanation of this method&#39;s functionality as well as how to
+correctly specify ``target``.
+
+Args:
+target: The fully-qualified string name of the buffer
+to look for. (See ``get_submodule`` for how to specify a
+fully-qualified string.)
+
+Returns:
+torch.Tensor: The buffer referenced by ``target``
+
+Raises:
+AttributeError: If the target string references an invalid
+path or resolves to something that is not a
+buffer
+</code></pre></div>
+<hr>
+
+<p><em>get_extra_state() -&gt; Any</em></p>
+<p>Returns any extra state to include in the module's state_dict.
+    Implement this and a corresponding :func:<code>set_extra_state</code> for your module
+    if you need to store extra state. This function is called when building the
+    module's <code>state_dict()</code>.</p>
+<div class="highlight"><pre><span></span><code>Note that extra state should be pickleable to ensure working serialization
+of the state_dict. We only provide provide backwards compatibility guarantees
+for serializing Tensors; other objects may break backwards compatibility if
+their serialized pickled form changes.
+
+Returns:
+object: Any extra state to store in the module&#39;s state_dict
+</code></pre></div>
+<hr>
+
+<p><em>get_parameter(target: str) -&gt; 'Parameter'</em></p>
+<p>Returns the parameter given by <code>target</code> if it exists,
+    otherwise throws an error.</p>
+<div class="highlight"><pre><span></span><code>See the docstring for ``get_submodule`` for a more detailed
+explanation of this method&#39;s functionality as well as how to
+correctly specify ``target``.
+
+Args:
+target: The fully-qualified string name of the Parameter
+to look for. (See ``get_submodule`` for how to specify a
+fully-qualified string.)
+
+Returns:
+torch.nn.Parameter: The Parameter referenced by ``target``
+
+Raises:
+AttributeError: If the target string references an invalid
+path or resolves to something that is not an
+``nn.Parameter``
+</code></pre></div>
+<hr>
+
+<p><em>get_submodule(target: str) -&gt; 'Module'</em></p>
+<p>Returns the submodule given by <code>target</code> if it exists,
+    otherwise throws an error.</p>
+<div class="highlight"><pre><span></span><code>For example, let&#39;s say you have an ``nn.Module`` ``A`` that
+looks like this:
+
+.. code-block::text
+
+A(
+(net_b): Module(
+(net_c): Module(
+(conv): Conv2d(16, 33, kernel_size=(3, 3), stride=(2, 2))
+)
+(linear): Linear(in_features=100, out_features=200, bias=True)
+)
+)
+
+(The diagram shows an ``nn.Module`` ``A``. ``A`` has a nested
+submodule ``net_b``, which itself has two submodules ``net_c``
+and ``linear``. ``net_c`` then has a submodule ``conv``.)
+
+To check whether or not we have the ``linear`` submodule, we
+would call ``get_submodule(&quot;net_b.linear&quot;)``. To check whether
+we have the ``conv`` submodule, we would call
+``get_submodule(&quot;net_b.net_c.conv&quot;)``.
+
+The runtime of ``get_submodule`` is bounded by the degree
+of module nesting in ``target``. A query against
+``named_modules`` achieves the same result, but it is O(N) in
+the number of transitive modules. So, for a simple check to see
+if some submodule exists, ``get_submodule`` should always be
+used.
+
+Args:
+target: The fully-qualified string name of the submodule
+to look for. (See above example for how to specify a
+fully-qualified string.)
+
+Returns:
+torch.nn.Module: The submodule referenced by ``target``
+
+Raises:
+AttributeError: If the target string references an invalid
+path or resolves to something that is not an
+``nn.Module``
+</code></pre></div>
+<hr>
+
+<p><em>half(self: ~T) -&gt; ~T</em></p>
+<p>Casts all floating point parameters and buffers to <code>half</code> datatype.</p>
+<div class="highlight"><pre><span></span><code>.. note::
+This method modifies the module in-place.
+
+Returns:
+Module: self
+</code></pre></div>
+<hr>
+
+<p><em>load_state_dict(state_dict: 'OrderedDict[str, Tensor]', strict: bool = True)</em></p>
+<p>Copies parameters and buffers from :attr:<code>state_dict</code> into
+    this module and its descendants. If :attr:<code>strict</code> is <code>True</code>, then
+    the keys of :attr:<code>state_dict</code> must exactly match the keys returned
+    by this module's :meth:<code>~torch.nn.Module.state_dict</code> function.</p>
+<div class="highlight"><pre><span></span><code>Args:
+state_dict (dict): a dict containing parameters and
+persistent buffers.
+strict (bool, optional): whether to strictly enforce that the keys
+in :attr:`state_dict` match the keys returned by this module&#39;s
+:meth:`~torch.nn.Module.state_dict` function. Default: ``True``
+
+Returns:
+``NamedTuple`` with ``missing_keys`` and ``unexpected_keys`` fields:
+</code></pre></div>
+<ul>
+<li><strong>missing_keys</strong> is a list of str containing the missing keys</li>
+<li><strong>unexpected_keys</strong> is a list of str containing the unexpected keys</li>
+</ul>
+<p>Note:
+    If a parameter or buffer is registered as <code>None</code> and its corresponding key
+    exists in :attr:<code>state_dict</code>, :meth:<code>load_state_dict</code> will raise a
+    <code>RuntimeError</code>.</p>
+<hr>
+
+<p><em>modules() -&gt; Iterator[ForwardRef('Module')]</em></p>
+<p>Returns an iterator over all modules in the network.</p>
+<div class="highlight"><pre><span></span><code>Yields:
+Module: a module in the network
+
+Note:
+Duplicate modules are returned only once. In the following
+example, ``l`` will be returned only once.
+
+Example::
+
+```
+&gt;&gt;&gt; l = nn.Linear(2, 2)
+&gt;&gt;&gt; net = nn.Sequential(l, l)
+&gt;&gt;&gt; for idx, m in enumerate(net.modules()):
+print(idx, &#39;-&gt;&#39;, m)
+
+0 -&gt; Sequential(
+(0): Linear(in_features=2, out_features=2, bias=True)
+(1): Linear(in_features=2, out_features=2, bias=True)
+)
+1 -&gt; Linear(in_features=2, out_features=2, bias=True)
+</code></pre></div>
+<p>```</p>
+<hr>
+
+<p><em>named_buffers(prefix: str = '', recurse: bool = True) -&gt; Iterator[Tuple[str, torch.Tensor]]</em></p>
+<p>Returns an iterator over module buffers, yielding both the
+    name of the buffer as well as the buffer itself.</p>
+<div class="highlight"><pre><span></span><code>Args:
+prefix (str): prefix to prepend to all buffer names.
+recurse (bool): if True, then yields buffers of this module
+and all submodules. Otherwise, yields only buffers that
+are direct members of this module.
+
+Yields:
+(string, torch.Tensor): Tuple containing the name and buffer
+
+Example::
+
+```
+&gt;&gt;&gt; for name, buf in self.named_buffers():
+&gt;&gt;&gt;    if name in [&#39;running_var&#39;]:
+&gt;&gt;&gt;        print(buf.size())
+</code></pre></div>
+<p>```</p>
+<hr>
+
+<p><em>named_children() -&gt; Iterator[Tuple[str, ForwardRef('Module')]]</em></p>
+<p>Returns an iterator over immediate children modules, yielding both
+    the name of the module as well as the module itself.</p>
+<div class="highlight"><pre><span></span><code>Yields:
+(string, Module): Tuple containing a name and child module
+
+Example::
+
+```
+&gt;&gt;&gt; for name, module in model.named_children():
+&gt;&gt;&gt;     if name in [&#39;conv4&#39;, &#39;conv5&#39;]:
+&gt;&gt;&gt;         print(module)
+</code></pre></div>
+<p>```</p>
+<hr>
+
+<p><em>named_modules(memo: Optional[Set[ForwardRef('Module')]] = None, prefix: str = '', remove_duplicate: bool = True)</em></p>
+<p>Returns an iterator over all modules in the network, yielding
+    both the name of the module as well as the module itself.</p>
+<div class="highlight"><pre><span></span><code>Args:
+memo: a memo to store the set of modules already added to the result
+prefix: a prefix that will be added to the name of the module
+remove_duplicate: whether to remove the duplicated module instances in the result
+or not
+
+Yields:
+(string, Module): Tuple of name and module
+
+Note:
+Duplicate modules are returned only once. In the following
+example, ``l`` will be returned only once.
+
+Example::
+
+```
+&gt;&gt;&gt; l = nn.Linear(2, 2)
+&gt;&gt;&gt; net = nn.Sequential(l, l)
+&gt;&gt;&gt; for idx, m in enumerate(net.named_modules()):
+print(idx, &#39;-&gt;&#39;, m)
+
+0 -&gt; (&#39;&#39;, Sequential(
+(0): Linear(in_features=2, out_features=2, bias=True)
+(1): Linear(in_features=2, out_features=2, bias=True)
+))
+1 -&gt; (&#39;0&#39;, Linear(in_features=2, out_features=2, bias=True))
+</code></pre></div>
+<p>```</p>
+<hr>
+
+<p><em>named_parameters(prefix: str = '', recurse: bool = True) -&gt; Iterator[Tuple[str, torch.nn.parameter.Parameter]]</em></p>
+<p>Returns an iterator over module parameters, yielding both the
+    name of the parameter as well as the parameter itself.</p>
+<div class="highlight"><pre><span></span><code>Args:
+prefix (str): prefix to prepend to all parameter names.
+recurse (bool): if True, then yields parameters of this module
+and all submodules. Otherwise, yields only parameters that
+are direct members of this module.
+
+Yields:
+(string, Parameter): Tuple containing the name and parameter
+
+Example::
+
+```
+&gt;&gt;&gt; for name, param in self.named_parameters():
+&gt;&gt;&gt;    if name in [&#39;bias&#39;]:
+&gt;&gt;&gt;        print(param.size())
+</code></pre></div>
+<p>```</p>
+<hr>
+
+<p><em>parameters(recurse: bool = True) -&gt; Iterator[torch.nn.parameter.Parameter]</em></p>
+<p>Returns an iterator over module parameters.</p>
+<div class="highlight"><pre><span></span><code>This is typically passed to an optimizer.
+
+Args:
+recurse (bool): if True, then yields parameters of this module
+and all submodules. Otherwise, yields only parameters that
+are direct members of this module.
+
+Yields:
+Parameter: module parameter
+
+Example::
+
+```
+&gt;&gt;&gt; for param in model.parameters():
+&gt;&gt;&gt;     print(type(param), param.size())
+&lt;class &#39;torch.Tensor&#39;&gt; (20L,)
+&lt;class &#39;torch.Tensor&#39;&gt; (20L, 1L, 5L, 5L)
+</code></pre></div>
+<p>```</p>
+<hr>
+
+<p><em>register_backward_hook(hook: Callable[[ForwardRef('Module'), Union[Tuple[torch.Tensor, ...], torch.Tensor], Union[Tuple[torch.Tensor, ...], torch.Tensor]], Optional[torch.Tensor]]) -&gt; torch.utils.hooks.RemovableHandle</em></p>
+<p>Registers a backward hook on the module.</p>
+<div class="highlight"><pre><span></span><code>This function is deprecated in favor of :meth:`~torch.nn.Module.register_full_backward_hook` and
+the behavior of this function will change in future versions.
+
+Returns:
+:class:`torch.utils.hooks.RemovableHandle`:
+a handle that can be used to remove the added hook by calling
+``handle.remove()``
+</code></pre></div>
+<hr>
+
+<p><em>register_buffer(name: str, tensor: Optional[torch.Tensor], persistent: bool = True) -&gt; None</em></p>
+<p>Adds a buffer to the module.</p>
+<div class="highlight"><pre><span></span><code>This is typically used to register a buffer that should not to be
+considered a model parameter. For example, BatchNorm&#39;s ``running_mean``
+is not a parameter, but is part of the module&#39;s state. Buffers, by
+default, are persistent and will be saved alongside parameters. This
+behavior can be changed by setting :attr:`persistent` to ``False``. The
+only difference between a persistent buffer and a non-persistent buffer
+is that the latter will not be a part of this module&#39;s
+:attr:`state_dict`.
+
+Buffers can be accessed as attributes using given names.
+
+Args:
+name (string): name of the buffer. The buffer can be accessed
+from this module using the given name
+tensor (Tensor or None): buffer to be registered. If ``None``, then operations
+that run on buffers, such as :attr:`cuda`, are ignored. If ``None``,
+</code></pre></div>
+<p>the buffer is <strong>not</strong> included in the module's :attr:<code>state_dict</code>.
+    persistent (bool): whether the buffer is part of this module's</p>
+<p>:attr:<code>state_dict</code>.</p>
+<div class="highlight"><pre><span></span><code>Example::
+
+```
+&gt;&gt;&gt; self.register_buffer(&#39;running_mean&#39;, torch.zeros(num_features))
+</code></pre></div>
+<p>```</p>
+<hr>
+
+<p><em>register_forward_hook(hook: Callable[..., NoneType]) -&gt; torch.utils.hooks.RemovableHandle</em></p>
+<p>Registers a forward hook on the module.</p>
+<div class="highlight"><pre><span></span><code>The hook will be called every time after :func:`forward` has computed an output.
+It should have the following signature::
+
+hook(module, input, output) -&gt; None or modified output
+
+The input contains only the positional arguments given to the module.
+Keyword arguments won&#39;t be passed to the hooks and only to the ``forward``.
+The hook can modify the output. It can modify the input inplace but
+it will not have effect on forward since this is called after
+:func:`forward` is called.
+
+Returns:
+:class:`torch.utils.hooks.RemovableHandle`:
+a handle that can be used to remove the added hook by calling
+``handle.remove()``
+</code></pre></div>
+<hr>
+
+<p><em>register_forward_pre_hook(hook: Callable[..., NoneType]) -&gt; torch.utils.hooks.RemovableHandle</em></p>
+<p>Registers a forward pre-hook on the module.</p>
+<div class="highlight"><pre><span></span><code>The hook will be called every time before :func:`forward` is invoked.
+It should have the following signature::
+
+hook(module, input) -&gt; None or modified input
+
+The input contains only the positional arguments given to the module.
+Keyword arguments won&#39;t be passed to the hooks and only to the ``forward``.
+The hook can modify the input. User can either return a tuple or a
+single modified value in the hook. We will wrap the value into a tuple
+if a single value is returned(unless that value is already a tuple).
+
+Returns:
+:class:`torch.utils.hooks.RemovableHandle`:
+a handle that can be used to remove the added hook by calling
+``handle.remove()``
+</code></pre></div>
+<hr>
+
+<p><em>register_full_backward_hook(hook: Callable[[ForwardRef('Module'), Union[Tuple[torch.Tensor, ...], torch.Tensor], Union[Tuple[torch.Tensor, ...], torch.Tensor]], Optional[torch.Tensor]]) -&gt; torch.utils.hooks.RemovableHandle</em></p>
+<p>Registers a backward hook on the module.</p>
+<div class="highlight"><pre><span></span><code>The hook will be called every time the gradients with respect to module
+inputs are computed. The hook should have the following signature::
+
+hook(module, grad_input, grad_output) -&gt; tuple(Tensor) or None
+
+The :attr:`grad_input` and :attr:`grad_output` are tuples that contain the gradients
+with respect to the inputs and outputs respectively. The hook should
+not modify its arguments, but it can optionally return a new gradient with
+respect to the input that will be used in place of :attr:`grad_input` in
+subsequent computations. :attr:`grad_input` will only correspond to the inputs given
+as positional arguments and all kwarg arguments are ignored. Entries
+in :attr:`grad_input` and :attr:`grad_output` will be ``None`` for all non-Tensor
+arguments.
+
+For technical reasons, when this hook is applied to a Module, its forward function will
+receive a view of each Tensor passed to the Module. Similarly the caller will receive a view
+of each Tensor returned by the Module&#39;s forward function.
+
+.. warning ::
+Modifying inputs or outputs inplace is not allowed when using backward hooks and
+will raise an error.
+
+Returns:
+:class:`torch.utils.hooks.RemovableHandle`:
+a handle that can be used to remove the added hook by calling
+``handle.remove()``
+</code></pre></div>
+<hr>
+
+<p><em>register_parameter(name: str, param: Optional[torch.nn.parameter.Parameter]) -&gt; None</em></p>
+<p>Adds a parameter to the module.</p>
+<div class="highlight"><pre><span></span><code>The parameter can be accessed as an attribute using given name.
+
+Args:
+name (string): name of the parameter. The parameter can be accessed
+from this module using the given name
+param (Parameter or None): parameter to be added to the module. If
+``None``, then operations that run on parameters, such as :attr:`cuda`,
+</code></pre></div>
+<p>are ignored. If <code>None</code>, the parameter is <strong>not</strong> included in the
+    module's :attr:<code>state_dict</code>.</p>
+<hr>
+
+<p><em>requires_grad_(self: ~T, requires_grad: bool = True) -&gt; ~T</em></p>
+<p>Change if autograd should record operations on parameters in this
+    module.</p>
+<div class="highlight"><pre><span></span><code>This method sets the parameters&#39; :attr:`requires_grad` attributes
+in-place.
+
+This method is helpful for freezing part of the module for finetuning
+or training parts of a model individually (e.g., GAN training).
+
+See :ref:`locally-disable-grad-doc` for a comparison between
+`.requires_grad_()` and several similar mechanisms that may be confused with it.
+
+Args:
+requires_grad (bool): whether autograd should record operations on
+parameters in this module. Default: ``True``.
+
+Returns:
+Module: self
+</code></pre></div>
+<hr>
+
+<p><em>set_extra_state(state: Any)</em></p>
+<p>This function is called from :func:<code>load_state_dict</code> to handle any extra state
+    found within the <code>state_dict</code>. Implement this function and a corresponding
+    :func:<code>get_extra_state</code> for your module if you need to store extra state within its
+    <code>state_dict</code>.</p>
+<div class="highlight"><pre><span></span><code>Args:
+state (dict): Extra state from the `state_dict`
+</code></pre></div>
+<hr>
+
+<p><em>share_memory(self: ~T) -&gt; ~T</em></p>
+<p>See :meth:<code>torch.Tensor.share_memory_</code></p>
+<hr>
+
+<p><em>state_dict(destination=None, prefix='', keep_vars=False)</em></p>
+<p>Returns a dictionary containing a whole state of the module.</p>
+<div class="highlight"><pre><span></span><code>Both parameters and persistent buffers (e.g. running averages) are
+included. Keys are corresponding parameter and buffer names.
+Parameters and buffers set to ``None`` are not included.
+
+Returns:
+dict:
+a dictionary containing a whole state of the module
+
+Example::
+
+```
+&gt;&gt;&gt; module.state_dict().keys()
+[&#39;bias&#39;, &#39;weight&#39;]
+</code></pre></div>
+<p>```</p>
+<hr>
+
+<p><em>to(</em>args, *<em>kwargs)</em></p>
+<p>Moves and/or casts the parameters and buffers.</p>
+<div class="highlight"><pre><span></span><code>This can be called as
+
+.. function:: to(device=None, dtype=None, non_blocking=False)
+:noindex:
+
+.. function:: to(dtype, non_blocking=False)
+:noindex:
+
+.. function:: to(tensor, non_blocking=False)
+:noindex:
+
+.. function:: to(memory_format=torch.channels_last)
+:noindex:
+
+Its signature is similar to :meth:`torch.Tensor.to`, but only accepts
+floating point or complex :attr:`dtype`\ s. In addition, this method will
+only cast the floating point or complex parameters and buffers to :attr:`dtype`
+(if given). The integral parameters and buffers will be moved
+:attr:`device`, if that is given, but with dtypes unchanged. When
+:attr:`non_blocking` is set, it tries to convert/move asynchronously
+with respect to the host if possible, e.g., moving CPU Tensors with
+pinned memory to CUDA devices.
+
+See below for examples.
+
+.. note::
+This method modifies the module in-place.
+
+Args:
+device (:class:`torch.device`): the desired device of the parameters
+and buffers in this module
+dtype (:class:`torch.dtype`): the desired floating point or complex dtype of
+the parameters and buffers in this module
+tensor (torch.Tensor): Tensor whose dtype and device are the desired
+dtype and device for all parameters and buffers in this module
+memory_format (:class:`torch.memory_format`): the desired memory
+format for 4D parameters and buffers in this module (keyword
+only argument)
+
+Returns:
+Module: self
+
+Examples::
+
+```
+&gt;&gt;&gt; linear = nn.Linear(2, 2)
+&gt;&gt;&gt; linear.weight
+Parameter containing:
+tensor([[ 0.1913, -0.3420],
+[-0.5113, -0.2325]])
+&gt;&gt;&gt; linear.to(torch.double)
+Linear(in_features=2, out_features=2, bias=True)
+&gt;&gt;&gt; linear.weight
+Parameter containing:
+tensor([[ 0.1913, -0.3420],
+[-0.5113, -0.2325]], dtype=torch.float64)
+&gt;&gt;&gt; gpu1 = torch.device(&quot;cuda:1&quot;)
+&gt;&gt;&gt; linear.to(gpu1, dtype=torch.half, non_blocking=True)
+Linear(in_features=2, out_features=2, bias=True)
+&gt;&gt;&gt; linear.weight
+Parameter containing:
+tensor([[ 0.1914, -0.3420],
+[-0.5112, -0.2324]], dtype=torch.float16, device=&#39;cuda:1&#39;)
+&gt;&gt;&gt; cpu = torch.device(&quot;cpu&quot;)
+&gt;&gt;&gt; linear.to(cpu)
+Linear(in_features=2, out_features=2, bias=True)
+&gt;&gt;&gt; linear.weight
+Parameter containing:
+tensor([[ 0.1914, -0.3420],
+[-0.5112, -0.2324]], dtype=torch.float16)
+
+&gt;&gt;&gt; linear = nn.Linear(2, 2, bias=None).to(torch.cdouble)
+&gt;&gt;&gt; linear.weight
+Parameter containing:
+tensor([[ 0.3741+0.j,  0.2382+0.j],
+[ 0.5593+0.j, -0.4443+0.j]], dtype=torch.complex128)
+&gt;&gt;&gt; linear(torch.ones(3, 2, dtype=torch.cdouble))
+tensor([[0.6122+0.j, 0.1150+0.j],
+[0.6122+0.j, 0.1150+0.j],
+[0.6122+0.j, 0.1150+0.j]], dtype=torch.complex128)
+</code></pre></div>
+<p>```</p>
+<hr>
+
+<p><em>to_empty(self: ~T, </em>, device: Union[str, torch.device]) -&gt; ~T*</p>
+<p>Moves the parameters and buffers to the specified device without copying storage.</p>
+<div class="highlight"><pre><span></span><code>Args:
+device (:class:`torch.device`): The desired device of the parameters
+and buffers in this module.
+
+Returns:
+Module: self
+</code></pre></div>
+<hr>
+
+<p><em>train(self: ~T, mode: bool = True) -&gt; ~T</em></p>
+<p>Sets the module in training mode.</p>
+<div class="highlight"><pre><span></span><code>This has any effect only on certain modules. See documentations of
+particular modules for details of their behaviors in training/evaluation
+mode, if they are affected, e.g. :class:`Dropout`, :class:`BatchNorm`,
+etc.
+
+Args:
+mode (bool): whether to set training mode (``True``) or evaluation
+mode (``False``). Default: ``True``.
+
+Returns:
+Module: self
+</code></pre></div>
+<hr>
+
+<p><em>type(self: ~T, dst_type: Union[torch.dtype, str]) -&gt; ~T</em></p>
+<p>Casts all parameters and buffers to :attr:<code>dst_type</code>.</p>
+<div class="highlight"><pre><span></span><code>.. note::
+This method modifies the module in-place.
+
+Args:
+dst_type (type or string): the desired type
+
+Returns:
+Module: self
+</code></pre></div>
+<hr>
+
+<p><em>xpu(self: ~T, device: Union[int, torch.device, NoneType] = None) -&gt; ~T</em></p>
+<p>Moves all model parameters and buffers to the XPU.</p>
+<div class="highlight"><pre><span></span><code>This also makes associated parameters and buffers different objects. So
+it should be called before constructing optimizer if the module will
+live on XPU while being optimized.
+
+.. note::
+This method modifies the module in-place.
+
+Arguments:
+device (int, optional): if specified, all parameters will be
+copied to that device
+
+Returns:
+Module: self
+</code></pre></div>
+<hr>
+
+<p><em>zero_grad(set_to_none: bool = False) -&gt; None</em></p>
+<p>Sets gradients of all model parameters to zero. See similar function
+    under :class:<code>torch.optim.Optimizer</code> for more context.</p>
+<div class="highlight"><pre><span></span><code>Args:
+set_to_none (bool): instead of setting to zero, set the grads to None.
+See :meth:`torch.optim.Optimizer.zero_grad` for details.
+</code></pre></div>
+<h3 id="properties">Properties</h3>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2020-2022 <a href="http://sebastianraschka.com">Sebastian Raschka</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.22074ed6.min.js"}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.960e086b.min.js"></script>
+      
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+      
+        <script src="../../../mathjaxhelper.js"></script>
+      
+    
+  </body>
+</html>
