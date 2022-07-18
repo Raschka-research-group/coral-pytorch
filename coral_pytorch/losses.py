@@ -45,6 +45,7 @@ def coral_loss(logits, levels, importance_weights=None, reduction='mean'):
     Examples
     ----------
     >>> import torch
+    >>> from coral_pytorch.losses import coral_loss
     >>> levels = torch.tensor(
     ...    [[1., 1., 0., 0.],
     ...     [1., 0., 0., 0.],
@@ -108,6 +109,7 @@ def corn_loss(logits, y_train, num_classes):
     Examples
     ----------
     >>> import torch
+    >>> from coral_pytorch.losses import corn_loss
     >>> # Consider 8 training examples
     >>> _  = torch.manual_seed(123)
     >>> X_train = torch.rand(8, 99)
@@ -124,7 +126,7 @@ def corn_loss(logits, y_train, num_classes):
     >>> logits.shape
     torch.Size([8, 4])
     >>> corn_loss(logits, y_train, NUM_CLASSES)
-    tensor(3.4210, grad_fn=<DivBackward0>)
+    tensor(0.7127, grad_fn=<DivBackward0>)
     """
     sets = []
     for i in range(num_classes-1):
@@ -149,3 +151,118 @@ def corn_loss(logits, y_train, num_classes):
         losses += loss
 
     return losses/num_examples
+
+
+class CoralLoss(torch.nn.Module):
+    """Computes the CORAL loss described in
+
+    Cao, Mirjalili, and Raschka (2020)
+    *Rank Consistent Ordinal Regression for Neural Networks
+       with Application to Age Estimation*
+    Pattern Recognition Letters, https://doi.org/10.1016/j.patrec.2020.11.008
+
+    Parameters
+    ----------
+    reduction : str or None (default='mean')
+        If 'mean' or 'sum', returns the averaged or summed loss value across
+        all data points (rows) in logits. If None, returns a vector of
+        shape (num_examples,)
+
+    Examples
+    ----------
+    >>> import torch
+    >>> from coral_pytorch.losses import CoralLoss
+    >>> levels = torch.tensor(
+    ...    [[1., 1., 0., 0.],
+    ...     [1., 0., 0., 0.],
+    ...    [1., 1., 1., 1.]])
+    >>> logits = torch.tensor(
+    ...    [[2.1, 1.8, -2.1, -1.8],
+    ...     [1.9, -1., -1.5, -1.3],
+    ...     [1.9, 1.8, 1.7, 1.6]])
+    >>> loss = CoralLoss()
+    >>> loss(logits, levels)
+    tensor(0.6920)
+    """
+
+    def __init__(self, reduction='mean'):
+        super().__init__()
+        self.reduction = reduction
+
+    def forward(self, logits, levels, importance_weights=None):
+        """
+        Parameters
+        ----------
+        logits : torch.tensor, shape(num_examples, num_classes-1)
+            Outputs of the CORAL layer.
+
+        levels : torch.tensor, shape(num_examples, num_classes-1)
+            True labels represented as extended binary vectors
+            (via `coral_pytorch.dataset.levels_from_labelbatch`).
+
+        importance_weights : torch.tensor, shape=(num_classes-1,) (default=None)
+            Optional weights for the different labels in levels.
+            A tensor of ones, i.e.,
+            `torch.ones(num_classes-1, dtype=torch.float32)`
+            will result in uniform weights that have the same effect as None.
+        """
+        return coral_loss(
+            logits, levels,
+            importance_weights=importance_weights,
+            reduction=self.reduction)
+
+
+class CornLoss(torch.nn.Module):
+    """
+    Computes the CORN loss described in our forthcoming
+    'Deep Neural Networks for Rank Consistent Ordinal
+    Regression based on Conditional Probabilities'
+    manuscript.
+
+    Parameters
+    ----------
+    num_classes : int
+        Number of unique class labels (class labels should start at 0).
+
+    Examples
+    ----------
+    >>> import torch
+    >>> from coral_pytorch.losses import corn_loss
+    >>> # Consider 8 training examples
+    >>> _  = torch.manual_seed(123)
+    >>> X_train = torch.rand(8, 99)
+    >>> y_train = torch.tensor([0, 1, 2, 2, 2, 3, 4, 4])
+    >>> NUM_CLASSES = 5
+    >>> #
+    >>> #
+    >>> # def __init__(self):
+    >>> corn_net = torch.nn.Linear(99, NUM_CLASSES-1)
+    >>> #
+    >>> #
+    >>> # def forward(self, X_train):
+    >>> logits = corn_net(X_train)
+    >>> logits.shape
+    torch.Size([8, 4])
+    >>> corn_loss(logits, y_train, NUM_CLASSES)
+    tensor(0.7127, grad_fn=<DivBackward0>)
+    """
+    def __init__(self, num_classes):
+        super().__init__()
+        self.num_classes = num_classes
+
+    def forward(self, logits, y_train):
+        """
+        Parameters
+        ----------
+        logits : torch.tensor, shape=(num_examples, num_classes-1)
+            Outputs of the CORN layer.
+
+        y_train : torch.tensor, shape=(num_examples)
+            Torch tensor containing the class labels.
+
+        Returns
+        ----------
+        loss : torch.tensor
+            A torch.tensor containing a single loss value.
+        """
+        return corn_loss(logits, y_train, num_classes=self.num_classes)
