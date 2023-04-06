@@ -1,3 +1,5 @@
+docs/tutorials/pytorch_lightning/*.csv
+
 # Log files
 docs/tutorials/pytorch_lightning/logs
 
