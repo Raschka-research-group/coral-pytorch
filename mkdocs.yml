@@ -36,10 +36,9 @@ nav:
       - PyTorch Lightning Examples:
         - CORAL multilayer perceptron for tabular data (Cement dataset): tutorials/pytorch_lightning/ordinal-coral_cement.md
         - CORAL convolutional neural net for image data (MNIST dataset): tutorials/pytorch_lightning/ordinal-coral_mnist.md
-        - CORAL recurrent neural net for text data (TripAdvisor dataset): tutorials/pytorch_lightning/ordinal-coral_tripadvisor.md
         - CORN multilayer perceptron for tabular data (Cement dataset): tutorials/pytorch_lightning/ordinal-corn_cement.md
         - CORN convolutional neural net for image data (MNIST dataset): tutorials/pytorch_lightning/ordinal-corn_mnist.md
-        - CORN recurrent neural net for text data (TripAdvisor dataset): tutorials/pytorch_lightning/ordinal-corn_tripadvisor.md
+        - CORN large language transformer (DistilBERT) for text data (TripAdvisor dataset): tutorials/pytorch_lightning/distilbert-corn-tripadvisor.md
       - Pure PyTorch Examples:
         - CORAL CNN model for image data (MNIST dataset): tutorials/pure_pytorch/CORAL_mnist.md
         - CORAL MLP model for tabular data (Cement dataset): tutorials/pure_pytorch/CORAL_cement.md
