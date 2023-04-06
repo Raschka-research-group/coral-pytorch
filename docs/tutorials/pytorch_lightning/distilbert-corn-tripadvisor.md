@@ -1,4 +1,4 @@
-# Finetuning a DistilBERT Classifier with CORN Loss
+# Finetuning a DistilBERT with CORN Loss for Ordinal Regression
 
 
 ```python
