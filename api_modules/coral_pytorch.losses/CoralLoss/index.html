@@ -14,8 +14,10 @@
       
         <link rel="canonical" href="http://raschka-research-group.github.io/coral_pytorch/api_modules/coral_pytorch.losses/CoralLoss/">
       
+      
+      
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.9">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.5">
     
     
       
@@ -23,29 +25,32 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.2b4465f4.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.7a7fce14.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.e6a45f82.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
         
-      
-    
-    
-    
-      
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
     
       <link rel="stylesheet" href="../../../extra.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
+    
     
     
   </head>
@@ -56,7 +61,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
   
     
     
@@ -78,16 +83,18 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="../../.." title="coral_pytorch" class="md-header__button md-logo" aria-label="coral_pytorch" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -109,7 +116,7 @@
     
     
       <label class="md-header__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
@@ -117,13 +124,13 @@
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
       
@@ -134,7 +141,7 @@
           <div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
         </div>
       </div>
     </div>
@@ -143,10 +150,10 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/raschka-research-group/coral_pytorch/" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/raschka-research-group/coral_pytorch" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     GitHub
@@ -181,17 +188,17 @@
     <a href="../../.." title="coral_pytorch" class="md-nav__button md-logo" aria-label="coral_pytorch" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
 
     </a>
     coral_pytorch
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/raschka-research-group/coral_pytorch/" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/raschka-research-group/coral_pytorch" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     GitHub
@@ -227,17 +234,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
       
       
       
-      
-        <label class="md-nav__link" for="__nav_2">
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
           Tutorials
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_2">
           <span class="md-nav__icon md-icon"></span>
           Tutorials
@@ -253,17 +261,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_1" type="checkbox" id="__nav_2_1" >
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
       
       
       
-      
-        <label class="md-nav__link" for="__nav_2_1">
+        <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
           PyTorch Lightning Examples
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="PyTorch Lightning Examples" data-md-level="2">
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_2_1">
           <span class="md-nav__icon md-icon"></span>
           PyTorch Lightning Examples
@@ -304,20 +313,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tutorials/pytorch_lightning/ordinal-coral_tripadvisor/" class="md-nav__link">
-        CORAL recurrent neural net for text data (TripAdvisor dataset)
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../../tutorials/pytorch_lightning/ordinal-corn_cement/" class="md-nav__link">
         CORN multilayer perceptron for tabular data (Cement dataset)
       </a>
@@ -346,8 +341,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tutorials/pytorch_lightning/ordinal-corn_tripadvisor/" class="md-nav__link">
-        CORN recurrent neural net for text data (TripAdvisor dataset)
+      <a href="../../../tutorials/pytorch_lightning/distilbert-corn-tripadvisor/" class="md-nav__link">
+        CORN large language transformer (DistilBERT) for text data (TripAdvisor dataset)
       </a>
     </li>
   
@@ -370,17 +365,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
       
       
       
-      
-        <label class="md-nav__link" for="__nav_2_2">
+        <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
           Pure PyTorch Examples
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="Pure PyTorch Examples" data-md-level="2">
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_2_2">
           <span class="md-nav__icon md-icon"></span>
           Pure PyTorch Examples
@@ -467,17 +463,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
       
       
       
-      
-        <label class="md-nav__link" for="__nav_3">
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
           API
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="API" data-md-level="1">
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_3">
           <span class="md-nav__icon md-icon"></span>
           API
@@ -651,13 +648,14 @@
               </div>
             
           
-          <div class="md-content" data-md-component="content">
-            <article class="md-content__inner md-typeset">
-              
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
                 
-<a href="https://github.com/raschka-research-group/coral_pytorch/edit/master/docs/api_modules/coral_pytorch.losses/CoralLoss.md" title="Edit this page" class="md-content__button md-icon">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
-</a>
+                  
+
+  
+  
 
 
   <h1>CoralLoss</h1>
@@ -702,7 +700,7 @@ shape (num_examples,)</p>
 <div class="highlight"><pre><span></span><code>The module can be accessed as an attribute using the given name.
 
 Args:
-name (string): name of the child module. The child module can be
+name (str): name of the child module. The child module can be
 accessed from this module using the given name
 module (Module): child module to be added to the module.
 </code></pre></div>
@@ -731,16 +729,12 @@ Example::
 &gt;&gt;&gt; net.apply(init_weights)
 Linear(in_features=2, out_features=2, bias=True)
 Parameter containing:
-tensor([[ 1.,  1.],
-[ 1.,  1.]])
+tensor([[1., 1.],
+[1., 1.]], requires_grad=True)
 Linear(in_features=2, out_features=2, bias=True)
 Parameter containing:
-tensor([[ 1.,  1.],
-[ 1.,  1.]])
-Sequential(
-(0): Linear(in_features=2, out_features=2, bias=True)
-(1): Linear(in_features=2, out_features=2, bias=True)
-)
+tensor([[1., 1.],
+[1., 1.]], requires_grad=True)
 Sequential(
 (0): Linear(in_features=2, out_features=2, bias=True)
 (1): Linear(in_features=2, out_features=2, bias=True)
@@ -772,6 +766,7 @@ torch.Tensor: module buffer
 Example::
 
 ```
+&gt;&gt;&gt; # xdoctest: +SKIP(&quot;undefined vars&quot;)
 &gt;&gt;&gt; for buf in model.buffers():
 &gt;&gt;&gt;     print(type(buf), buf.size())
 &lt;class &#39;torch.Tensor&#39;&gt; (20L,)
@@ -879,12 +874,6 @@ A tensor of ones, i.e.,
 <code>torch.ones(num_classes-1, dtype=torch.float32)</code>
 will result in uniform weights that have the same effect as None.</p>
 </li>
-<li>
-<p><code>reduction</code> : str or None (default='mean')</p>
-<p>If 'mean' or 'sum', returns the averaged or summed loss value
-across all data points (rows) in logits. If None, returns
-a vector of shape (num_examples,)</p>
-</li>
 </ul>
 <hr>
 
@@ -915,7 +904,7 @@ buffer
     Implement this and a corresponding :func:<code>set_extra_state</code> for your module
     if you need to store extra state. This function is called when building the
     module's <code>state_dict()</code>.</p>
-<div class="highlight"><pre><span></span><code>Note that extra state should be pickleable to ensure working serialization
+<div class="highlight"><pre><span></span><code>Note that extra state should be picklable to ensure working serialization
 of the state_dict. We only provide provide backwards compatibility guarantees
 for serializing Tensors; other objects may break backwards compatibility if
 their serialized pickled form changes.
@@ -953,7 +942,7 @@ path or resolves to something that is not an
 <div class="highlight"><pre><span></span><code>For example, let&#39;s say you have an ``nn.Module`` ``A`` that
 looks like this:
 
-.. code-block::text
+.. code-block:: text
 
 A(
 (net_b): Module(
@@ -1005,7 +994,25 @@ Module: self
 </code></pre></div>
 <hr>
 
-<p><em>load_state_dict(state_dict: 'OrderedDict[str, Tensor]', strict: bool = True)</em></p>
+<p><em>ipu(self: ~T, device: Union[int, torch.device, NoneType] = None) -&gt; ~T</em></p>
+<p>Moves all model parameters and buffers to the IPU.</p>
+<div class="highlight"><pre><span></span><code>This also makes associated parameters and buffers different objects. So
+it should be called before constructing optimizer if the module will
+live on IPU while being optimized.
+
+.. note::
+This method modifies the module in-place.
+
+Arguments:
+device (int, optional): if specified, all parameters will be
+copied to that device
+
+Returns:
+Module: self
+</code></pre></div>
+<hr>
+
+<p><em>load_state_dict(state_dict: Mapping[str, Any], strict: bool = True)</em></p>
 <p>Copies parameters and buffers from :attr:<code>state_dict</code> into
     this module and its descendants. If :attr:<code>strict</code> is <code>True</code>, then
     the keys of :attr:<code>state_dict</code> must exactly match the keys returned
@@ -1045,7 +1052,7 @@ Example::
 &gt;&gt;&gt; l = nn.Linear(2, 2)
 &gt;&gt;&gt; net = nn.Sequential(l, l)
 &gt;&gt;&gt; for idx, m in enumerate(net.modules()):
-print(idx, &#39;-&gt;&#39;, m)
+...     print(idx, &#39;-&gt;&#39;, m)
 
 0 -&gt; Sequential(
 (0): Linear(in_features=2, out_features=2, bias=True)
@@ -1056,24 +1063,26 @@ print(idx, &#39;-&gt;&#39;, m)
 <p>```</p>
 <hr>
 
-<p><em>named_buffers(prefix: str = '', recurse: bool = True) -&gt; Iterator[Tuple[str, torch.Tensor]]</em></p>
+<p><em>named_buffers(prefix: str = '', recurse: bool = True, remove_duplicate: bool = True) -&gt; Iterator[Tuple[str, torch.Tensor]]</em></p>
 <p>Returns an iterator over module buffers, yielding both the
     name of the buffer as well as the buffer itself.</p>
 <div class="highlight"><pre><span></span><code>Args:
 prefix (str): prefix to prepend to all buffer names.
-recurse (bool): if True, then yields buffers of this module
+recurse (bool, optional): if True, then yields buffers of this module
 and all submodules. Otherwise, yields only buffers that
-are direct members of this module.
+are direct members of this module. Defaults to True.
+remove_duplicate (bool, optional): whether to remove the duplicated buffers in the result. Defaults to True.
 
 Yields:
-(string, torch.Tensor): Tuple containing the name and buffer
+(str, torch.Tensor): Tuple containing the name and buffer
 
 Example::
 
 ```
+&gt;&gt;&gt; # xdoctest: +SKIP(&quot;undefined vars&quot;)
 &gt;&gt;&gt; for name, buf in self.named_buffers():
-&gt;&gt;&gt;    if name in [&#39;running_var&#39;]:
-&gt;&gt;&gt;        print(buf.size())
+&gt;&gt;&gt;     if name in [&#39;running_var&#39;]:
+&gt;&gt;&gt;         print(buf.size())
 </code></pre></div>
 <p>```</p>
 <hr>
@@ -1082,11 +1091,12 @@ Example::
 <p>Returns an iterator over immediate children modules, yielding both
     the name of the module as well as the module itself.</p>
 <div class="highlight"><pre><span></span><code>Yields:
-(string, Module): Tuple containing a name and child module
+(str, Module): Tuple containing a name and child module
 
 Example::
 
 ```
+&gt;&gt;&gt; # xdoctest: +SKIP(&quot;undefined vars&quot;)
 &gt;&gt;&gt; for name, module in model.named_children():
 &gt;&gt;&gt;     if name in [&#39;conv4&#39;, &#39;conv5&#39;]:
 &gt;&gt;&gt;         print(module)
@@ -1104,7 +1114,7 @@ remove_duplicate: whether to remove the duplicated module instances in the resul
 or not
 
 Yields:
-(string, Module): Tuple of name and module
+(str, Module): Tuple of name and module
 
 Note:
 Duplicate modules are returned only once. In the following
@@ -1116,7 +1126,7 @@ Example::
 &gt;&gt;&gt; l = nn.Linear(2, 2)
 &gt;&gt;&gt; net = nn.Sequential(l, l)
 &gt;&gt;&gt; for idx, m in enumerate(net.named_modules()):
-print(idx, &#39;-&gt;&#39;, m)
+...     print(idx, &#39;-&gt;&#39;, m)
 
 0 -&gt; (&#39;&#39;, Sequential(
 (0): Linear(in_features=2, out_features=2, bias=True)
@@ -1127,7 +1137,7 @@ print(idx, &#39;-&gt;&#39;, m)
 <p>```</p>
 <hr>
 
-<p><em>named_parameters(prefix: str = '', recurse: bool = True) -&gt; Iterator[Tuple[str, torch.nn.parameter.Parameter]]</em></p>
+<p><em>named_parameters(prefix: str = '', recurse: bool = True, remove_duplicate: bool = True) -&gt; Iterator[Tuple[str, torch.nn.parameter.Parameter]]</em></p>
 <p>Returns an iterator over module parameters, yielding both the
     name of the parameter as well as the parameter itself.</p>
 <div class="highlight"><pre><span></span><code>Args:
@@ -1135,16 +1145,19 @@ prefix (str): prefix to prepend to all parameter names.
 recurse (bool): if True, then yields parameters of this module
 and all submodules. Otherwise, yields only parameters that
 are direct members of this module.
+remove_duplicate (bool, optional): whether to remove the duplicated
+parameters in the result. Defaults to True.
 
 Yields:
-(string, Parameter): Tuple containing the name and parameter
+(str, Parameter): Tuple containing the name and parameter
 
 Example::
 
 ```
+&gt;&gt;&gt; # xdoctest: +SKIP(&quot;undefined vars&quot;)
 &gt;&gt;&gt; for name, param in self.named_parameters():
-&gt;&gt;&gt;    if name in [&#39;bias&#39;]:
-&gt;&gt;&gt;        print(param.size())
+&gt;&gt;&gt;     if name in [&#39;bias&#39;]:
+&gt;&gt;&gt;         print(param.size())
 </code></pre></div>
 <p>```</p>
 <hr>
@@ -1164,6 +1177,7 @@ Parameter: module parameter
 Example::
 
 ```
+&gt;&gt;&gt; # xdoctest: +SKIP(&quot;undefined vars&quot;)
 &gt;&gt;&gt; for param in model.parameters():
 &gt;&gt;&gt;     print(type(param), param.size())
 &lt;class &#39;torch.Tensor&#39;&gt; (20L,)
@@ -1172,7 +1186,7 @@ Example::
 <p>```</p>
 <hr>
 
-<p><em>register_backward_hook(hook: Callable[[ForwardRef('Module'), Union[Tuple[torch.Tensor, ...], torch.Tensor], Union[Tuple[torch.Tensor, ...], torch.Tensor]], Optional[torch.Tensor]]) -&gt; torch.utils.hooks.RemovableHandle</em></p>
+<p><em>register_backward_hook(hook: Callable[[ForwardRef('Module'), Union[Tuple[torch.Tensor, ...], torch.Tensor], Union[Tuple[torch.Tensor, ...], torch.Tensor]], Union[NoneType, Tuple[torch.Tensor, ...], torch.Tensor]]) -&gt; torch.utils.hooks.RemovableHandle</em></p>
 <p>Registers a backward hook on the module.</p>
 <div class="highlight"><pre><span></span><code>This function is deprecated in favor of :meth:`~torch.nn.Module.register_full_backward_hook` and
 the behavior of this function will change in future versions.
@@ -1198,7 +1212,7 @@ is that the latter will not be a part of this module&#39;s
 Buffers can be accessed as attributes using given names.
 
 Args:
-name (string): name of the buffer. The buffer can be accessed
+name (str): name of the buffer. The buffer can be accessed
 from this module using the given name
 tensor (Tensor or None): buffer to be registered. If ``None``, then operations
 that run on buffers, such as :attr:`cuda`, are ignored. If ``None``,
@@ -1209,23 +1223,45 @@ that run on buffers, such as :attr:`cuda`, are ignored. If ``None``,
 <div class="highlight"><pre><span></span><code>Example::
 
 ```
+&gt;&gt;&gt; # xdoctest: +SKIP(&quot;undefined vars&quot;)
 &gt;&gt;&gt; self.register_buffer(&#39;running_mean&#39;, torch.zeros(num_features))
 </code></pre></div>
 <p>```</p>
 <hr>
 
-<p><em>register_forward_hook(hook: Callable[..., NoneType]) -&gt; torch.utils.hooks.RemovableHandle</em></p>
+<p><em>register_forward_hook(hook: Union[Callable[[~T, Tuple[Any, ...], Any], Optional[Any]], Callable[[~T, Tuple[Any, ...], Dict[str, Any], Any], Optional[Any]]], </em>, prepend: bool = False, with_kwargs: bool = False) -&gt; torch.utils.hooks.RemovableHandle*</p>
 <p>Registers a forward hook on the module.</p>
 <div class="highlight"><pre><span></span><code>The hook will be called every time after :func:`forward` has computed an output.
-It should have the following signature::
 
-hook(module, input, output) -&gt; None or modified output
+If ``with_kwargs`` is ``False`` or not specified, the input contains only
+the positional arguments given to the module. Keyword arguments won&#39;t be
+passed to the hooks and only to the ``forward``. The hook can modify the
+output. It can modify the input inplace but it will not have effect on
+forward since this is called after :func:`forward` is called. The hook
+should have the following signature::
 
-The input contains only the positional arguments given to the module.
-Keyword arguments won&#39;t be passed to the hooks and only to the ``forward``.
-The hook can modify the output. It can modify the input inplace but
-it will not have effect on forward since this is called after
-:func:`forward` is called.
+hook(module, args, output) -&gt; None or modified output
+
+If ``with_kwargs`` is ``True``, the forward hook will be passed the
+``kwargs`` given to the forward function and be expected to return the
+output possibly modified. The hook should have the following signature::
+
+hook(module, args, kwargs, output) -&gt; None or modified output
+
+Args:
+hook (Callable): The user defined hook to be registered.
+prepend (bool): If ``True``, the provided ``hook`` will be fired
+before all existing ``forward`` hooks on this
+:class:`torch.nn.modules.Module`. Otherwise, the provided
+``hook`` will be fired after all existing ``forward`` hooks on
+this :class:`torch.nn.modules.Module`. Note that global
+``forward`` hooks registered with
+:func:`register_module_forward_hook` will fire before all hooks
+registered by this method.
+Default: ``False``
+with_kwargs (bool): If ``True``, the ``hook`` will be passed the
+kwargs given to the forward function.
+Default: ``False``
 
 Returns:
 :class:`torch.utils.hooks.RemovableHandle`:
@@ -1234,18 +1270,42 @@ a handle that can be used to remove the added hook by calling
 </code></pre></div>
 <hr>
 
-<p><em>register_forward_pre_hook(hook: Callable[..., NoneType]) -&gt; torch.utils.hooks.RemovableHandle</em></p>
+<p><em>register_forward_pre_hook(hook: Union[Callable[[~T, Tuple[Any, ...]], Optional[Any]], Callable[[~T, Tuple[Any, ...], Dict[str, Any]], Optional[Tuple[Any, Dict[str, Any]]]]], </em>, prepend: bool = False, with_kwargs: bool = False) -&gt; torch.utils.hooks.RemovableHandle*</p>
 <p>Registers a forward pre-hook on the module.</p>
 <div class="highlight"><pre><span></span><code>The hook will be called every time before :func:`forward` is invoked.
-It should have the following signature::
 
-hook(module, input) -&gt; None or modified input
 
-The input contains only the positional arguments given to the module.
-Keyword arguments won&#39;t be passed to the hooks and only to the ``forward``.
-The hook can modify the input. User can either return a tuple or a
-single modified value in the hook. We will wrap the value into a tuple
-if a single value is returned(unless that value is already a tuple).
+If ``with_kwargs`` is false or not specified, the input contains only
+the positional arguments given to the module. Keyword arguments won&#39;t be
+passed to the hooks and only to the ``forward``. The hook can modify the
+input. User can either return a tuple or a single modified value in the
+hook. We will wrap the value into a tuple if a single value is returned
+(unless that value is already a tuple). The hook should have the
+following signature::
+
+hook(module, args) -&gt; None or modified input
+
+If ``with_kwargs`` is true, the forward pre-hook will be passed the
+kwargs given to the forward function. And if the hook modifies the
+input, both the args and kwargs should be returned. The hook should have
+the following signature::
+
+hook(module, args, kwargs) -&gt; None or a tuple of modified input and kwargs
+
+Args:
+hook (Callable): The user defined hook to be registered.
+prepend (bool): If true, the provided ``hook`` will be fired before
+all existing ``forward_pre`` hooks on this
+:class:`torch.nn.modules.Module`. Otherwise, the provided
+``hook`` will be fired after all existing ``forward_pre`` hooks
+on this :class:`torch.nn.modules.Module`. Note that global
+``forward_pre`` hooks registered with
+:func:`register_module_forward_pre_hook` will fire before all
+hooks registered by this method.
+Default: ``False``
+with_kwargs (bool): If true, the ``hook`` will be passed the kwargs
+given to the forward function.
+Default: ``False``
 
 Returns:
 :class:`torch.utils.hooks.RemovableHandle`:
@@ -1254,10 +1314,12 @@ a handle that can be used to remove the added hook by calling
 </code></pre></div>
 <hr>
 
-<p><em>register_full_backward_hook(hook: Callable[[ForwardRef('Module'), Union[Tuple[torch.Tensor, ...], torch.Tensor], Union[Tuple[torch.Tensor, ...], torch.Tensor]], Optional[torch.Tensor]]) -&gt; torch.utils.hooks.RemovableHandle</em></p>
+<p><em>register_full_backward_hook(hook: Callable[[ForwardRef('Module'), Union[Tuple[torch.Tensor, ...], torch.Tensor], Union[Tuple[torch.Tensor, ...], torch.Tensor]], Union[NoneType, Tuple[torch.Tensor, ...], torch.Tensor]], prepend: bool = False) -&gt; torch.utils.hooks.RemovableHandle</em></p>
 <p>Registers a backward hook on the module.</p>
-<div class="highlight"><pre><span></span><code>The hook will be called every time the gradients with respect to module
-inputs are computed. The hook should have the following signature::
+<div class="highlight"><pre><span></span><code>The hook will be called every time the gradients with respect to a module
+are computed, i.e. the hook will execute if and only if the gradients with
+respect to module outputs are computed. The hook should have the following
+signature::
 
 hook(module, grad_input, grad_output) -&gt; tuple(Tensor) or None
 
@@ -1278,6 +1340,17 @@ of each Tensor returned by the Module&#39;s forward function.
 Modifying inputs or outputs inplace is not allowed when using backward hooks and
 will raise an error.
 
+Args:
+hook (Callable): The user-defined hook to be registered.
+prepend (bool): If true, the provided ``hook`` will be fired before
+all existing ``backward`` hooks on this
+:class:`torch.nn.modules.Module`. Otherwise, the provided
+``hook`` will be fired after all existing ``backward`` hooks on
+this :class:`torch.nn.modules.Module`. Note that global
+``backward`` hooks registered with
+:func:`register_module_full_backward_hook` will fire before
+all hooks registered by this method.
+
 Returns:
 :class:`torch.utils.hooks.RemovableHandle`:
 a handle that can be used to remove the added hook by calling
@@ -1285,18 +1358,95 @@ a handle that can be used to remove the added hook by calling
 </code></pre></div>
 <hr>
 
+<p><em>register_full_backward_pre_hook(hook: Callable[[ForwardRef('Module'), Union[Tuple[torch.Tensor, ...], torch.Tensor]], Union[NoneType, Tuple[torch.Tensor, ...], torch.Tensor]], prepend: bool = False) -&gt; torch.utils.hooks.RemovableHandle</em></p>
+<p>Registers a backward pre-hook on the module.</p>
+<div class="highlight"><pre><span></span><code>The hook will be called every time the gradients for the module are computed.
+The hook should have the following signature::
+
+hook(module, grad_output) -&gt; Tensor or None
+
+The :attr:`grad_output` is a tuple. The hook should
+not modify its arguments, but it can optionally return a new gradient with
+respect to the output that will be used in place of :attr:`grad_output` in
+subsequent computations. Entries in :attr:`grad_output` will be ``None`` for
+all non-Tensor arguments.
+
+For technical reasons, when this hook is applied to a Module, its forward function will
+receive a view of each Tensor passed to the Module. Similarly the caller will receive a view
+of each Tensor returned by the Module&#39;s forward function.
+
+.. warning ::
+Modifying inputs inplace is not allowed when using backward hooks and
+will raise an error.
+
+Args:
+hook (Callable): The user-defined hook to be registered.
+prepend (bool): If true, the provided ``hook`` will be fired before
+all existing ``backward_pre`` hooks on this
+:class:`torch.nn.modules.Module`. Otherwise, the provided
+``hook`` will be fired after all existing ``backward_pre`` hooks
+on this :class:`torch.nn.modules.Module`. Note that global
+``backward_pre`` hooks registered with
+:func:`register_module_full_backward_pre_hook` will fire before
+all hooks registered by this method.
+
+Returns:
+:class:`torch.utils.hooks.RemovableHandle`:
+a handle that can be used to remove the added hook by calling
+``handle.remove()``
+</code></pre></div>
+<hr>
+
+<p><em>register_load_state_dict_post_hook(hook)</em></p>
+<p>Registers a post hook to be run after module's <code>load_state_dict</code>
+    is called.</p>
+<div class="highlight"><pre><span></span><code>It should have the following signature::
+hook(module, incompatible_keys) -&gt; None
+
+The ``module`` argument is the current module that this hook is registered
+on, and the ``incompatible_keys`` argument is a ``NamedTuple`` consisting
+of attributes ``missing_keys`` and ``unexpected_keys``. ``missing_keys``
+is a ``list`` of ``str`` containing the missing keys and
+``unexpected_keys`` is a ``list`` of ``str`` containing the unexpected keys.
+
+The given incompatible_keys can be modified inplace if needed.
+
+Note that the checks performed when calling :func:`load_state_dict` with
+``strict=True`` are affected by modifications the hook makes to
+``missing_keys`` or ``unexpected_keys``, as expected. Additions to either
+set of keys will result in an error being thrown when ``strict=True``, and
+clearing out both missing and unexpected keys will avoid an error.
+
+Returns:
+:class:`torch.utils.hooks.RemovableHandle`:
+a handle that can be used to remove the added hook by calling
+``handle.remove()``
+</code></pre></div>
+<hr>
+
+<p><em>register_module(name: str, module: Optional[ForwardRef('Module')]) -&gt; None</em></p>
+<p>Alias for :func:<code>add_module</code>.</p>
+<hr>
+
 <p><em>register_parameter(name: str, param: Optional[torch.nn.parameter.Parameter]) -&gt; None</em></p>
 <p>Adds a parameter to the module.</p>
 <div class="highlight"><pre><span></span><code>The parameter can be accessed as an attribute using given name.
 
 Args:
-name (string): name of the parameter. The parameter can be accessed
+name (str): name of the parameter. The parameter can be accessed
 from this module using the given name
 param (Parameter or None): parameter to be added to the module. If
 ``None``, then operations that run on parameters, such as :attr:`cuda`,
 </code></pre></div>
 <p>are ignored. If <code>None</code>, the parameter is <strong>not</strong> included in the
     module's :attr:<code>state_dict</code>.</p>
+<hr>
+
+<p><em>register_state_dict_pre_hook(hook)</em></p>
+<p>These hooks will be called with arguments: <code>self</code>, <code>prefix</code>,
+    and <code>keep_vars</code> before calling <code>state_dict</code> on <code>self</code>. The registered
+    hooks can be used to perform pre-processing before the <code>state_dict</code>
+    call is made.</p>
 <hr>
 
 <p><em>requires_grad_(self: ~T, requires_grad: bool = True) -&gt; ~T</em></p>
@@ -1334,11 +1484,37 @@ state (dict): Extra state from the `state_dict`
 <p>See :meth:<code>torch.Tensor.share_memory_</code></p>
 <hr>
 
-<p><em>state_dict(destination=None, prefix='', keep_vars=False)</em></p>
-<p>Returns a dictionary containing a whole state of the module.</p>
+<p><em>state_dict(</em>args, destination=None, prefix='', keep_vars=False)*</p>
+<p>Returns a dictionary containing references to the whole state of the module.</p>
 <div class="highlight"><pre><span></span><code>Both parameters and persistent buffers (e.g. running averages) are
 included. Keys are corresponding parameter and buffer names.
 Parameters and buffers set to ``None`` are not included.
+
+.. note::
+The returned object is a shallow copy. It contains references
+to the module&#39;s parameters and buffers.
+
+.. warning::
+Currently ``state_dict()`` also accepts positional arguments for
+``destination``, ``prefix`` and ``keep_vars`` in order. However,
+this is being deprecated and keyword arguments will be enforced in
+future releases.
+
+.. warning::
+Please avoid the use of argument ``destination`` as it is not
+designed for end-users.
+
+Args:
+destination (dict, optional): If provided, the state of module will
+be updated into the dict and the same object is returned.
+Otherwise, an ``OrderedDict`` will be created and returned.
+Default: ``None``.
+prefix (str, optional): a prefix added to parameter and buffer
+names to compose the keys in state_dict. Default: ``&#39;&#39;``.
+keep_vars (bool, optional): by default the :class:`~torch.Tensor` s
+returned in the state dict are detached from autograd. If it&#39;s
+set to ``True``, detaching will not be performed.
+Default: ``False``.
 
 Returns:
 dict:
@@ -1347,6 +1523,7 @@ a dictionary containing a whole state of the module
 Example::
 
 ```
+&gt;&gt;&gt; # xdoctest: +SKIP(&quot;undefined vars&quot;)
 &gt;&gt;&gt; module.state_dict().keys()
 [&#39;bias&#39;, &#39;weight&#39;]
 </code></pre></div>
@@ -1400,6 +1577,7 @@ Module: self
 Examples::
 
 ```
+&gt;&gt;&gt; # xdoctest: +IGNORE_WANT(&quot;non-deterministic&quot;)
 &gt;&gt;&gt; linear = nn.Linear(2, 2)
 &gt;&gt;&gt; linear.weight
 Parameter containing:
@@ -1411,6 +1589,7 @@ Linear(in_features=2, out_features=2, bias=True)
 Parameter containing:
 tensor([[ 0.1913, -0.3420],
 [-0.5113, -0.2325]], dtype=torch.float64)
+&gt;&gt;&gt; # xdoctest: +REQUIRES(env:TORCH_DOCTEST_CUDA1)
 &gt;&gt;&gt; gpu1 = torch.device(&quot;cuda:1&quot;)
 &gt;&gt;&gt; linear.to(gpu1, dtype=torch.half, non_blocking=True)
 Linear(in_features=2, out_features=2, bias=True)
@@ -1497,7 +1676,7 @@ Module: self
 </code></pre></div>
 <hr>
 
-<p><em>zero_grad(set_to_none: bool = False) -&gt; None</em></p>
+<p><em>zero_grad(set_to_none: bool = True) -&gt; None</em></p>
 <p>Sets gradients of all model parameters to zero. See similar function
     under :class:<code>torch.optim.Optimizer</code> for more context.</p>
 <div class="highlight"><pre><span></span><code>Args:
@@ -1506,9 +1685,15 @@ See :meth:`torch.optim.Optimizer.zero_grad` for details.
 </code></pre></div>
 <h3 id="properties">Properties</h3>
 
-              
-            </article>
-          </div>
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
         </div>
         
       </main>
@@ -1539,10 +1724,11 @@ See :meth:`torch.optim.Optimizer.zero_grad` for details.
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.22074ed6.min.js"}</script>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.960e086b.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.407015b8.min.js"></script>
       
         <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
       
