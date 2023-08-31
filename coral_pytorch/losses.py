@@ -62,8 +62,9 @@ def coral_loss(logits, levels, importance_weights=None, reduction='mean'):
         raise ValueError("Please ensure that logits (%s) has the same shape as levels (%s). "
                          % (logits.shape, levels.shape))
 
-    term1 = (F.logsigmoid(logits)*levels
-                      + (F.logsigmoid(logits) - logits)*(1-levels))
+    log_sigmoid = F.logsigmoid(logits)
+    term1 = (log_sigmoid*levels
+                      + (log_sigmoid - logits)*(1-levels))
 
     if importance_weights is not None:
         term1 *= importance_weights
@@ -146,8 +147,9 @@ def corn_loss(logits, y_train, num_classes):
         num_examples += len(train_labels)
         pred = logits[train_examples, task_index]
 
-        loss = -torch.sum(F.logsigmoid(pred)*train_labels
-                          + (F.logsigmoid(pred) - pred)*(1-train_labels))
+        log_sigmoid = F.logsigmoid(logits)
+        loss = -torch.sum(log_sigmoid*train_labels
+                          + (log_sigmoid - pred)*(1-train_labels))
         losses += loss
 
     return losses/num_examples
